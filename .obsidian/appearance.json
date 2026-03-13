@@ -1,0 +1,8 @@
+{
+  "enabledCssSnippets": [
+    "MCL Multi Column",
+    "dashboard",
+    "dashboard-fix"
+  ],
+  "theme": "obsidian"
+}

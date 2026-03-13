@@ -1,0 +1,6 @@
+Tags: #Networking #Terminology 
+
+- Star Topology: Devices are individually connected via a central networking device, such as a switch or hub. Very reliable and scalable. Much more expensive. Much more maintanced is needed when scaled more. Reference image: [[Pasted image 20250401154618.png|Star Topology]]
+- Bus Topology: Relies upon a single connection, which is known as a backbone cable. Prone to becoming slow and bottlenecked. Difficult to troubleshoot. Easier and more cost-efficient to set up. Reference Image: [[Pasted image 20250401154742.png|Bus Topology]]
+- Ring Topology: Known as a token topology. Connected devices form a loop, which requires little cabling and dedicated hardware. Own data needing to be sent first, is sent, before forwarding occurs. Easy to trouble shoot, but not efficient for data travelling across a network. Has a single point of failure. Reference Image: [[Pasted image 20250401154958.png|Ring Topology]]
+- Virtual Local Area Network: Allows for devices to benefit from things such as an Internet connection, but be treated seperately. This network seperation provides security since rules are in place to determine how specific devices communicate with each other. Reference Image:[[Pasted image 20250401194935.png|VLAN Topology]]

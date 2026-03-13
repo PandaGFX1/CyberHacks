@@ -1,0 +1,47 @@
+Tags: #Networking #Terminology 
+
+- Fundamentals:
+	- Refer to: [[LAN Topologies]]
+	- Networks: Simply just multiple connected things, such as devices.
+	- Private Network: Small network, separated by a router.
+	- Public Network: A network connecting smaller networks together.
+	- Internet: Essentially, one giant network that consist of many, many small networks. 
+	- APRPANET: First iteration of the internet funded by the United States Defense Department in the late 1980s.
+	- World Wide Web (WWW): Invented by Tim Berners-Lee in 1989.
+- LAN:
+	- Refer to: [[LAN Topologies]] and [[Subnetting]] and [[Protocols]]
+	- Internet Protocol Address (IP): Used as a way of identifying hosts on a network. Set of numbers divided into four octets. Subnet Mask: Represented by four bytes (32 bits) ranging from 0-255. Reference Image: [[Pasted image 20250401155339.png|IP Address]]
+	- Media Access Control Address (MAC): Twelve-character hexadecimal address. Serial number for computers. Burned into a NIC and cannot be changed. Reference this picture: [[MAC Address.png]]
+	- Protocols: Backbone of networking and force many devices to communicate in the same language.
+	- Internet Control Message Protocol (ICMP): Used by ping to determine the performance of a connection between devices.
+	- Local Area Network (LAN): A smaller network, commonly found in places such as a house or coffee shop.
+- Routing:
+	- Refer to: [[LAN Topologies]] and [[Subnetting]]
+	- Switch: Dedicated devices within a network that are designed to aggregate multiple other dives using ethernet. Much more efficient than hubs/repeaters. Switches keep track of what device is connected to what port. Can operate at Layer 2 and 3. Picture for reference: [[Pasted image 20250401154355.png|Switch Image]]
+	- Router: Connects networks and passes data between them through routing. Operates at Layer 3. Picture for reference: [[Pasted image 20250401154425.png|Router Image]]
+	- Routing: Process of data travelling across networks. Involves creating a path between networks, so data can be successfully delivered. Useful for when devices are connected by many paths.
+	- Load Balancers: Ensure high traffic websites can handle the load and provide a failover if a server becomes unresponsive. Uses algorithms such as `round-robin` or `weighted`. Also preforms periodic health checks to ensure a service is running correctly. Reference Image: [[Pasted image 20250402160408.png|Load Balancer]]
+	- Content Delivery Networks (CDN): Allows you to host static files from a website and host them across thousands of servers all over thw world. CDN works out where a file is upon request and sends the request there instead.
+ - Protocols:
+	- Network Interface Card (NIC): Allows computers to connect to a network.
+	- Graphical User Interface (GUI): Part of an application users can interact with.
+	- Uniform Resource Locator (URL): An instruction on how to access a resource on the internet.
+	- Databases: Webservers can communicate with databases to store and recall data from them. Range from a simple plain text file up to complext clusters of multiple servers. Common databases: MySQL, MSSQL, MongoDB, Postgres.
+- OSI Model: 
+	- Refer to: [[OSI Model]] and [[Packets and Frames]]
+	- Encapsulation: Process of adding more bits of information before sending.
+		- Reference Image: [[Pasted image 20250402223549.png|Encapsulation Example]]
+	- Decapsulation: Process of removing/extracting bits of information after recieving.
+	- Frame: Layer 2 piece of data. No information such as IP addresses are attached.
+- Firewalls:
+	- Refer to: [[Firewall Basics]]
+	- Firewall: Device within a network responsible for determining what traffic is allowed to enter and exit. Used to `permit` or `deny`.
+	- Web Application Firewall (WAF): Sits between a web request and the web server. Protects the webserver from hacking and DOS attacks. Can rate limit web requests.
+- Virtual Private Network (VPN):
+	- Refer to: [[VPN Basics]]
+	- Technology that allows devices on separate networks to communicate securely by creating a dedicated path between each other over the Internet (a tunnel). Allows these devices to form their own private network.
+- Virtual Local Area Network (VLAN):
+	- Refer to: [[LAN Topologies]]
+	- Allows specific devices within a network to be virtually split up.
+- Virtual Hosts:
+	- Allows websites to host multiple websites with different domain names. Has root directory mapped to different locations on the hard drive. EX: `one.com -> /var/www/website_one` and `two.com -> /var/www/website_two`

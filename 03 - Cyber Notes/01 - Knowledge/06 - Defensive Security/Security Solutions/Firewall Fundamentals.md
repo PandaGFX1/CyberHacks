@@ -1,0 +1,51 @@
+Tags: #Defense #Terminology #Tools 
+
+Refer to: [[SOC Fundamentals]] and [[Defensive Security Intro]] and [[Firewall Basics]] and [[OSI Model]]
+
+- Firewall:
+	- Designed to inspect a network's or digital devices incoming and outgoing traffic based on rules to check against.
+	- Most firewalls today offer extra functionalities than just rule-based filtering.
+- Types of Firewalls:
+	- Reference Image: [[Pasted image 20250416182412.png|4 Types of Firewalls]]
+	- Reference Image: [[Pasted image 20250416184639.png|Firewall Comparison]]
+	- Stateless Firewall:
+		- Operates on Layer 3 and Layer 4 of the OSI model. Filters the data based on predetermined rules without taking note of the state of the previous connections. Every packet is compared to the rules.
+		- Cannot apply complex policies, but it is fast.
+		- Example:
+			- Firewall normally denied a few packets from a single source based on rules, Ideally it would then block the source, but instead it doesn't and compares future packets.
+	- Stateful Firewall:
+		- Goes beyond predetermined rules but also keeping track of previous connections and store them in a state table. Inspects packets based on their history with connections.
+		- Operates at Layer 3 and Layer 4 of the OSI model.
+		- Example:
+			- Firewall accepts a few packets from a source address based on rules and will allow all future packets for this connection.
+	- Proxy Firewall:
+		- Also known as application-level gateways, act as intermediaries between the private network and the Internet. They operate at Layer 7 of the OSI model. Also inspects the content of the packets. And inspects the traffic coming to an application.
+		- Requests made by users in a network are forward by this proxy after inspection and mask them with their own IP address to provide anonymity for the internal IP.
+		- Content filtering policies can be applied to these firewalls to allow/deny incoming and outgoing traffic based on their content.
+	- Next Generation Firewall (NFGW):
+		- Operates from Layer 3 to Layer 7 of the OSI model. Offers deep packet inspection and other functionalities that enhance the security of incoming and outgoing traffic.
+		- Has an IPS that blocks malicious activity in real time. Offers heuristic (behavior) analysis by analyzing the patterns of attacks and blocking them instantly before reaching the network.
+		- Has SSL/TLS decryption capabilities which inspects the packets after decrypting them and correlates the data with the threat intelligence feeds.
+- Rules In Firewalls:
+	- Consists of a few basic components:
+		- Source Address: Where the traffic comes from.
+		- Destination Address: The machine receiving the data
+		- Port: Port number for traffic
+		- Protocol: Protocol used during communication
+		- Action: Action that is taken upon identifying that traffic
+		- Direction: Defines if it is for outgoing or incoming traffic.
+	- Allow: Allows specific traffic
+	- Deny: Deny specific traffic
+	- Forward: Redirect traffic to a different network segment. Applies to firewalls that provide routing functionality and act as gateways.
+		- Example: Forward all HTTP traffic coming into the network to the web server
+	- Inbound: Applied to packets coming into the network
+	- Outbound: Applied to packets before they leave the network
+	- Forward: Forward specific traffic inside the network
+- Linux:
+	- Reference Image: [[Pasted image 20250416191913.png|Netfilter Hierarchy]]
+	- Netfilter is the framework inside the Linux OS with core firewall functionalities such as packet filtering, NAT, and connection tracking. Serves as foundation for various firewall utilities.
+	- Example Utilities:
+		- iptables: Most widely used Linux firewall. Uses netfilter framework.
+		- nftables: Successor to iptables with enhanced packet filtering and NAT capabilities. Based on Netfilter framework.
+		- firewalld: Operates on the Netfilter framework and has predefined rules. Works differently from others and comes with pre-built network zone configurations.
+		- Uncomplicated Firewall (ufw): Eliminates the complications  of making rules in a complex syntax by giving an easier interface. More bingger-friendly. Basically you define rules using ufw and it configures your rules into iptable rules.

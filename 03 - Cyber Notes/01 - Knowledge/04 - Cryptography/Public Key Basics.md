@@ -1,0 +1,63 @@
+Tags: #Cryptography #Algorithms #Commands #Terminology 
+
+Refer to: [[RSA Cracking]]
+
+- Asymmetric encryption is relatively slow compared to symmetric encryption, but can be used to negotiate and agree on symmetric encryption ciphers and keys, therefore allowing use of symmetric encryption for speed without anyone knowing how to decode it.
+
+- RSA Resources:
+	- Tools: [RSACTFTool](https://github.com/Ganapati/RsaCtfTool) and [RSATool](https://github.com/ius/rsatool)
+	- [RSA CTF Challenge](https://tryhackme.com/r/room/breakrsa)
+	- Variables to know: 
+		- `p` and `q` are large prime numbers
+		- `n` is the product of `p` and `q`
+		- The public key is `n` and `e`
+		- The private key is `n` and `d`
+		- `m` is used to represent the original text
+		- `c` represented the encrypted text
+- Diffie-Hellman Key Exchange:
+	- Method that allows two parties to establish a shared secret (password) over an insecure communication channel without requiring a pre-existing shared secret. This shared key can be used for symmetric encryption and nobody would know what it is.
+	- Often used alongside RSA. Diffie-Hellman is used for key agreement, and RSA is used for digital signatures, key transport, authentication, etc.
+	- Example:
+		- Two individually generated secrets: `A` and `B`
+		- Common material: `C`
+		- Individual keys combined with the common material: `AB` and `BC`
+		- These are sent to the intended person and combined with their secret to create two identical keys
+	- Resources:
+		- [[Diffie-Hellman.svg]]
+- Other Algorithms:
+	- Digital Signature Algorithm (DSA): Public-key cryptography algorithm specifically designed for digital signatures
+	- ECDSA (Elliptic Curve Digital Signature Algorithm): Variant of DSA that uses elliptic curve cryptography to provide smaller key sizes for equivalent security.
+	- ECDSA (ECDSA with Security Key): Extension of ECDSA. Incorporates hardware-based security keys for enhanced private key protection.
+	- ED25519: Public-key signature system using EdDSA (Edwards-curve Digital Signature Algorithm) with Curve25519
+	- Ed25519-SK (Ed25519 with Security Key): Variant of Ed25519. Similar to ECDSA-SK.
+- SSH
+	- Default SSH key is RSA keys
+	- Generate a key pair with default options: `ssh-keygen -t rsa`
+		- Add your `.pub` key to the `authorized_keys` file of who you want to login to.
+		- You can also steal a private key and use that to login to a server as someone else that they have access to (not the same person)
+	- When generating SSH keys to log in to remote machines, copy the public key over: `ssh-copy-id`
+	- Specify a key for standard Linux OpenSSH: `ssh -i privateKeyFile user@host`
+		- NOTE: Private key must have permissions of 600 or greater
+- Digital Signatures:
+	- Provide a way to verify authenticity and integrity of a digital message or document. You produce a signature with your private key which can be verified using your public key.
+		- [[Digital Signatures.svg]]
+	- Web server has a certificate stating it is the real website. EX: `tryhackme.com`
+	- Certificates have a chain of trust starting with a Root Certificate Authority (CA).
+		- Certificate signed by an organization.
+		- Organization is trusted by a CA.
+		- Browser trust the CA.
+		- Therefore, your browser trusts the certificate.
+	- From install, your device, operating system, and web browser automatically trust various Root CAs.
+	- Free TLS certificates for domains you own: [Let's Encrypt](https://letsencrypt.org/)
+- Pretty Good Privacy (PGP):
+	- Software that implements encryption for encrypting files, preforming digital signing, and more.
+	- GnuPG (GPG):
+		- Open-source implementation of the OpenPGP standard.
+		- Commonly used in email to protect the confidentiality of emails.
+		- Public GPG key shared with contacts
+	- Usage:
+		- Generating GPG: `gpg --full-gen-key`
+		- Crack passphrase protected GPG private keys: `gpg2john`
+			- Refer to: [[Hashing Basics]]
+	- Import GPG key: `gpg --import backup.key`
+	- Decrypt messages: `gpg --decrypt confidential_message.gpg`

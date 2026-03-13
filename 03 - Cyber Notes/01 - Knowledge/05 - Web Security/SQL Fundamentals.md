@@ -1,0 +1,101 @@
+Tags: #Terminology #Web #Commands #Linux
+
+Refer to: [[HTTP In Depth]] and [[TLS and SSL]] and [[Website Innerworkings]] and [[Linux Fundamentals]]
+
+- Databases: Organized collection of structured information/data that is easily accessible and can be manipulated or analyzed. Example: User authentication data, user generated data, user history data.
+	- Relational Databases (SQL): Store structured data, table-based. Relationships can be made between two or more tables. Used when data will going to reliably be received in a consistent format and accuracy is important.
+	- Non-relational Databases: (NoSQL): Store data in a non-tabular format. Such as storing data that can contain varying types of quantities of data. Better used when data received can vary greatly in it's format, such as user-generated content.
+		- Reference Image: [[Pasted image 20250406085215.png|Non-Relational Databases]]
+- Relational Databases In-Depth:
+	- Reference Image: [[Pasted image 20250406085528.png|Tables, Rows, and Columns]]
+		- Tables: All data stored in a relational databased is stored here. Example: Collection of books in stock might be stored in a table called Books.
+		- Columns: Used to define what pieces of information are needed to define what the table is for. Example: id, Name, Published_date. Also define what data type that column should contain such as `strings`, `Integerts`, `floats/decimals`, and `Times/Dates`.
+		- Row: Each record typically has it's own row. Therefore, it's own id, it's own name, and it's own published_date.
+	- Primary and Foreign Keys:
+		- Reference Image: [[Pasted image 20250406090026.png|Primary and Foreign Keys]]
+		- Primary Key: Used to ensure the data collected in a certain column is unique. Example: People can have the same name, so an id field that is unique to each actual person is a primary key. Only one primary key column in a table.
+		- Foreign Key: A column or columns in a table that also exists in another table within the database and provides a link between two tables. There can be more than one foreign key in a table.
+- Structured Query Language (SQL): Programing language that can be used to query, define, and manipulate the data stored in a relational database.
+	- Database Management System (DBMS): Serve as an interface between the end user and the database. Essentially a software program that allowed users to retrieve, update, and manage data being stored. Examples: MySQL, MongoDB, MariaDB.
+- Using MySQL:
+	- Usage: `mysql`
+	- Commands:
+		- `mysql -u root -p`: Login to mysql.
+		- Database Statements:
+			- `CREATE DATABASE database_name;`: Create a new database
+			- `SHOW DATABASES;`: Shows the databases.
+			- `USE database_name;`: Use a database
+			- `DROP database database_name;`: Remove/delete a database.
+		- Table Statements:
+			- `CREATE TABLE example_table_name`: Create a table
+				- Reference Image: [[Pasted image 20250406091453.png|CREATE TABLE Syntax]] and [[Pasted image 20250406091824.png|CREATE TABLE Usage]] 
+			- `SHOW TABLES;`: Show tables in a database.
+			- `DESCRIBE/DESC table_name;`: Shows rules regarding columns in the table.
+			- `ALTER TABLE table_name;`: Used to make changes such as renaming columns, changing data types, etc.
+			- `DROP TABLE table_name;`: Drop/remove a table.
+			- `SELECT * FROM table_name;`: Show stuff in the table
+		- CRUD Operations: 
+			- Stands for Create, Read, Update, and Delete which are basic operations.
+			- Create Operation (INSERT): 
+				- Usage: `INSERT INTO`
+				- Reference Image: [[Pasted image 20250406092647.png|INSERT INTO Example]]
+			- Read Operation (SELECT):
+				- Usage: `SELECT * FROM table_name;`
+				- Another example: `SELECT name, description FROM table_name;`
+			- Update Operation (UPDATE): 
+				- Usage: `UPDATE`
+				- Reference Image: [[Pasted image 20250406093151.png|UPDATE Example]]
+			- Delete Operation (DELETE):
+				- Usage: `DELETE`
+				- Reference Image: [[Pasted image 20250406093339.png|DELETE Example]]
+		- Clauses: 
+			- Specifies the criteria of the data being manipulated
+			- Examples of clauses: `FROM`, `WHERE`, `DISTINCT`, `GROUP BY`, `ORDER BY`, `HAVING`.
+			- `DISTINCT`: Prevent duplicate records from being show
+				- Usage: `SELECT DISTINCT name FROM books;`
+			- `GROUP BY`: Aggregates data from multiple records and groups the results in columns
+			- `ORDER BY`: Sorts records using functions like `ASC` and `DESC`
+				- Usage: `SELECT * FROM books ORDER BY published_date ASC;`
+			- `HAVING`: Used with order clauses to filter groups or results of records based on a condition
+				- Usage: [[Pasted image 20250406110654.png|HAVING Clause Example]]
+				- Example: `SELECT name FROM hacking_tools WHERE name LIKE '%Flipper%';`
+		- Operators: 
+			- Used to filter and manipulate data effectively
+			- Logical Operators: Test the truth of a condition and return `TRUE` or `FALSE`
+				- `LIKE`: Filter for specific patterns in a column
+					- Example: See example above.
+				- `AND`: Uses multiple conditions and returns `TRUE` if all of them are true.
+					- Example: [[Pasted image 20250406111509.png|AND Operator Example]]
+				- `OR`: Combines multiple conditions and returns `TRUE` if at least one is true.
+					- Example: [[Pasted image 20250406111740.png|OR Operator Example]]
+				- `NOT`: Reverses the value of a Boolean operator to exclude a specific condition.
+					- Example: [[Pasted image 20250406111850.png|NOT Operator Example]]
+				- `BETWEEN`: Allows us to test if a value exists within a defined range
+					- Example: [[Pasted image 20250406112000.png|BETWEEN Operator Example]]
+			- Comparison Operators: Compare values and check if they match
+				- Example Operators: `=`, `!=`, `<`, `>`, `<=`, `>=`
+		- Functions: 
+			- Help streamline queries and operations and manipulate data.
+			- String Functions:
+				- `CONCAT()`: Add two or more strings together.
+					- Example: [[Pasted image 20250406113950.png|CONCAT Function Example]]
+				- `GROUP_CONCAT()`: Concatenate data from multiple rows into one field.
+					- Example: [[Pasted image 20250406114144.png|GROUP_CONCAT Function Example]]
+				- `SUBSTRING()`: Retrieve a substring from a string, starting at a determined position.
+					- Example: [[Pasted image 20250406114337.png|SUBSTRING Function Example]]
+				- `LENGTH()`: Returns number of characters in a string.
+					- Example: `SELECT LENGTH(name) AS name_length FROM books;`
+			- Aggregate Functions: 
+				- `COUNT()`: Returns number of records within an expression
+					- Example: `SELECT COUNT(*) AS total_books FROM books;`
+				- `SUM()`: Sums all values of a column.
+					- Example: `SELECT SUM(price) AS total_price FROM books;`
+				- `MAX()`: Calculates maximum value within a provided column.
+					- Example: `SELECT MAX(published_date) AS latest_book FROM books;`
+				- `MIN()`: Calculates the minimum value within a provided column.
+					- Example: `SELECT MIN(published_date) AS earliest_book FROM books;`
+- Using sqlite3:
+	- `sqlite3 example.db`: Access a database
+	- `.tables`: Show the tables
+	- `PRAGMA table_info(customers);`: Show table information such as all of the fields
+	- `SELECT * FROM customers;`: Dump fields

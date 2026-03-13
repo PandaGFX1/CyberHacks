@@ -1,0 +1,67 @@
+Tags: #Defense #Terminology 
+
+Refer to: [[Defensive Security Intro]] and [[Incident Response Fundamentals]] and [[Digital Forensics Fundamentals]]
+
+- Logs: 
+	- Digital footprints left behind by any activity. Activity could be normal, but have malicious intent.
+- Use Cases of Logs:
+	- Security Events Monitoring:
+		- Logs help us detect anomalous behavior when real-time monitoring is used.
+	- Incident Investigation and Forensics:
+		- Logs are the traces of every kind of activity. Offers detailed information on what happened during the incident. Security Team utilizes logs to preform root cause analysis of incidents
+	- Troubleshooting:
+		- Logs record errors in systems and application and can be used to diagnose issues.
+	- Performance Monitoring:
+		- Logs provide insight into performance of applications.
+	- Auditing and Compliance:
+		- Logs make ^ easier with the capability to establish a trail of different kind of activities.
+- Types of Logs:
+	- Reference Image: [[Pasted image 20250415121803.png|Types of Logs]]
+	- There can be various other types of logs depending on the different applications and the services they provide.
+	- Log Analysis:
+		- Technique for extracting valuable data from logs. 
+- Windows Event Logs:
+	- Crucial Types of Logs Stored:
+		- Application Logs:
+			- Any information related to applications is here. Including errors, warnings, issues, etc.
+		- System Logs:
+			- Information related to running operations such as driver issues, hardware issues, system startup, etc.
+		- Security Logs:
+			- Most important log file. Contains all security related activities such as user authentication, changes in accounts, policy changes, etc.
+	- To view: `Event Viewer -> Windows Logs`
+	- Different Fields of Windows Logs:
+		- Description:
+			- Detailed information of activity
+		- Log Name:
+			- Log file name
+		- Logged:
+			- Time of activity
+		- Event ID:
+			- Unique ID depending on activity.
+			- Important Event IDs:
+				- `4626`: Successful login
+				- `4625`: Bad login
+				- `4634`: Good log off
+				- `4720`: Account created
+				- `4724`: Attempt made to reset password
+				- `4722`: Account enabled
+				- `4725`: Account disabled
+				- `4726`: Account deleted
+				- `104`: Event log cleared/deleted
+				- `4688`: Associated with Process Execution Activity
+- Web Server Access Logs Analysis:
+	- All requests are logged by the website and stored in a log file on the web server.
+	- Apache Web Server Access log file fields:
+		- Located at `/var/log/apache2/access.log`
+		- IP Address: IP of the user who made the request
+		- Timestamp: When the request was made
+		- Request: Request details
+			- HTTP Method: What method used
+			- URL: Request resource
+		- Status Code: Response from the server
+		- User-Agent: Information about users OS, browser, etc.
+	- Preforming log analysis:
+		- Read the file: `cat file`
+		- Combine files `cat file1 file2 > combined_files`
+		- Use `grep` and `less` for better viewing.
+

@@ -1,0 +1,59 @@
+Tags:
+
+- See how many and what certs I will get from WGU at 70 credits.
+- Complete general education first - ASAP with WGU.
+- Compare remaining certs (if any) to SANS certs I will get.
+- Transfer from WGU -> SANS after 70 credits acquired and 30 general education credits.
+	- Took into getting General Education classes done through study.com or SOPHIA Learning, so I can ensure I have the 31 general education requirements to be able to transfer into SANS.
+		- Would require WGU to accept them and then I send SANS my WGU transcript with those on there to get credit.
+	- Post 9/11 GI Bill for funding
+	- Would need to do Undergrad Certificate -> BS -> Masters to fully avoid paying out of pocket
+- Get CISSP before transferring in, in order to free up 2 classes for electives of my choice. - LOOK INTO THIS
+- Complete WGU -> SANS Masters while in Military
+	- All of this is dependant on what certs I have, where I am at, and where I want to go.
+	- WGU Bachelors and then SANS Masters using GI bill or WGU Masters or a different college Master using TA.
+	- Watch this [Using POST 9/11 GI Bill for SANS](https://www.youtube.com/watch?v=GEWSz3xHAww) 
+	- [Link to SANS Master Degree](https://www.sans.edu/cyber-security-programs/masters-degree/?msc=main-nav) 
+	- [Link to WGU Bachelor Degree Plan/Certs](https://www.wgu.edu/online-it-degrees/cybersecurity-information-assurance-bachelors-program/program-guide.html)
+	- [WGU To SANS Bachelors Reddit Thread](https://www.reddit.com/r/GIAC/comments/1i5a8iy/wgu_to_sans_bachelor/)
+	- [Josh Madakor WGU Video](https://www.youtube.com/watch?v=bPVb2QgMupQ)
+	- [$30k STEM Scholarship For GI Bill](https://www.va.gov/education/other-va-education-benefits/stem-scholarship/)
+		- [More Information](https://veteran.com/gi-bill-stem-extension/)
+	- [POST 9-11 GI Bill Yellow Ribbon Program](https://www.va.gov/education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program)
+- Below plan comes down to if WGU let's me prioritize and only take gen ed classes first. If not, I'll need to so SOPHIA learning/CLEP or DSST exam and withdraw after term 1, wait a little bit, and then reapply and send in SOPHIA/CLEP or DSST credits.
+- Plan:
+	- Term 1 WGU: Prioritize Gen Ed classes 17+ Credits?
+		- Ethics in Technology
+		- Health, Fitness, and Wellness
+		- Introduction to Communication
+		- Critical Thinking
+	- Term 2 WGU: (Possibly take another online college for the 1 gen ed class I need - Pay out of pocket. Could look at doing SOPHIA as well during this time and possibly transfer those credits into the new college if they allow it)
+		- Any Gen Ed classes I can take or need
+	- Once at 58 credits and possibly 31 Gen Ed classes, withdraw and take SANS Undergrad Certificate (12 credits) -> SANS Undergrad Degree -> SANS Masters. Reference the above video. Use Post 9/11 GI Bill for all of this.
+	- SANS Undergrad Certificate: 10-18 months (1 month and 1 day of GI bill for 4 courses)
+	- SANS Undergrad Degree: (2 years maybe less with undergrad certificate) GI Bill will cover this
+	- SANS Grad Degree: GI Bill will cover this (1-2 years maybe less due to the previous) (1 month leftover)
+		- Pros:
+			- High looking certs
+			- Expensive education for free
+			- Probably opens more door
+		- Cons:
+			- Requires a lot of thought and everything to workout according to plan
+			- Longer schooling required and can't complete as fast as WGU
+			- Could overload me while I'm active duty since it's not flexible like WGU and you have to take the courses they tell you at that time. Can't just pick how many or how little to take (Dont know if this is true or not)
+- Backup Plan:
+	- Complete BS at WGU using TA and get 13-14 certs.
+	- Pursue a BS/MS at SANS using my GI bill OR pursue only the MS at SANS using GI bill. Might be able to get another BS in like cloud computing or a certificate in cloud computing or another specialty field that interests me.
+		- Pros: 
+			- Less renewal fees with CompTIA and so certs
+			- Less thought, just continue on with the path I'm on now
+			- Less expensive
+			- Lets me be more relaxed and not worry about failing as much or overload.
+		- Cons:
+			- No SANS certs or not as many
+			- Don't know if it would affect my job/work outlook
+- Backup Plan:
+	- Could do WGU BS using TA. Maybe even WGU MS while using TA and then once I get out, use my GI bill and do Undergrad Cert -> BS -> MS all through SANS. Double the certs, no debt, but double or triple the amount of time it would take normally and instead it'd be more beneficial to use that to get for a higher cert like CISSP or OSCP or something harder.
+		- Going to do this plan. Certs aren't the end all, be all and with the experience I will have, I don't need 50 million certs like that.
+		- Had to put WGU on hold since I will be getting moved to 782nd. WGU account will remain open forever, so I can always go to student portal, just make sure to send new transcripts (JST, Calhoun, study.com/SOPHIA) before the 5th of the month before my start date and get squared away.
+		- [Info about stopping enrollment](https://www.reddit.com/r/WGU/comments/156l1p4/can_i_quit_before_i_start/)

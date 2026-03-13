@@ -1,0 +1,32 @@
+{
+	"nodes":[
+		{"id":"bc8da22dbb587d22","type":"text","text":"# **Today is `=dateformat(date(today), \"DDDD\")`**","x":-1120,"y":-620,"width":600,"height":60,"color":"5"},
+		{"id":"7a73f3446fd41a23","type":"text","text":"## Morning Start-Up","x":-1120,"y":-540,"width":420,"height":60},
+		{"id":"08e2adf89d50e716","type":"text","text":"","x":-1120,"y":-460,"width":420,"height":260},
+		{"id":"b489abd491688afb","type":"text","text":"","x":-660,"y":-540,"width":560,"height":240},
+		{"id":"fdef2519dd85af06","type":"text","text":"## Today's Notes","x":-60,"y":-540,"width":420,"height":60,"color":"3"},
+		{"id":"d1d29d3544b579f7","type":"text","text":"","x":-660,"y":-280,"width":100,"height":100,"color":"#bc6296"},
+		{"id":"af291324c3987914","type":"text","text":"```dataview  \nTABLE without ID row.file.link AS Name, truncate(string(date(today) - Birthday),2, \"\") AS Age  \nFROM \"People\"  \nWHERE dateformat(Birthday,\"dd-MM\") = dateformat(date(now), \"dd-MM\")  \n```","x":-520,"y":-280,"width":420,"height":100,"color":"#bc6296"},
+		{"id":"f692d7eaea20a80b","type":"text","text":"## 7-Day Outlook","x":-660,"y":-145,"width":560,"height":60,"color":"3"},
+		{"id":"fe031006354fb993","type":"text","text":"###### Today's Daily Note","x":-480,"y":-620,"width":220,"height":60,"color":"5"},
+		{"id":"ec056f7b795cbd14","type":"text","text":"Yesterday's Daily Note","x":-225,"y":-620,"width":325,"height":60,"color":"5"},
+		{"id":"8eaae7c92c420419","type":"text","text":"Home MOC","x":140,"y":-620,"width":220,"height":60,"color":"5"},
+		{"id":"c3d5ae1cc2d8e79f","type":"text","text":"```dataview  \nTASK  \nWHERE (contains(tags, \"#calendar\") OR contains(tags, \"#holiday\"))  \nAND scheduled = date(today)  \nGROUP by scheduled  \n```\n---\n```dataview  \nTASK  \nWHERE (contains(tags, \"#calendar\") OR contains(tags, \"#holiday\"))  \nAND (scheduled >= date(tomorrow) AND scheduled <= date(today) + dur(7 days))  \nSORT scheduled ASC  \nGROUP by scheduled  \n```","x":-660,"y":-60,"width":560,"height":440},
+		{"id":"f13d5b0b1037bff8","type":"text","text":"","x":-660,"y":420,"width":250,"height":60},
+		{"id":"8ee626921ea378d7","type":"text","text":"","x":-350,"y":420,"width":250,"height":60},
+		{"id":"50982015f65035aa","type":"text","text":"```tasks  \nnot done scheduled date is today OR scheduled before today  \nhide backlink  \nhide recurrence rule  \nhide scheduled date  \nhide task count\nhide toolbar\n```","x":-1120,"y":-175,"width":420,"height":195},
+		{"id":"816e1f380129c058","type":"text","text":"```tasks  \nnot done (no scheduled date) OR NOT (scheduled on today)  \npath does not include Reminders/Cleaning  \nhide created date  \nhide backlink  \nhide task count\nhide toolbar\nsort by scheduled date  \nsort by filename reverse  \n```","x":-1120,"y":40,"width":420,"height":200},
+		{"id":"a0d0adb7708b6e68","type":"text","text":"```tasks  \ndone today  \nhide backlink  \nhide done date  \nhide scheduled date  \nhide recurrence rule  \nhide task count\nhide toolbar\n```","x":-1120,"y":260,"width":420,"height":220},
+		{"id":"034ad300e01a4898","type":"text","text":"## Evening Recap","x":-60,"y":120,"width":420,"height":70,"color":"6"},
+		{"id":"0c89c3d19df9b106","type":"text","text":"","x":-60,"y":-460,"width":420,"height":550},
+		{"id":"63973f97baf440a2","type":"text","text":"","x":-60,"y":220,"width":420,"height":260}
+	],
+	"edges":[
+		{"id":"6b39ae773b57b347","fromNode":"034ad300e01a4898","fromSide":"bottom","toNode":"63973f97baf440a2","toSide":"top","toEnd":"none","color":"6"},
+		{"id":"02d54584671ae492","fromNode":"f692d7eaea20a80b","fromSide":"bottom","toNode":"c3d5ae1cc2d8e79f","toSide":"top","toEnd":"none","color":"3"},
+		{"id":"6ea1dff730c7cb50","fromNode":"bc8da22dbb587d22","fromSide":"right","toNode":"fe031006354fb993","toSide":"left","toEnd":"none","color":"5"},
+		{"id":"6fc41c62e703b99e","fromNode":"fe031006354fb993","fromSide":"right","toNode":"ec056f7b795cbd14","toSide":"left","toEnd":"none","color":"5"},
+		{"id":"ff266b70a5f91c08","fromNode":"ec056f7b795cbd14","fromSide":"right","toNode":"8eaae7c92c420419","toSide":"left","toEnd":"none","color":"5"},
+		{"id":"12db36e3f39b1d6f","fromNode":"d1d29d3544b579f7","fromSide":"right","toNode":"af291324c3987914","toSide":"left","toEnd":"none","color":"#bc6296"}
+	]
+}

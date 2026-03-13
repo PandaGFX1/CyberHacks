@@ -1,0 +1,66 @@
+Tags: #Terminology #Web 
+
+Refer to: [[HTTP In Depth]] and [[TLS and SSL]] and [[Website Innerworkings]]
+
+- Front End: Parts the user can see and interact with.
+	- Hypertext Markup Language (HTML): Set of instructions/code that instructs a web browser on what to display and how.
+	- Cascading Style Sheets (CSS): Describes a standard of , such as colors, text, and layouts.
+	- JavaScript (JS): Enables more complex activity that allows choices and decisions to be made on what to display.
+- Back End: Things the user doesn't see, but are needed for the web application to work.
+	- Database: Information is stored, modified, and retrieved here.
+	- Infrastructure: Web servers, application servers, storage, networking devices, etc.
+	- Web Application Firewall (WAF): Optional component that helps to filter dangerous requests and provide protection.
+- Uniform Resource Locator. 
+	- Refer to [[HTTP In Depth]]
+- HTTP Request & Response:
+	- Reference Image: [[Pasted image 20250405095423.png|HTTP Request and Response]]
+	- `Start Line`: Tells what kind of message is being sent
+	- `Headers`: Key-value pairs that provide extra information about the message and give instructions
+	- `Empty Line`: Divider to separate the header from the body
+	- `Body`: Where actual data is stored
+- In-Depth HTTP Request:
+	- Reference Image: [[Pasted image 20250405095755.png|HTTP Request]]
+	- In-Depth Methods:
+		- `GET`: Fetch data from the server without making changes
+		- `POST`: Sends data to the server. Could be used for SQL injection or XSS
+		- `PUT`: Updates something on the server. Exploited by not making sure the user is authorized to make changes.
+		- `DELETE`: Removes something from the server.
+		- `PATCH`: Updates part of the resource. Good for small changes
+		- `HEAD`: Works like GET but only retrieves headers.
+		- `OPTIONS`: Tells what methods are available for a specific resource.
+		- `TRACE`: Shows which methods are allowed, most of the time it is disabled.
+		- `CONNECT`: Used to create a secure connection.
+	- HTTP Version:
+		- `HTTP/0.9`: 1991 and only supported GET requests.
+		- `HTTP/1.0`: 1996 and added headers and better support for content. Also improved caching.
+		- `HTTP/1.1`: 1997 did a lot and is still widely used today
+		- `HTTP/2`: 2015 Introduced new features for better performance
+		- `HTTP/3`: 2022 and uses a new protocol (QUIC) for quicker and more secure connection.
+- HTTP Response:
+	- Reference Image: [[Pasted image 20250405101407.png|HTTP Response]]
+	- Headers:
+		- `Server`: Might show server information
+		- `Set-Cookie`: Should have `HttpOnly` flag and `Secure` flag set so they can't be accessed by JS and only sent over HTTPS
+		- `Cache-Control`: Can prevent sensitive info from being cached by using `no-cache`.
+		- `LOCATION`: If users can modify the location header during requests, then this could be an open redirect vulnerability.
+- Security Headers:
+	- Refer to: [Analyze Security Headers of Any Website](https://securityheaders.io/)
+	- Content-Security-Policy (CSP): Additional security layer to help mitigate against common attacks like XSS.
+		- Example: `Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.tryhackme.com; style-src 'self`
+			- `default-src`: Specifies the default policy of self, the current website
+			- `script-src`: Specifies the policy for where scripts can be loaded from (self and tryhackme).
+			- `style-src`: Policy for where CSS style sheets can be loaded.
+	- Strict-Transport-Security (HSTS): Ensures web browsers always connect over HTTPS
+		- Example: `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`
+			- `max-age`: Expiry time in seconds for this setting
+			- `includeSubDomains`: Optional Setting that instructs browser to apply this setting to all subdomains
+			- `preload`: Optional setting allows website to be included in preload lists. Preloads lists are used to enforce HSTS before even having a first website to visit.
+	- X-Content-Type-Options: Used to instruct browsers not to guess the MIME time of a resource.
+		- Example: `X-Content-Type-Options: nosniff`
+			- `nosniff`: Says not to sniff or guess MIME type
+	- Referrer-Policy: Controls amount of information sent to destination web server when a user is redirected from the source web server.
+		- Example: `Referrer-Policy: no-referrer``
+			- `no-referrer`: Completely disable any information being sent about referrer
+			- `same-origin`: Only send referrer information when the destination is part of the same origin.
+			- `strict-origin`: Only send referrer information as the origin when the protocol stays the same. Such as HTTPS to HTTPS
+			- `strict-origin-when-cross-origin`: Similar to `strict-origin` except for `same-origin` requests where it sends the full URL path in the origin header.
