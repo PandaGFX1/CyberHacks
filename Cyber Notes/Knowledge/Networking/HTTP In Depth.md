@@ -1,0 +1,66 @@
+Tags: #Networking #Terminology 
+
+Refer to: [[Protocols]] and [[Ports]] and [[OSI Model]]
+
+- HyperText Transfer Protocol was developed by Tim Berners-Lee and his team between 1989-1991.
+- Set of rules used for communcating with web servers for the transmitting of webpage data, whether it is HTML, Images, Videos, etc.
+- HTTPS is the secure version of HTTP by encryption.
+- HTTP/HTTPS is a stateless and doesn't keep track of previous requests, so cookies are used.
+- Uniform Resource Locator (URL): An instruction on how to access a resource on the internet.
+	- Reference Image: [[TryHackMe/Pasted image 20250402140805.png|URL Breakdown]]
+	- Scheme: Instructs on what protocol to use for accessing the resource. EX: HTTP, HTTPS, FTP
+	- User: Some services require authentication to login, so you can add a username and password into the URL
+	- Host/Domain: The domain name or IP address of the server
+	- Port: Port you are going to connect to, but can be any port.
+	- Path: File name or location of the resource you want to access
+	- Query String: Extra bits of information that can be sent to the requested path. EX: `/blog?id=1` tells the blog path you want the blog article with an id of 1.
+	- Fragment: Reference to a locational on the actual page requested. Common for pages with long content and can link to a certain part of the page.
+- HTTP Request:
+	- Reference Image: [[TryHackMe/Pasted image 20250402141128.png|Basic HTTP GET Request]]
+		- It is possible to make a request to a web server with just one line: `GET / HTTP/1.1`
+		- For a better experience you send other data in the form of headers that contain extra information to give to the web server.
+			- Headers such as: `Host: tryhackme.com, User-Agent: Mozilla..., Referer: https`
+			- Response would be: `Server: nginx/1.15.8, Date, Content-Type, Content-Length`
+- HTTP Methods:
+	- HTTP Methods are a way for the client to show their intended action when making a HTTP request.
+	- GET Request: This is used for getting information from a web server.
+	- POST Request: Used for submitted data to a web server and potentially creating new records.
+	- PUT Request: Used for submitting data to a web server to update information.
+	- DELETE Request: Used for deleting information/records from a web server.
+- HTTP Status Codes:
+	- Reference Image: [[TryHackMe/Pasted image 20250402153217.png|Status Code Cheat Sheet]]
+	- The first line of a response always contains the status code. 
+	- Status Code is informing the clients of the outcome of their request and potentially how to handle it.
+	- Ranges and Codes:
+		- 100 - 199 Information Response: Sent to tell the client the first part of their request has been accepted and they can continue. No longer very common.
+		- 200 - 299 Success: Used to tell clients their request was successful
+			- 200 OK: Request was completed successfully
+			- 201 Created: A resource has been created.
+		- 300 - 399 Redirection: Used to redirect the client's request to another resource. EX: A different website or webpage
+			- 301 Moved Permanently: Redirects clients browser to a new webpage or tells search engines that the page has moved and to look there instead.
+			- 302 Found: Similar to permanent redirect, but only a temporary change and it may change again in the future.
+		- 400 - 499 Client Errors: Informs the client that there was an error with their request.
+			- 400 Bad Request: Tells the browser that something was either wrong or missing in their request. Could be if the web source resource is expecting a certain parameter the client didn't send.
+			- 401 Not Authorized: Not currently allowed to view this resource until you have authorized the application. EX: User/Password.
+			- 403 Forbidden: You do not have permission to view this resource no matter what.
+			- 404 Page Not Found: The page/resource requested does not exist.
+			- 405 Method Not Allowed: Resource does not allow this method request. EX: You send a `GET` request when it was expect a `POST` request.
+		- 500 - 599 Server Errors: Reserved for errors happening on the server-side and usually indicate quite a major problem with the server handling the request.
+			- 500 Internal Service Error: The server has encountered some kind of error with your request that it doesn't know how to properly handle.
+			- 503 Service Unavailable: Server cannot handle your request as it's either overloaded or down for maintenance.
+- Headers:
+	- Headers are not strictly required, but without them it will be difficult to properly view a website.
+	- Common Request Headers:
+		- Host: By providing host header you can tell web server which host you require since some host multiple websites.
+		- User-Agent: Your browser software and version number so it knows how to format the data.
+		- Content-Length: Tells server how much data it should expect so it can make sure it's not missing any data.
+		- Accept-Encoding: What type of compression methods the browser supports so data can be made smaller for transmission
+		- Cookie: Data sent to the server to help remember your information.
+	- Common Response Headers:
+		- Set-Cookie: Information to store which gets sent back to the web server on each request.
+		- Cache-Control: How long to store the content of the response in the browser's cache.
+		- Content-Type: Tells client what type of data is being returned. Allows client browser to know how to process the data.
+		- Content-Encoding: What method was used to compress the data to make it smaller when sent.
+- Cookies:
+	- Small pieces of data that is stored on a computer to remind the web server who you are.
+	- Reference Image: [[TryHackMe/Pasted image 20250402154148.png|Cookie Exchange Process]]

@@ -1,0 +1,115 @@
+Tags: #Commands #Linux #Tools #Terminology 
+
+- Dates back to 1985. Windows 10 comes in both Home and Pro.
+- File system used by modern versions of Windows is the New Technology File System (NTFS). Before NTFS there was File Allocation Table (FAT), FAT16/31 and High Performance File System (HPFS). FAT typically used for USB devices, MicroSD cards, etc.
+	- NTFS Advantages:
+		- Supports files larger than 4GB
+		- Set specific permissions on folder and files
+		- Folder and file compression
+		- Encryption File System (EFS)
+	- NTFS Permissions:
+		- Reference Image: [[TryHackMe/Pasted image 20250402200711.png|NTFS Permissions]]
+		- Viewable by: `Right click file/folder -> Properties -> Security`
+		- Full Control
+		- Modify
+		- Read & Execute
+		- List Folder Contents
+		- Read
+		- Write
+	- Alternate Data Streams (ADS):
+		- File attribute specific to Windows NTFS
+		- Every file has at least one stream `$DATA`
+		- Use PowerShell to view ADS for files.
+- Windows\System32 Folders:
+	- `C:\Windows` traditionally contains the Windows operating system.
+	- The system environment variable for windows is `%windir%`
+	- System32 holds important files that are critical for the OS.
+	- Passwords are saved at: `C:\Windows\System32\config`
+- User Accounts, Profiles, and Permissions
+	- Administrator and Standard User Accounts are typical.
+	- Can use `lusrmgr.msc` to access Local User and Group Management information.
+	- User Account Control (UAC):
+		- Refer to: [UAC Help Page](https://docs.microsoft.com/en-us/windows/security/identity-protection/user-account-control/how-user-account-control-works)
+		- By default doesn't apply for the built-in local admin account.
+		- When a user with an account type of admin logs into a system, the current session doesn't run with elevated privileges.
+- System Configuration:
+	- One utility is `MSConfig`
+		- Helps to diagnose startup issues.
+		- Service tab lists ALL services configured for the system regardless of their state.
+	- `taskmgr` is used to enable/disable startup items.
+	- Computer Management:
+		- Utility is `compmgmt`
+		- Can be used to create basic tasks thru task scheduler
+		- Also includes event viewer.
+			- Reference Image: [[TryHackMe/Pasted image 20250402201839.png|5 Types of Events]]
+			- Reference Image: [[TryHackMe/Pasted image 20250402202002.png|Windows Logs Descriptions]]
+			- Do Windows Event Log room found in [[Try Hack Me Rooms]]
+		- Shared Folders:
+			- Complete list of shares and folders that others can connect to
+			- Default shares are Windows - `C$`, Administration - `ADMIN$`, and Remote - `IPC$`
+		- Performance Monitor:
+			- Utility is `perfmon`
+			- Used to see preformance data in real-time or from log file. 
+			- Useful for troubleshooting performance issues, whether local or remote.
+		- Disk Management:
+			- Allows for:
+				- Set up a new drive
+				- Extend a partition
+				- Shrink a parition
+				- Assigned or change a drive letter. 
+		- System Information Tool:
+			- Utility is `msinfo32.exe`
+			- Environment Variables are viewable here.
+			- Can also find the IP address and specifications under the Components tab.
+		- Resource Monitor: 
+			- Utility is `resmon`
+			- Used for advance troubleshooting.
+			- 4 sections:
+				- CPU
+				- DISK
+				- Network
+				- Memory
+- Command Prompt:
+	- Utility is `cmd.exe`
+	- Found in the System Configuration Panel.
+- Windows Commands:
+	- Refer to: [[Windows Command Line]] and [[Windows PowerShell]]
+	- `hostname`: Displays hostname
+	- `whoami`: Currently logged on user
+	- `ipconfig`: IP Information
+	- `cls`: Clear screen
+	- `netstat`: Protocol statistics for TCP/IP connections.
+	- `net`: Manage network resources.
+		- Uses through sub commands. EX: `net user`. Can use `net help` and `net help user` for information.
+- Registry Editor
+	- Utility is `regedit`
+	- Contains a central hierarchical database used to store information necessary to configure the system.
+	- Contains:
+		- Profiles for each user
+		- Applications installed on the computer and types of documents they can create
+		- Property sheet settings for folders and application icons
+		- What hardware exists on the system
+		- The ports that are being used
+- Windows Updates:
+	- Typically released on the 2nd Tuesday of each month (Patch Day) unless critical.
+- Virus & Threat Protection:
+	- Quick Scan: Checks folders in your system where threats are commonly found
+	- Full Scan: Checks all files and running program on your hard disk. Can take very long.
+	- Custom Scan: Choose which files and locations to check
+	- Settings:
+		- Real-time Protection: Locates and stops malware from installing or running on device.
+		- Cloud-Delivered Protection: Provides increased and faster protection with access to latest protection data in the cloud
+		- Automatic Sample Submission: Send sample files to Microsoft to help protect you and others.
+		- Controlled Folder Access: Protect files, folders, and memory areas on your device from unauthorized changes by unfriendly applications.
+- Firewall:
+	- Open Windows Defender Firewall: `WF.msc`
+	- Domain: Domain profile applies to networks where the host system can authenticate to a domain controller
+	- Private: Private profile is a user-assigned profile and us used to designate private and public home networks
+	- Public: Default profile used to designate public networks such as Wi-Fi hotspots at coffee shops, airports, etc.
+- Volume Shadow Copy Service (VSS)
+	- Coordinates required actions to create a consistent shadow copy (snapshot) of data to be backed up.
+	- Used to:
+		- Create a restore point
+		- Preform system restore
+		- Configure restore setting
+		- Delete restore points

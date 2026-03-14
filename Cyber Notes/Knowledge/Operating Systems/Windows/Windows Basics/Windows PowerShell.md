@@ -1,0 +1,54 @@
+Tags: #Windows #Scripting #Tools 
+
+Refer to: [[Windows Fundamentals]] and [[Windows Command Line]]
+
+- Object Oriented Programming Language.
+- Consists of (color, username, size) Properties and (functions) Methods.
+
+- AD Commands:
+	- `Set-ADAccountPassword sophie -Reset -NewPassword (Read-Host -AsSecureString -Prompt 'New Password') -Verbose` : Reset a password
+	- `Set-ADUser -ChangePasswordAtLogon $true -Identity sophie -Verbose`: Force a password reset at next logon
+	- `gpupdate /force`: Force a computer to sync to its GPO.
+- Basic Commands:
+	- `Get-Content`: Get contents of a file
+	- `Set-Location`: Change directory
+	- `Get-Command`: See all available cmdlets, functions, aliases, and scripts.
+		- `-CommandType "Function"`: Only function type commands
+	- `Get-Alias`: See all Aliases
+	- `Find-Module -Name "Powershell*"`: Search for modules (collection of cmdlets) in online repos you can download
+	- `Install-Module -Name "PowerShellGet`: Install a found module.
+	- `Get-ChildItem`: Lists files and directories in a location.
+		- `-Path`: See a certain path.
+	- `New-Item`: Create a new item (have to have arguments)
+		- `-Path ".\captain-cabin\captain-wardrobe" -ItemType "Directory"`: Create a new directory
+		- `-Path ".\captain-cabin\captain-wardrobe\captain-boots.txt" -ItemType "File"`
+	- `Remove-Item`: Removes an item.
+		- Use `-Path` to specify
+	- `Copy-Item`
+		- Use `-Path` to specify where or what
+- Piping, Filtering, and Sorting:
+	- `| Sort-Object Length`: Sorts by the Length property.
+	- `| Where-Object -Property "Extension" -eq ".txt"`: Filters by Extension property and only uses files with a .txt extension.
+		- `-ne`: Not equal
+		- `-gt`: Greater than
+		- `-ge`: Greater than or equal to
+		- `-lt`: Less than
+		- `-le`: Less than or equal to
+		- `-like`: Used alongside a wildcard to find sorta matching. EX: `-like "ship*"`
+	- `| Select-Object Name,Length`: Only shows the Name and Length properties.
+	- `Select-String -Path (path) -Pattern "hat"`: Similar to grab and look for text patterns within files.
+- System and Network Information
+	- `Get-ComputerInfo`: Comprehensive list of system info
+	- `Get-LocalUser`: Lists all local user accounts on the system.
+	- `Get-NetIPConfiguration`: Detailed information about network interfaces.
+	- `Get-NetIPAddress`: Show detail for all IP addresses configured.
+- System Analysis:
+	- `Get-Process`: Detailed view of all running processes
+	- `Get-Service`: Get's the status of services on machine
+	- `Get-NetTCPConnection`: Displays current TCP connections
+	- `Get-FileHash`: generates file hashes. Can specify which type.
+- Scripting:
+	- `Invoke-Command`: Executes commands on remote systems
+		- Help: `Get-Help Invoke-Command -examples`
+		- Execute the `Get-Service` command on a remote computer: `Invoke-Command -ComputerName RoyalFortune -ScriptBlock { Get-Service }`
+- 

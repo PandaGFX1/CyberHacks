@@ -1,0 +1,74 @@
+Tags: #Windows #Commands #Tools #Networking #Terminology 
+
+Refer to: [[Windows PowerShell]] and [[Windows Fundamentals]] and [[Windows Command Line]]
+
+- Run "Active Directory Users and Computers" from the start menu.
+
+- Windows Domain: Group of users and computers under the administration of a given business.
+	- Advantages:
+		- Centralized identity management
+		- Managing security policies.
+- Active Directory (AD): Helps to centralize the administration of common components of a Windows computer network into a single repository.
+- Domain Controller (DC): Server that runs Active Directory services.
+- Active Directory Domain Service (AD DS): Core of any windows domain. Service acts as a catalogue that holds the information of all of the "objects" that exist on your networks. Such as: users, groups, machines, printers, shares, etc. 
+	- Users: Known as a security principal meaning they can be authenticated by the domain and assigned more privileges over resources (files and printers)
+	- Can be two types of entities:
+		- People: General represent people like employees who need access
+		- Services: Define users to be used by services such as MSSQL. Every services requires a user to run, but will only have privileges needed to run their service.
+	- Machines: Known as a security principal. Every computer that join the AD domain has a machine object created.
+		- Naming scheme for machine accounts is the computer name and a dollar sign. EX: `DC01$`
+		- Machine accounts are local admins, but aren't supposed to be accessed.
+			- Passwords are automatically rotated out and comprised of 120 random characters.
+	- Security Groups: Known as security principals and can have both users and machine. Can include other groups as well.
+		- Default groups:
+			- Refer to [Microsoft AD Group Documentation](https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/active-directory-security-groups)
+			- Domain Admins: Have admin privileges over entire domain. Can administer any computer on the domain including DCs.
+			- Server Operators: Can administer Domain Controllers. Cannot change any admin group memberships.
+			- Backup Operators: Allows to access any file, ignoring permissions. Used to perform backups of data on computers.
+			- Account Operators: Users can create or modify other accounts in the domain.
+			- Domain Users: All existing user accounts in the domain
+			- Domain Computers: All existing computers in the domain
+			- Domain Controllers: Includes all existing DCs on the domain
+- Organizational Units (OUs): Users, computers, and groups are organized into these units which are container objects that allow you to classify the objects. Used to define sets of users with similar policing requirements.
+	- Reference Image: [[TryHackMe/Pasted image 20250402211304.png|Organizational Units]]
+	- Default OUs
+		- Builtin: Default groups available to any Windows host.
+		- Computers: Any machine joining network is put here, but can be moved
+		- Domain Controllers: Contains the DCs in the network
+		- Users: Default users and groups that apply to a domain-wide context
+		- Managed Service Accounts: Holds accounts used by services in the Windows domain.
+- Managing Users in AD:
+	- By default, OUs are protected against accidental deletion. To turn off: `View -> Advanced Features -> Object -> Untick "Protect from accidental deletion`
+	- Delegation: Delegate tasks such as resetting passwords to other low-privilege users.
+		- Can use Windows PowerShell to change passwords.
+- Managing Computers in AD:
+	- Normally want different policies for servers and the machines that regular users use, so create different OUs and move them.
+	- Starting point for segregating devices could be:
+		- Workstations, Servers, and DC all in separate OUs.
+- Group Policy Management:
+	- Managed through the Group Policy Objects (GPO), which is a collection of settings that can be applied to OUs.
+		- To apply: Create a GPO under `Group Policy Objects` and then link it to the OU where it goes.
+		- Then click settings and find the policy. They are categorized by Computer and User polcies.
+		- NOTE: Linked GPOs will apply to the linked OU and sub-OUs under it.
+- Authentication Methods:
+	- When a user tries to authenticate to a service using domain credentials, service authenticates by asking the DC to verify.
+	- Protocols Used:
+		- Kerberos: Used by any recent version of Windows and is the default protocol in any recent domain.
+			- Walkthrough Images: [[TryHackMe/Pasted image 20250402212933.png|Kerberos Part 1]], [[TryHackMe/Pasted image 20250402212955.png|Kerberos Part 2]], [[TryHackMe/Pasted image 20250402213017.png|Kerberos Part 3]]
+		- NetNTLM: Legacy authentication protocol kept for compatibility purposes.
+			- Uses a challenge-response mechanism
+			- Walkthrough Image: [[TryHackMe/Pasted image 20250402213051.png|NetNTLM Authentication Process]]
+- Trees, Forests, Trusts:
+	- Trees: Two domains that share a namespace can become a tree
+		- Reference Image: [[TryHackMe/Pasted image 20250402213224.png|Tree Example]]
+		- Gives better control over who can access what in the domain. EX: Someone in different domain cannot manage users in another domain.
+		- `Enterprise Admins`: Group will grant a user admin privileges over all of an enterprises domains.
+	- Forest: Union of several tress with different namespaces.
+		- Reference Image: [[TryHackMe/Pasted image 20250402213440.png|Forest Example]]
+	- Trust Relationships: Domains arranged in tress and forest are joined together by this.
+		- **NOTE: Having a trust relationship doesn't automatically grant access to all resources. You have to authorize the users and decide what to authorize**
+		- Allows you to authorize a user from a different part of the forest `THM UK` to access resources from a different domain `MHT EU`
+		- One-Way Trust Relationship: If `Domain AAA` trusts `Domain BBB` then a user from `Domain BBB` can be authorized to access a resource on `Domain AAA`
+			- Note: The direction of the one-way trust relationship is contrary to that of the access direction.
+		- Two-Way Trust Relationship: Made to allow both domains to manually authorize users from the other. 
+			- Note: By default joining several domains under a tree or forest will form a two-way trust relationship.

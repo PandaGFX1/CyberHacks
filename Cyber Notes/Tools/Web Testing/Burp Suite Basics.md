@@ -1,0 +1,48 @@
+Tags: #Web #Commands #Tools 
+
+Refer to: [[Website Innerworkings]] and [[Web Application Basics]] and [[HTTP In Depth]]
+
+- Burp Suite is used for conducting web application pentesting. Especially for Application Programming Interfaces (API) testing. Captures and enables manipulation for all HTTP/HTTPS traffic between a browser and web server. Used for web and mobile applications
+- Burp Suite Professional is a paid, but unrestricted version. Includes: Automated vulnerability scanner, fuzzer/brute-forcer that is not rate limited, API for better integration, etc.
+- Burp Suite Community Key Features:
+	- Proxy: Enables interception and modification of requests and responses while interacting with web applications.
+	- Repeater: Allows for capturing, modifying, and resending the same request multiple times. Useful for SQLi or testing the functionality of endpoints.
+	- Intruder: Allows for spraying endpoints with requests. Used for brute-forcing.
+	- Decoder: Can decode information or encode payloads before sending.
+	- Comparer: Enables the comparison of two pieces of data at either word or byte level.
+	- Sequencer: Typically employed when assessing the randomness of tokens, such as session cookie values or other randomly generated data.
+- Burp Suite Dashboard:
+	- Tasks: Allow you to define tasks that BS will preform. The default in community is "Live Passive Crawl". This automatically logs the pages visited.
+	- Event Log: Provides information about the actions preformed such as starting the proxy.
+	- Issue Activity: Specific to BS Professional. Displays the vulnerabilities identified by the automated scanner.
+	- Advisory: Provides more detailed information about the identified vulnerabilities such as references and suggested remediations.
+- Settings:
+	- Global Settings: Affect the whole installation.
+	- Project Settings: Specific to the current project. Community doesn't support saving projects.
+	- User Settings: Affect the entire installation.
+- Burp Proxy:
+	- Allows to capture requests and responses and can send this to other tools.
+	- Intercepting Requests: Held back from reaching the target when captured and allow for forwarding, dropping, editing, or sending them to another module.
+	- Captures and Logs all requests made through the proxy, even when it is turned off.
+	- Response Interception: Proxy does not intercept server responses unless explicitly requested.
+	- Match and Replace: Allow for regex to modify outgoing and incoming requests. 
+	- FoxyProxy can be used in firefox for Burp. Burp uses PORT 8080.
+- Burp Suite Browser:
+	- Used instead of FoxyProxy
+	- If running as root user on Linux, you will get an error for inability to sandbox.
+		- To fix: Run Burp Suite under a low-privileged account.
+		- Easy Option: `Settings -> Tools -> Burp's Browser` and check the `Allow Burp's Browseer to run without a sandbox`
+			- Can pose a significant security risk.
+- Scoping and Targeting:
+	- Setting a scope: Allows you to define what gets proxied and logged in Burp Suite.
+		- Proxy will still intercept anything that is not included in the scope. 
+			- To disable: `Proxy sub-tab -> Select "and URL is in target scope" for both response and request interception rules`
+- Configuring HTTPS traffic:
+	- Add PortSwigger CA to your browser's list of trusted CA's.
+		- [Download the CA Certificate](http://burp/cert)
+		- Go to firefox settings: `about:preferences -> View Certificates _> Trust this CA to identify websites`
+- Example Attack:
+	- Try XSS: `<script>alert(Succ3ssful XSS")</scrip>` into a text field. 
+		- We notice there is a client-side filter to prevent adding non email characters, which we can bypass.
+		- First, enter in valid stuff like a random email and random query.
+		- Go to Burp and add the payload into a field and then URL encode it by selecting it and then `CTRL+U`. Might also be able to `RIGHT CLICK + URL Encode as you type`

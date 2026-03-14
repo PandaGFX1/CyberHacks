@@ -1,0 +1,73 @@
+Tags: #Defense #Terminology 
+
+Refer to: [[Defensive Security Intro]]
+
+- Digital Forensics:
+	- Application of methods and procedures to investigate and solve cyber crimes.
+- National Institute of Standards and Technology (NIST):
+	- Defines a general process for every digital forensics case. 
+	- NIST works on defining frameworks for different areas of technology
+- Process of digital forensics:
+	- Consists of 4 phases.
+	- Reference Image: [[TryHackMe/Pasted image 20250414085312.png|4 Phases of Digital Forensics]]
+	- Collection:
+		- Consists of identifying all the devices from which data can be collected. Also necessary to ensure original data is not tampered with while collecting evidence.
+	- Examination:
+		- Data usually needs to be filtered as the amount can overwhelm investigators. This phase is where filtering is done.
+	- Analysis:
+		- Analyze the data by correlating it with multiple pieces of evidence to draw conclusions. Aims to extract the activities relevant to the case chronologically.
+	- Reporting:
+		- A detailed report is prepared. Contains the investigations methodologies and detailed findings from the collected evidence. May also contain recommendations.
+- Different Types of Digital Forensics:
+	- Reference Image: [[TryHackMe/Pasted image 20250414090333.png|Types of Digital Forensics]]
+	- Computer Forensics:
+		- Most common type; Concerns investigating computers.
+	- Mobile Forensics:
+		- Involves investigationg mobile devices and extracting evidence such as call records, text messages, GPS locations, etc.
+	- Network Forensics:
+		- Includes the whole network. Majority of evidence found in networks is the network traffic logs.
+	- Database Forensics:
+		- Investigated any intrusion into databases that result in data modification or exfiltration.
+	- Cloud Forensics:
+		- Involves investigating data stored on cloud infrastructure. Can get tricky as little evidence is on cloud infrastructures.
+	- Email Forensics:
+		- Investigated to determine whether they are part of phishing or fraudulent campaigns.
+- Evidence Acquisition:
+	- Must collect all evidence securely without tampering the original data.
+	- General practices to follow:
+		- Proper Authorization:
+			- Forensics teams should obtain authorization from the relevant authorities before collecting any data. Forensic evidence contains private and sensitive data of an organization or individual.
+		- Chain of Custody:
+			- Formal documents containing all details of the evidence
+			- Key details:
+				- Refer to: [Sample CoC Download](https://www.nist.gov/document/sample-chain-custody-formdocx)
+				- Description of the evidence (name, types)
+				- Name of individuals who collected the evidence
+				- Date and time of evidence collection
+				- Storage location of each piece of evidence
+				- Access times and the individual record who accessed the evidence
+		- Use of Write Blockers:
+			- Write Blockers allow a forensics team to collect data from a hard drive, without modifying or altering files that may be on the hard drive.
+			- Example:
+				- When a collection team attaches a hard drive to the forensics workstation, some background tasks on the workstation may alter the timestamps of files on the hard drive.
+- Windows Forensics/Tools:
+	- Forensic Images of the Windows Operating System are taken.
+		- Bit-by-bit copies of the whole OS.
+		- 2 Different categories of Forensic Images are taken from a Windows OS.
+		- Disk Image:
+			- Contains all the data present on the storage device (HDD, SSD, etc.) This data is non-volatile.
+		- Memory Image:
+			- Contains all the data inside the OS's RAM. RAM is volatile, therefore the memory image should be prioritized and taken first.
+	- FTK Imager:
+		- Widely used tool for taking disk images. Offers a user-friendly GUI for creating the image in various formats. Can also analyze the contents of a disk image. Used for both acquisition and analysis.
+	- Autopsy:
+		- Popular open-source digital forensics platform. Investigator can import an acquired disk image into this tool and the tool will conduct an extensive analysis of the image. Offers features such as keyword search, deleted file recovery, file metadata, extension mismatch detection, etc.
+	- DumpIt:
+		- Offers the utility of taking a memory image from a Windows OS. Creates memory images using a CLI interface and a few commands. Memory image can be taking in different formats.
+	- Volatility:
+		- Used for analyzing memory images. Offers useful plugins. Supports various OS's other than Windows.
+- Commands/Tools:
+	- `pdfinfo`: Displays various metadata related to a PDF file.
+		- To install: `sudo apt install poppler-utils`
+	- `exiftool`: Used to read the Exchangeable Image File Format (EXIF) data from an image.
+		- To install: `sudp apt install libimage-exiftool-perl`

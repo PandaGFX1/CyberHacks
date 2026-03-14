@@ -1,0 +1,118 @@
+Tags: #Offensive 
+
+- Defense in Depth: The use of multiple varied layers of security to an organizations systems and data in the hopes that multiple layers will provide redundancy in an organizations security perimeter
+- The CIA Triad:
+	- An information security model that is used throughout creating a security policy.
+	- A continuous cycle and if all 3 sections are not answered, the security policy is ineffective.
+	- Confidentiality:
+		- Protection of data from unauthorized ACCESS and MISUSE - Protects data from parties it's not intended for.
+			- EX: Only HR Employees can access employee records; Accounting documents may not be as sensitive, so not as tight of controls are placed on them, but they are still confidential.
+	- Integrity:
+		- Condition where information is kept ACCURATE and CONSISTENT unless AUTHORIZED CHANGES are made.
+		- Maintained when information remains unchanged during storage, transmission, and usage not involving modification to the information.
+		- Defenses to Use:
+			- Access control and rigorous authentication can help prevent authorized users from making unauthorized changes.
+			- Hash verifications and digital signatures an help ensure transactions are authentic and files have not been modified or corrupted.
+	- Availability:
+		- Data is only useful if it is available and accessible by the user. 
+		- Information should be available when authorized users need to access it.
+		- Availability is achieved through many factors such as:
+			- Reliable and well-tested hardware for their information technology servers.
+			- Redundant technology and services in case of failure of the primary.
+			- Implementing well-versed security protocols to protect technology and services from attack.
+
+- Principals of Privilege:
+	- Vital to administration and correctly define the various levels of access to an information technology system individual require
+	- Levels of access given are determined on 2 primary functions:
+		- Individuals role/function in an organization.
+		- Sensitivity of the information being stored on the system.
+		
+	- Two concepts used to assign and manage the access rights of individuals:
+		- Privileged Identity Management (PIM):
+			- Used to translate a user's role within an organization into an access role on a system
+		- Privileged Access Management (PAM)
+			- Management of the privileges a system's access role has.
+			- Encompasses enforcing security policies.
+				- EX: Password management, auditing policies, and reducing the attack surface of a system
+	- Principle of Least Privilege:
+		- Users should be given the MINIMUM amount of privileges and only given those that are absolutely necessary for them to preform their duties.
+
+- Other Security Models:
+	- The Bell-La Padula Module:
+		- Works by granting accesses to pieces of data (called objects) on a strictly need to know basis.
+		- Popular within government/military due to presuming members have already gone through "vetting"
+			- Vetting: Screening process where applicant's backgrounds are examined to establish risk they propose to an organization.
+		- Uses the rule "no write down, no read up".
+		- Advantages:
+			- Can be replicated to real-life organizations hierarches
+			- Simple the implement and understand and has been proven successful
+		- Disadvantages:
+			- User may not have access to an object, but they will know about it's existence
+			- Model relies on a LARGE amount of trust in the organization
+		- Reference Image: [[TryHackMe/Pasted image 20260308123326.png|Bell-La Padula Model]]
+	- Biba Model
+		- Equivalent of the above, but for integrity
+		- Applies the rule of objects (data) and subject (users) summarized as "no write up, no read down"
+		- Users can create or write content to objects at OR below their level, but can only READ the contents of objects above the users level
+		- Used in organizations where integrity is MORE important than confidentiality
+			- EX: Software development, developers may only have access to code necessary for their job. May not need access to critical pieces of information such as databases.
+		- Advantages:
+			- Simple to implement
+			- Resolves limitations of Bell-La Padula model by addressing both confidentiality and data integrity
+		- Disadvantages:
+			- Many levels of access and objects -- Things can be overlooked easily when applying security controls
+			- Often results in delays within a business
+				- EX: A doctor would NOT be able to read the notes made by a nurse in a hospital
+		- Reference Image: [[TryHackMe/Pasted image 20260308143259.png|Biba Model]]
+
+- Threat Modeling & Incident Response:
+	- Process of reviewing, improving, and testing security protocols in place in an organizations info tech infrastructure and services.
+		- Critical stage of threat modeling is identifying likely threats that an application or system may face; vulnerability's a system or application may be vulnerable to.
+	- Very Similar to a risk assessment made in workplaces for employees and customers. Principals all return to:
+		- Preparation
+		- Identification 
+		- Mitigations
+		- Review
+	- However, it's a complex process that needs constant review and an effective threat model should include:
+		- Threat Intelligence
+		- Asset Identification
+		- Mitigation Capabilities
+		- Risk Assessment
+	- Frameworks:
+		- Process for Attack Simulation and Threat Analysis (PASTA)
+		- STRIDE - 6 Principles below
+			- Spoofing Identity
+				- Requires you to authenticate requests and users accessing a system
+				- Spoofing involved a malicious party falsely identifying itself as another
+				- Access keys (API Keys) or signatures via encryption help to remediate this
+			- Tampering With Data
+				- Anti-Tampering measures to a system or application provide integrity
+				- EX: Shops use seals on food products
+			- Repudiation Threats
+				- Dictates use of services such as logging of activity for a system/application to track
+			- Information Disclosure
+				- Applications/Services need to be appropriately configured to only show information relevant to the owner
+			- Denial of Service
+				- Applications/services resources should have measures so that abuse won't result in bringing the whole system down
+			- Elevation of Privileges
+				- Worst case scenario for a application/service
+				- Means user was able to escalate privileges and can lead to further exploitation or information disclosure.
+	- Incident Response: Actions taken to resolve and remediate the threat
+		- 6 Steps of Incident Response:
+			- Preparation:
+				- Do we have the resources and plans in place to deal with the security incident?
+			- Identification
+				- Has the threat and the threat actor been correctly identified in order for us to respond to?
+			- Containment
+				- Can the threat/security incident be contained to prevent other systems or users from being impacted?
+			- Eradication
+				- Remove the active threat.
+			- Recovery
+				- Perform a full review of the impacted systems to return to business as usual operations.
+			- Lessons Learned
+				- What can be learnt from the incident? I.e. if it was due to a phishing email, employees should be trained better to detect phishing emails.
+	- Incident: Breach of security
+		- Classified using a rating of urgency and impact - Urgency is determined by the type of attack that is faced and impact is determined by the affected system and what impact it has on business operation
+			- Reference Image: [[TryHackMe/Pasted image 20260308144331.png|Incident Classification]]
+		- Responded to by a Computer Security Incident Response Team (CSIRT)
+			- Group of employees with technical knowledge about systems and/or current incident

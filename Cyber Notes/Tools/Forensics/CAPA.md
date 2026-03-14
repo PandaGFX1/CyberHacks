@@ -1,0 +1,91 @@
+Tags: #Defense #Tools #MalwareAnalysis 
+
+Refer to: [[Hashing Basics]] and [[Cryptography Basics]]
+
+- Common Analysis Platform for Artifacts:
+	- Tool developed by FireEye Mandiant.
+	- Designed to identify the capabilities present in executable files like Portable Executables (PE), ELF Binaries, .NET modules, shellcode, and even sandbox reports.
+	- Analyzes the files and applies a set of rules that describe common behaviors, allowing it to determine what the program is capable of doing such as network communication, file manipulation, process injection, etc.
+	- Used as a way to essentially reverse engineer code without having to manually do it. - Useful in malware analysis and threat hunting.
+- Using CAPA On Windows:
+	- Open PowerShell and ensure you are in the correct directory: `C:\Users\Administrators\Desktop\capa`
+	- Run `capa` or `capa.exe` and point to the binary (malicious executable)
+	- Example: `capa.exe .\cryptbot.bin` or `capa .\cryptbot.bin` and `capa cryptbot.bin` may also work
+- Options:
+	- `-h`: Get help
+		- Example: `capa -h`
+	- `-v` and `-vv`: Increase verbosity
+		- Example: `capa.exe .\cryptbot.bin -v`
+		- Check inside the `cryptbot_v.txt` or `cryptbot_vv.txt` depending on what you used.
+	- `-j`: Output as a .json file.
+		- Example: `capa -j -vv .\cryptbot.bin > cryptbot_vv.json`
+		- Upload this file to `CAPA Explorer Web` - Offline and Online
+- Interpreting Results:
+	- First Block / Hashes:
+		- Contains basic information about the file such as:
+			- `Cryptographic Algorithms`: Hashes
+			- `Analysis`: What type of analysis was preformed (static/dynamic)
+			- `OS`: Which identified capabilities applied/what type of executable
+			- `Arch`: Tells what type of binary related architecture we are dealing with
+			- `Path`: Where the file is located
+	- MITRE ATT&CK:
+		- Format is: `ATT&CK Tactic::ATT&CK Technique::Technique Identifier` or `ATT&CK Tactic::ATT&CK Technique::ATT&CK Sub-Technique::Technique Identifier[.]Sub-Technique Identifier`
+	- Malware Attribute Enumeration and Characterization (MAEC):
+		- Specialized language designed to encode and communicate complex details concern malware. Contains an extensive range of attributes such as behaviors, artifacts, and interconnections among various types of malware.
+		- Common Value:
+			- Launcher:
+				- Exhibits behaviors that might trigger specific actions similar to malware behavior
+			- Indicates the file have behavior similar to:
+				- Dropping Additional Payloads
+				- Activating persistence mechanisms
+				- Connecting to C2 servers
+				- Executing specific functions
+				- And More
+			- Downloader:
+				- Exhibits behavior wherein it downloads and executes other files, usually seen on more complex malware.
+			- Indicates the file have behavior similar to:
+				- Fetching additional payloads or resources from internet
+				- Pulling in updates
+				- Executing secondary stages
+				- Retrieving configuration files.
+	- Malware Behavior Catalogue (MBC):
+		- Designed to support various aspects such as labelling, similarity analysis, and standardized reporting. Serves as a catalogue of malware objectives and behaviors. Can link to ATT&CK methods.
+		- **NOTE**: There's a lot more, but most is self explanatory. Essentially the left side is what is identified and the right side is how specifically it preforms that action.
+		- Break it down line by line and thing logically about what the malware is doing.
+		- Reference: [MBC Summary](https://github.com/MBCProject/mbc-markdown/blob/main/mbc_summary.md)
+		- Formatting:
+			- `OBJECTIVE::Behavior::Method[Identifier]` 
+				- EX: `ANTI-STATIC ANALYSIS::Executable Code::Argument Obfuscation[B0032.020]`
+				- This format can have METHOD which is basically a sub-technique
+			- `OBJECTIVE::Behavior::[Identifier]`
+				- Ex: `COMMUNICATION::HTPP Communication::[C0002]`
+		- Objective:
+			- Based on ATT&CK tactics in the context of malware behavior. Has Anti-Behavioral and Anti-Static Analysis. Use case of characterizing malware.
+			- Anti-Behavioral Analysis: 
+				- Malware attempts to avoid detection by hindering behavioral analysis using tools like sandboxes or debuggers.
+			- Anti-Static Analysis: 
+				- Malware attempts to obstruct or add complexity to static analysis to make it harder to identify and understand its intentions/behaviors.
+			- Collection:
+				- Malware focuses on identifying and gathering information from target machine.
+			- C2:
+				- Malware typically establishes communication with compromised systems. Allows malware to control systems through RCE, exfiltrate data, etc.
+			- Credential Access:
+				- Primary aim of malware is to steal account credentials.
+		- Micro-Behavior/Objective:
+			- Action or actions exhibited by potentially malicious software that isn't necessarily malicious by these behaviors are typically abused.
+	- Namespaces:
+		- Format: `Capability(Rule Name)::TLN(Top-Level Namespace)/Namespace`
+		- Example: `reference anti-VM strings::Anti-Analysis/anti-vm/vm-detection`
+		- Namespaces:
+			- Used to group items with the same purposes.
+			- Uses rules to detect behaviors and then groups that into a category. There is a LOT.
+			- Reference Image: [[TryHackMe/Pasted image 20250429083129.png|Namespaces Grouping]]
+			- Reference: [Other TLN's and Other Namespaces](https://github.com/MBCProject/capa-rules-1?tab=readme-ov-file#namespace-organization)
+		- Group Namespaces:
+			- Under the TLN, there are grouped namespaces.
+			- Example: `anti-analsysis/anti-vm/vm-detection` and `anti-analysis/obfuscation` both f0all under the same TLN, but these are rules that are grouped to detect different things.
+	- Capability:
+		- Lines up with it's related TLN, namespace, and the rules associated.
+		- The name of the rule that was flagged with the namespace.
+		- Example: `reference anti vm strings`. There just isn't a "-".
+		- Exception would be if a rule is located in the nursery instead.

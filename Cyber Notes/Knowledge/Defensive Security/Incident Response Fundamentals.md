@@ -1,0 +1,76 @@
+Tags: #Defense #Terminology 
+
+Refer to: [[Defensive Security Intro]]
+
+- Cyber Security Incident:
+	- Any digital/cyber related incident that costs organizations thousands of dollars.
+	- Require planning and resources to avoid huge losses.
+- Incidents:
+	- Many different processes run on devices; some interactive and some non-interactive.
+	- Every process generates an event every time they do something and it is logged. 
+	- Security solutions take in these events and analyze them. When it find an event or group of events associated with a possible harmful activity, it triggers an alert.
+	- False Positive:
+		- If a security solution triggers an alert, but it is not a true alert
+	- True Positive:
+		- Security solution triggers an alert and the event actually happened.
+	- Categorized as low, medium, high, or critical based on the impact created.
+- Types Of Incidents:
+	- Malware Infections
+		- Mostly caused by files that can be text, documents, executables, etc.
+	- Security Breaches:
+		- When an unauthorized person gets access to confidential data
+	- Data Leaks:
+		- When confidential information of an individual or organization is exposed to unauthorized entities.
+	- Insider Attacks:
+		- Incidents from within an organization.
+	- Denial Of Service Attacks:
+		- Incidents where the attacker floods a system/network/application with false requests making it unavailable.
+- Incident Response Process:
+	- SANS Incident Response Framework:
+		- Consists of 6 phases.
+		- `PICERL` to remember more easily.
+		- Reference Image: [[TryHackMe/Pasted image 20250415112511.png|SANS Incident Response]]
+	- NIST Incident Response:
+		- Consists of 4 phases.
+		- Reference Image: [[TryHackMe/Pasted image 20250415112552.png|NIST Incident Response]]
+	- Comparison:
+		- Reference Image: [[TryHackMe/Pasted image 20250415115715.png|SANS and NIST Incident Response]]
+	- Phases:
+		- Preparation:
+			- Includes building the necessary resources to handle an incident. Resources include devloping incident response teams, having a peroper incident response plan, and deploying necessary security solutions to combat incidents.
+				- EX: Conducting awareness training for employees
+		- Identification:
+			- Looking for any abnormal behavior that indicants an incident by using security solutions/techniques.
+				- EX: Team notices a huge amount of data being sent from one of the hosts.
+		- Containment:
+			- Minimizing the impact of attack by isolating victim machines, disabling compromised user accounts, etc.
+				- EX: Isolate host from the network to stop from jumping systems.
+		- Eradication:
+			- Removing the threat from the attacked environment. Threat of any kind. Ensured the subject environment is clean. 
+				- EX: Deep malware scan was executed to remove the malicious software
+		- Recovery:
+			- Recovering the affected systems from backup or rebuilding them. Recovered systems are then tested.
+				- EX: Compromised host was re-configured and the exfiltrated data was restored from the backup.
+		- Lessons Learned:
+				- Gaps in the detection and analysis of the incident are identified and documented.
+					- EX: Conducting a post-incident review meeting to analyze the incident's root cause and improve security.
+	- Incident Response Plan:
+		- Formal incident response document that outlines the incident response process/procedures of an organization.
+- Incident Response Techniques:
+	- Security Information and Event Management Solution (SIEM):
+		- Collects all important logs in one centralized location and correlates them to identify incidents
+	- Antivirus (AV):
+		- Detects known malicious programs in a system and regularly scans your system for these
+	- Endpoint Detection Response (EDR):
+		- Deployed on every system, protecting it against some advanced-level threats. Can also contain and eradicate the threat.
+	- Playbook:
+		- Step-by-step instructions on how to deal with each kind of incident such as investigating the extent of the attack, taking necessary actions to prevent further damage, etc.
+		- Example playbook for a Phising Email Incident:
+			- 1. Notify all the stakeholders of the incident
+			- 2. Determine if the email was malicious by conducting header/body analysis of the email.
+			- 3. Look for any attachments with the email and analyze them
+			- 4. Determine if anybody opened the attachments.
+			- 5. Isolate the infected systems from the network.
+			- 6. Block the email sender.
+	- Runbook:
+		- Detailed, step-by-step execution of specific steps during different incidents. May vary depending on resources avaliable.

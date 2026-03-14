@@ -1,0 +1,53 @@
+Tags: #Commands #Linux #Tools
+
+- Linux is a much more lightweight OS than other OS's such as Windows. Linux is an umbrella for multiple OS's based on UNIX.
+- Linux is open source and comes in many flavors/distributions.
+- The first release of a Linux OS was in 1991 by Linux Torvalds
+
+- Commands:
+	- `echo`: Displays what you want.
+	- `whoami`: Displays user your logged in as.
+	- `ls`: Lists files.
+	- `cd`: Change directory
+	- `cat`: Concatenate/print contents of a file
+	- `pwd`: Print working directory
+	- `find -name *.txt`: Find all documents with a .txt extension.
+	- `grep`: Searches for what is specified in the specified file.
+	- `wc -l`: Counts the number of lines in a file.
+	- `touch`: Create a new file.
+	- `mkdir`: Make a new directory.
+	- `cp`: Copy a file or folder.
+	- `mv`: Move a file or folder.
+	- `rm`: Remove a file or folder.
+	- `file`: Determine the file type.
+	- `su`: Switch user
+		- Add `-l` to get a shell much more like the actual user.
+	- `wget`: Download files from the web via HTTP
+	- `scp`: Secure copy using SSH protocol
+		- Format is SOURCE then DESTINATION: `scp important.txt ubuntu@10.10.10.10:/home/ubuntu/notes.txt`
+	- `python3 -m http.server`: Make a simple web server to serve files
+	- `ps`: Shows running processes
+	- `top`: Real-time statistics about the processes running.
+	- `htop`: Better real-time view than `top`
+	- `kill`: Kill a processes using PID
+	- `systectl [option] [service]`: Control systemd processes
+	- `add-apt-repository`: Allows you to add a new apt repo.
+	- `echo $SHELL`: See what shell you are using
+	- `telnet IP PORT`: Connect via telnet
+		- Refer to [[Telnet]]
+	- FTP Usage:
+		- Refer to [[Protocols]]
+	- `ssh usernam@ip -X`: SSH with X11 forwarding for a GUI.
+	- `sftp username@ip`: Refer to [[Protocols]]
+	- `chromium --ssl-key-log-file=~/ssl-key.log`: Dump chrome TLS keys if it is set to log a sessions TLS keys.
+- Operators:
+	- `&`: Allows you to run commands in the background of your terminal
+	- `&&`: Combine multiple commands together in one line
+	- `>`: Redirector for what is specified.
+	- `>>`: Appends output rather than replace.
+- Common Directories:
+	- `/etc`: Stores files used by the operating system.
+	- `/var`: Short for variable data and stores data that is frequently accessed or written by services or applications.
+	- `/root`: Home for the "root" user.
+	- `/tmp`: Short for temporary and store data that is only needed to be accessed once or twice. Folder is cleared when the computer is restarted.
+

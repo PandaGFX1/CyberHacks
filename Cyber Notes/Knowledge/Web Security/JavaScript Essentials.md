@@ -1,0 +1,42 @@
+Tags: #Terminology #Web #Scripting 
+
+Refer to: [[HTTP In Depth]] and [[TLS and SSL]] and [[Website Innerworkings]]
+
+- JavaScript (JS): Popular scripting language to add interactive features into websites. Used primarily with HTML. Interpreted language meaning the code is executed directly in the browser.
+- Variables: Contains that allow you to store data values in them.
+	- 3 ways to declare variables: `var` and `let` and `const`
+		- `var`: Function-scoped
+		- `let` and `const`: Block-scoped which offers better control variable visibility
+- Data Types: Define the type of value a variable can hold such as `string` and `number` and `boolean` and `null` and `undefined` and `object`
+- Functions: Block of code designed to preform a specific task.
+	- Reference Image: [[TryHackMe/Pasted image 20250405115634.png|JS Function]]
+- Loops: Allow for you to run code blocks multiple times as long as the condition is true. Common Loops: `for`, `while`, `do..while`.
+	- Reference Image: [[TryHackMe/Pasted image 20250405115836.png|JS Loop]]
+- Example scripts:
+	- Script 1: [[TryHackMe/Pasted image 20250405120257.png|JS Add 2 Numbers and Print]]
+- Integrating JS into HTML: Can be integrated internally and externally.
+	- Internally: Embedding the JS code directly into an HTML document. Inserted between `<script>` tags. Placed inside `<head>` tags when scripts need to be loaded before the page content is rendered. Placed in `<body>` tags to be utilized to interact with elements as they are loaded.
+		- Reference Image: [[TryHackMe/Pasted image 20250405120905.png|Simple Internal JS]]
+	- Externally: Creating and storing JS code in a separate file ending with `.js`. Helps to keep the HTML document clean and organized. Can be stored/hosted on the same web server or on an external web server. Better for reusing across multiple web pages.
+		- Reference Image: [[TryHackMe/Pasted image 20250405121223.png|Simple External JS]]
+- Verifying Internal or External JS: If you see a `<script>` tag with a `src` attribute then it indicates it is external JS.
+- Abusing Dialogue Functions: 
+	- Dialogue Boxes: Allow for interaction with users and to dynamically update content on web pages. JS provides built-in functions like `alert`, `prompt`, and `confirm`
+	- Can be exploited with XSS
+		- `alert`: Convey information or warnings to users.
+			- EX: `alert("HelloTHM");`
+		- `prompt`: Asks for user input.
+			- EX: [[TryHackMe/Pasted image 20250405121919.png|JS Prompt And Alert]]
+		- `confirm`: Displays dialogue box. Returns true if OK is pressed and false if Cancel is pressed.
+- Bypassing Control Flow Statements:
+	- Control Flow: Order in which statements and code blocks are executed based on certain conditions. 
+		- Example Structures: `if-else`, `switch`, `for`, `while`, `do..while`.
+	- `if-else`: Execute different blocks of code depending on if a condition is true or false.
+		- Example: [[TryHackMe/Pasted image 20250405123439.png|JS If-Else Statement]]
+- Exploring Minified Files:
+	- Minification: Process of compressing JS files by removing all unnecessary characters such as spaces, line breaks, comments, and even shortening variable names. Helps with performance and makes it harder to read.
+	- Obfuscation: Adds undesired code, renaming variables/functions to meaningless names, and adding dummy code.
+		- Refer to: [Online JS Obfuscator](https://codebeautify.org/javascript-obfuscator)
+	- Deobfuscation: Reverting the obfuscation of JS code
+		- Refer to: [Online JS Deobfuscator](https://obf-io.deobfuscate.io/)
+		- 

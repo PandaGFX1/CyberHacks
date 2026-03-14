@@ -1,0 +1,76 @@
+Tags: #Tools #Commands 
+
+Refer to: [[HTTP In Depth]] and [[Website Innerworkings]] and [[DNS In Depth]] and [[Protocols]]
+
+- Often used for reconnissance to enumerate web directories, DNS subdomains, virtual hosts, Amazon S3 buckets, and Google Cloud Storage by brute force.
+
+- Helpful Stuff: [[TryHackMe/Pasted image 20250408161507.png|DNS vs Vhosts]] and [[TryHackMe/Pasted image 20250408161748.png|Different Use Cases]]
+
+- For HTB: We know that we are only pentesting one IP address, therefore we use vhost mode (probably) because only sites hosted by that server/on that IP are within scope, whereas if we are pentesting to see if maybe there are subdomains hosted by DIFFERENT MACHINES, but might still be tied to that domain, we use DNS. DNS = Multiple machines. VHOST = One machine running multiple things. DNS for the whole domain of example.com.
+
+- Installation:
+	- Follow: [GoBuster GitHub](https://github.com/OJ/gobuster)
+- Usage: `gobuster [command]`
+	- SecList Common Directories is good to use.
+	- Reference Image: [[TryHackMe/Pasted image 20250408155025.png|Useful Usage]]
+- Commands:
+	- `completion`: Generate the autocompletion script for the specified shell
+	- `dir`: Uses directory/file enumeration
+	- `dns`: DNS subdomain enumeration by doing a DNS lookup to the FQDN created by combining the domain name with wordlist. EX: blog.example.thm, hello.example.thm. Uses the same main domain. 
+	- `fuzz`: Uses fuzzing mode. Replaces the keyword FUZZ in the URL, Headers, and request body
+	- `gcs`: GCS bucket enumeration mode
+	- `help`: Help about any command
+	- `s3`: AWS bucket enumeration
+	- `tftp`: TFTP enumeration
+	- `vhost`: VHOST enumeration Probably want to use the IP address as URL parameter - Navigate to the URL by combining the URL parameter with entry from wordlist. EX: blog.thm, shop.thm running on same server.
+- Flags/Options:
+	- `-t`: Configures number of threads. Default is 10.
+	- `-w`: Configures a wordlist
+	- `--delay`: Defines amount of time to wait before sending requests.
+	- `--debug`: Helps troubleshoot errors.
+	- `-o`: Writes results to a file
+	- `-u ""`: Specifies the URL to use
+- Directory Enumeration:
+	- Help Page:
+		- `gobuster dir --help`
+	- Example Usage:
+		- `gobuster dir -u "http://www.example.thm" -w /usr/share/wordlists/dirbuster/... -r`
+			- Follows redirects
+		- `gobuster dir -u "https://..." -w /usr/share/wordlists/... -x .php,.js`
+			- Lists directories from wordlists and files with .php or .js
+	- Common Flags:
+		- `-c`: Cookie to pass with each request
+		- `-x`: File extensions to scan for
+		- `-H`: Configures an entire header to pass with each request
+		- `-k`: Skips the process that checks the certificate when https is used. Often happens for CTF events/self-signed certificates.
+		- `-P`: Password for authenticated requests
+		- `-s`: Configure status codes to display
+		- `-b`: Configure which status codes NOT to display
+		- `-U`: Username for authenticated requests
+		- `-r`: Follows redirects that is receives as a response.
+- DNS Enumeration:
+	- Help Page:
+		- `gobuster dns --help`
+	- Example Usage:
+		- `gobuster dns -d example.thm -w /usr/share/wordlists/SecLists/Discovery/DNS/subdomains-top1million-5000.txt`
+	- Common Flags:
+		- `-c`: Show CNAME records. Cannot be used with `-i`
+		- `-i`: Shows IP addresses that the domain/subdomain resolves to
+		- `-r`: Configures a custom DNS server for resolving
+		- `-d`: Configures the domain to enumerate
+- VHost Enumeration:
+	- Virtual hosts are different websites on the same machine. Sometimes, they look like subdomains. They are IP-based and run on the same server. Subdomains are set up in DNS
+	- Help Page:
+		- `gobuster vhost --help`
+	- Example Usage:
+		- `gobuster vhost -u "http://10.10.120.125" --domain example.thm -w /usr/share/wordlists/SecLists/Discovery/DNS/subdomains-top1million-5000.txt --append-domain --exclude-length 250-320`
+			- `--domain`: Used since there isn't a fully set up DNS infrastructure.
+			- `--append-domain`: Used to make the url blog.example.thm and shop.example.thm
+				- NOTE: If you don't use append then you will get blog.thm and shop.thm, which is more common.
+	- Common Flags:
+		- `-u`: Specifies the base URL
+		- `--append-domain`: Appends the base domain to each word. EX: `word.example.com`
+		- `-m`: Specifies the HTTP method to use for the request
+		- `--domain`: Appends a domain to each wordlist entry to form a valid hostname
+		- `--exclude-length`: Excludes results based on length of response body
+		- `-r`: Follows HTTP redirects

@@ -1,0 +1,78 @@
+Tags: #Defense #Terminology #Tools 
+
+Refer to: [[SOC Fundamentals]] and [[Log Fundamentals]] and [[Defensive Security Intro]]
+
+- Security Information and Event Management system (SIEM):
+	- Collects data from various endpoints/network devices, stores them at a central point, and preforms correlations on them.
+- Important of a SIEM:
+	- Examine every single log that is generated, with hundreds being generated a second, is way too tedious so a SIEM does it for us.
+	- Takes logs from various sources and correlates them between events.
+	- Key Features:
+		- Real time log ingestion'
+		- Alerting against abnormal activities
+		- 24/7 monitoring
+		- Early detection for latest threats
+		- Data insights and visualization
+		- Investigate past incidents
+- Network Visibility:
+	- Network Log Sources Divided into two parts:
+		- Host Centric Log Sources:
+			- Log sources that capture events that occurred within or related to the host. Such as Windows Event logs, Sysmon, Osquery, etc.
+			- Examples:
+				- User accessing a file
+				- User authenticating
+				- Process Execution Activity
+				- Process adding/editing/deleting a registry key or value
+				- Powershell execution
+		- Network Centric Log Sources:
+			- Generated when the hosts communicate with each other or access the internet to visit a website. Network based protocols are SSH, VPN, HTTP/S, FTP, etc.
+			- Examples:
+				- SSH connection
+				- File accessed via FTP
+				- Web traffic
+				- User accessing company's resources through VPN
+				- File sharing activity
+- Log Sources and Log Ingestion:
+	- Windows:
+		- Records every event that can be viewed, through the Event Viewer utility.
+	- Linux:
+		- Stores all related logs, such as events, errors, warnings, etc. 
+		- Common Log Storage Locations:
+			- `/var/log/httpd`: Contains HTTP Request/Response and error logs
+			- `/var/log/cron`: Events related to cron jobs are stored here
+			- `/var/log/auth.log` and `/var/log/secure`: Stores authentication related logs
+			- `/var/log/kern`: Stores kernel related events
+			- `/var/log/apache`: Common location to write all Apache related logs
+	- Web Server:
+		- Check above
+	- Log Injestion:
+		- Common Methods used by SIEMS to injest logs:
+			- Agent/Forwarder:
+				- SIEM solutions provide a lightweight tool called an agent (forwarder by Splunk) that gets installed on the Endpoints. It is configured to capture all the important logs and send them to the SIEM
+			- Syslog:
+				- Widely used protocol to collect data from various systems like web servers, databases, etc and are sent real-time data to a central point.
+			- Manual Upload:
+				- Some SIEMs (Splunk, ELK, etc.) allow users to ingest offline data for quick analysis. Once ingested, it is normalized and made avaliable for analysis
+			- Port-Forwarding:
+				- SIEM solutions can also be configured to listen on a certain port and then the endpoint forward the data to them SIEM instance on that port.
+- Analyzing Logs and Alerts:
+	- Once ingested, SIEM looks for unwanted behaviors or suspicious patterns. Uses conditions set in the rules by SOC analysts.
+	- Dashboard:
+		- Can be customized.
+		- Information found:
+			- Alert Highlights
+			- System Notification
+			- Health Alert
+			- List of Failed Login Attempts
+			- Events Ingested Count
+			- Rules Triggered
+			- Top Domains Visited
+	- Correlation Rules:
+		- Logical expressions set to be triggered
+		- Examples:
+			- If a User gets 5 failed login attempts in 10 seconds - Raise an alert for `Multipled Failed Login Attempts`
+			- Rule is set to alert every time a user plugs an USB in.
+		- Use-Cases:
+			- Users try to remove logs during post-exploitation to hide themselves and cover tracks, but a ID of 104 is logged every time a user tried to remove/clear event logs.
+				- Rule: If the Log source is WinEventLog AND EventID is 104 - Trigger an alert `Event Log Cleared`
+				- 

@@ -1,0 +1,59 @@
+Tags: #Networking #Terminology 
+
+Refer to: [[OSI Model]] and [[Protocols]]
+
+- Notable Headers:
+	- Time to Live: Sets an expiry timer for a packet
+	- Checksum: Provides integrity checking for protocols such as TCP/IP.
+	- Source Address: IP address of device that the packet is being sent from, so data knows where to return to.
+	- Destination Address: Device's IP address the packet is being sent to so that data knows where to travel next.
+- Transmission Control Protocol (TCP): 
+	- Can often be called the TCP/IP model.
+	- Consists of 4 layers:
+		- Application
+		- Transport
+		- Internet
+		- Network Interface
+	- Connection-based meaning a connection is established before data is sent (stateful).
+	- Involves the 3-way handshake. 
+	- Very reliable and guarantees integrity, but can be slow since more computing and bottlenecks can occur.
+	- Headers Involved:
+		- Source Port: Port opened by the sender to send the packet from, chosen randomly.
+		- Destination Port: Port number than an application or service is running on the remote host. EX: Port 80 for HTTP.
+		- Source IP: IP of the device sending the packet.
+		- Destination IP: IP of the device the packet is for.
+		- Sequence Number: When a connection occurs, first piece of data transmitted is given a random number.
+		- Acknowledgement Number: The next piece of data will have the sequence number + 1
+		- Checksum: Mathematical calculation and output is remembered, to verify integrity.
+		- Data: Where the data is. EX: Bytes of a file.
+		- Flag: Determines how packets should be handled.
+- TCP/IP 3-Way Handshake:
+	-  Reference Image: [[TryHackMe/Pasted image 20250401184707.png|TCP 3-Way Handshake]]
+	- Allows for reliable connection.
+	- 3- Flags are:
+		- SYN: Initial packet sent to initiate a connection.
+		- SYN/ACK: Sent be receiving device to acknowledge and synchronize.
+		- ACK: Can be used by either the client or server to acknowledge a series of packets that have been successfully received.
+		- DATA: Data is sent via the DATA flag.
+		- FIN: Used to cleanly close a connection.
+		- RST: Abruptly ends all communication. Normally the last resort for low system resources or application not working.
+	- SYN-ACK Steps:
+		- Client: Sends the Initial Sequence Number (ISN)
+		- Server: Sends SYN/ACK along with a different, random ISN.
+		- Client - Sends ACK along with the ISN of the Client + 1.
+		- Adds +1 every time they send something onwards.
+	- Closing a Connection:
+		- Reference Image: [[TryHackMe/Pasted image 20250401190449.png|Closing a TCP Connection]]
+		- Packets sent: `FIN, FIN/ACK, ACK`
+- UDP/IP Connection:
+	- Refer to: [[TryHackMe/Pasted image 20250401191017.png]]
+	- Stateless protocol that doesn't need a constant connection.
+	- Used when applications can tolerate data loss.
+	- UDP is much faster and allows for user software to determine the speed, but can result in bad user experience.
+	- Headers Involved:
+		- Time To Live: Sets expiry timer.
+		- Source Address: IP address of the device the packet is from, so data knows where to return to.
+		- Destination Address: Device's IP address the packet is being sent to so data knows where to go next.
+		- Source Port: Port number opened by the sender, randomly chosen.
+		- Destination Port: Port number an application or service is running on the remote host.
+		- Data: Where data is stored. EX: Bytes of a file.

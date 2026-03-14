@@ -1,0 +1,57 @@
+Tags: #Tools #Defense #Linux #Commands 
+
+Refer to: [[Log Fundamentals]] and [[Intrusion Detection System Fundamentals]] and [[Defensive Security Intro]] and [[Firewall Fundamentals]]
+
+- Snort:
+	- One of the most widely used open-source IDS solution developed in 1998. Uses both signature and anomaly based detections. Defined in the rule files of the Snort tool.
+	- Comes with built-in rule files and contain a variety of known attack patterns. 
+	- Can configure snort to detect specific types of network traffic that are not covered by default rule files.
+- Modes:
+	- Packet Sniffer Mode:
+		- Reads and displays network packets without preforming analysis. Does not related directly to IDS, but can help network monitoring and trouble shooting. Can display network traffic in console or output to a file.
+			- Network team observes some network issues. They use Snort to get detailed insights into the network traffic.
+	- Packet Logging Mode:
+		- Preforms detection on the network traffic in real-time and displays the detections as alerts on the console. Allows you to log the network traffic as a PCAP as well. Includes all network traffic and any detections.
+			- Security team uses network traffic logged through Snort's packet logging to preform a forensic investigation.
+	- NIDS Mode:
+		- Primary mode that monitors network traffic in real-time and applied its rule files to identify any match to the known attack patterns stored as signatures.
+			- Use Snort NIDS mode to monitor a network/system.
+- Installation:
+	- When installing snort, you must provide network interface and range. You can run it normally and only capture traffic intended for the host, but if you want to use snort to capture and detect intrusions for a whole network you must turn on **promiscuous** mode for the host's network interface.
+- Rule Format:
+	- Reference Image: [[TryHackMe/Pasted image 20250417065401.png|ICMP Rule Example]]
+	- Action:
+		- Specifies which action to take when the rule is triggered
+	- Protocol:
+		- Which protocol to match the rule.
+	- Source IP:
+		- Where the traffic comes from.
+	- Source Port:
+		- Port from where traffic originates
+	- Destination IP:
+		- Specifies the IP of where the traffic is going. Use $HOME_NET since it is a variable that is defined in Snorts configuration file
+	- Destination Port:
+		- The port the traffic would reach
+	- Rule Metadata:
+		- Defined at the end of the rule. Every rule has some.
+		- Message (msg):
+			- Describes the message to display when the rule is triggered. Should indicate type of activity
+		- Signature ID (sid):
+			- Unique identifier to differentiate it from other rules.
+		- Rule Revision (rev):
+			- Every time a rule is modified, the revision number should increase to help track changes.
+- File Storage:
+	- `/etc/snort`: Snorts directory
+	- `/etc/snort/snort.conf`: Configuration file
+	- `/etc/snort/rules/`: Stores the rules
+- Rule Creation:
+	- Open `local.rules` (Contains custom rules for snort)
+	- Add the rule: `alert icmp any any -> 127.0.0.1 any (msg:"Loopback Ping Detected"; sid:10003; rev:1;)`
+- Usage:
+	- Start snort: `sudo snort -q -l /var/log/snort -i lo -A console -c /etc/snort/snort.conf`
+		- `-A`: Alert-mode?
+		- `-c`: Config file to use
+		- `-i`: Interface to use
+		- `-q`: Quiet mode; doesn't display banner and initialization information
+		- `-l`: Sets the output logging directory
+	- PCAP File Detection: `sudo snort -q -l /var/log/snort -r Task.pcap -A console -c /etc/snort/snort.conf`

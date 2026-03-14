@@ -1,0 +1,81 @@
+Tags: #Defense #Terminology 
+
+Refer to: [[Defensive Security Intro]]
+
+- The 5 W's
+	- Reference Image: [[TryHackMe/Pasted image 20250413184252.png|5 W's Of Response]]
+- Security Operations Center (SOC):
+	- Dedicated facility operated by a specialized team. Aims to continuously monitor an organization's network and resources and identify suspicious activity to prevent damage. They work 24/7.
+- SOC Ecosystem:
+	- Reference Image: [[TryHackMe/Pasted image 20250416110543.png|SOC Ecosystem]]
+- Main Focus:
+	- Keep detection and response intact.
+	- Detections:
+		- Detect vulnerabilities
+		- Detect unauthorized activity
+		- Detect policy violations
+		- Detect intrustions
+	- Response:
+		- Support with incident response
+- 3 Pillars of a SOC Team:
+	- Reference Image: [[TryHackMe/Pasted image 20250413183242.png|Pillars of SOC]]
+- People:
+	- No matter the amount of automation, people are always important due to false positives. Without human intervention, more irrelevant issues would be focused on.
+- Roles of a SOC Team:
+	- Reference Image: [[TryHackMe/Pasted image 20250413183448.png|SOC Hierarchy]]
+	- SOC Analyst (Level 1):
+		- First responders to any detection. Anything detected by the security solution starts here. 
+		- Preform basic alert triage to determine if a specific detection is harmful and report detections.
+	- SOC Analyst (Level 2):
+		- Help dives deeper into investigation and correlate data from multiple sources for proper analysis
+	- SOC Analyst (Level 3): 
+		- Experience professionals who proactively look for any threat indicators and support in the incident response activies. Critical severity detection reported by L1 and L2 need detailed responses, containment, eradication, and recovery and this is where L3 experience is needed.
+	- Security Engineer:
+		- Deploy and configure security solutions for the SOC Analysts and ensure smooth operation
+	- Detection Engineer:
+		- L2 and L3 analysts normally create the rules (logic) behind security solutions, but a detection engineer can also be used as an independent role.
+	- SOC Manager:
+		- Manages the processes the SOC team follows and provides support. Remains in contact with the Chief of Information Security Officer (CISO) and provides updates as to the current security posture and efforts.
+- Processes:
+	- Each role has its own processes. Such as L1 SOC Analysts are the first responders and carry out alert triage.
+	- Alert Triage:
+		- Basis of a SOC team; the first response. Triage is focused on analyzing the specific alert. Determines the severity of the alert and helps prioritize it.
+		- All about answering the 5 W's.
+			- Who
+			- What
+			- Why
+			- Where
+			- When
+		- Example:
+			- Malware detected on Host: GEORGE PC
+			- What?
+				- Malicious file was detected on one of the hosts inside the organization's network
+			- When?
+				- The file was detected at 13:20 on June 5, 2024.
+			- Where?
+				- The file was detecting in the directory of the host: "GEORGE PC".
+			- Who?
+				- The file was detected for the user George.
+			- Why?
+				- After the investigation, it was found the file was downloaded from a pirated software-selling website. The investigation with the user revealed that they downloaded the file as they wanted to use a software for free.
+	- Reporting:
+		- Harmful events need to go to higher-level analysts. Alerts are escalated as tickets and assigned to the relevant people. The report should discuss all 5 W's along with a thorough analysis and screenshots should be used as evidence.
+	- Incident Response and Forensics:
+		- If a reported detection points to highly malicious activity, a high-level team initates an incident response. Forensics may also be preformed to determine the root cause by analyzing artifacts.
+- Technology:
+	- Refers to the security solutions. Security solutions efficiently minimize the teams manual effort to detect and respond to threats.
+	- Security solutions centralize all information of the devices/applications present in the network and automate the detection and response capabilites.
+	- Security Solutions:
+		- Security Information and Event Management (SIEM): Popular tool used. Collects logs from various network devices, referred to as log sources. Contains rules which use logic to identify suspicious activity.
+		- Modern SIEM solutions surpass rule based detection analysis and prove user behavior analytics and threat intelligence capabilities. Machine learning algorithms support this to enhance detection.
+	- Endpoint Detection and Response (EDR): 
+		- Provides SOC team with detailed real-time and historical visability of the devices activites. Operations on the endpoint level and can carry out automated responses. Allows for detailed investigation and response.
+	- Firewall: 
+		- Functions for network security and acts as a barrier between internal and external networks. Monitors incoming and outgoing network traffic.
+	- Other tools:
+		- Antivirus, 
+		- Endpoints Protection Platform (EPP)
+			- Solution deployed on endpoint devices to prevent file-based malware attacks, detect malicious activity, and provides investigation/remediation capabilities.
+		- IDS/IPS
+		- XDR
+		- Security Orchestration, Automation, and Response (SOAR): Solution that helps organizations to streamline and automate their security operations, including incident management, threat intelligence, and vulnerability response.
