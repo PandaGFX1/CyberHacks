@@ -1,7 +1,7 @@
 # Example of a more complicated config file for `MKDocs`
 # This one takes more action to handle formatting and theming
 
-site_name: CyberHack Learning
+site_name: CyberHacks Learning
 theme:
   name: material
   features:
