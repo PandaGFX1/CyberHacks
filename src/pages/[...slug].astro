@@ -1,0 +1,100 @@
+---
+import { getCollection, render } from 'astro:content';
+import NoteLayout from '../layouts/NoteLayout.astro';
+import SidebarNav from '../components/SidebarNav.astro';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map(note => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content, headings } = await render(note);
+const { title, category, tags } = note.data;
+---
+<NoteLayout title={title || note.id} category={category} tags={tags}>
+  <SidebarNav slot="sidebar" currentSlug={note.id} />
+
+  <aside slot="toc" id="toc-container">
+    {headings
+      .filter(h => {
+        const text = h.text.toLowerCase();
+        const SKIP = ['related concepts', 'related techniques',
+          'related tools', 'related playbooks', 'related knowledge',
+          'references', 'references / images'];
+        return !SKIP.some(s => text.includes(s));
+      })
+      .map(h => (
+        <a
+          href={`#${h.slug}`}
+          class={`toc-link toc-h${h.depth}`}
+          data-heading={h.slug}
+        >
+          {h.text}
+        </a>
+      ))
+    }
+  </aside>
+
+  <Content />
+</NoteLayout>
+
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const tocLinks = document.querySelectorAll('.toc-link[data-heading]');
+    if (!tocLinks.length) return;
+
+    const SKIP_HEADINGS = [
+      'related concepts', 'related techniques', 'related tools',
+      'related playbooks', 'related knowledge', 'references',
+      'references / images', 'references/images'
+    ];
+
+    const headings = Array.from(
+      document.querySelectorAll('.note-content h1, .note-content h2, .note-content h3, .note-content h4')
+    ).filter(h => {
+      if (!h.id) return false;
+      const text = h.textContent.trim().toLowerCase();
+      return !SKIP_HEADINGS.some(skip => text.includes(skip));
+    });
+
+    if (!headings.length) return;
+
+    function setActive(id) {
+      tocLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.heading === id);
+      });
+      const activeLink = document.querySelector(`.toc-link[data-heading="${id}"]`);
+      if (activeLink) activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    function update() {
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const OFFSET = 100;
+
+      // If at bottom of page, highlight last heading
+      if (scrollY + winHeight >= docHeight - 10) {
+        setActive(headings[headings.length - 1].id);
+        return;
+      }
+
+      // Find last heading above the offset line
+      let active = headings[0];
+      for (const h of headings) {
+        if (h.getBoundingClientRect().top <= OFFSET) {
+          active = h;
+        }
+      }
+      setActive(active.id);
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  });
+</script>
