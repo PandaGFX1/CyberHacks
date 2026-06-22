@@ -48,7 +48,7 @@ Occurs when user input is not properly sanitized and interpreted as commands.
 | Command Injection | Injecting OS commands for remote execution |
 
 - See [SQL Injection](/techniques/SQL-Injection)
-- See Command Injection
+- See [Command Injection](/techniques/Command-Injection)
 
 ### 4. Insecure Design
 Flaws in application architecture rather than implementation — cannot be patched, must be redesigned.
@@ -122,7 +122,7 @@ Flow: Attacker → vulnerable application → attacker-controlled or internal se
 ## Related Techniques
 - IDOR
 - [SQL Injection](/techniques/SQL-Injection)
-- Command Injection
+- [Command Injection](/techniques/Command-Injection)
 - [XSS](/techniques/XSS)
 - SSRF
 
