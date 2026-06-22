@@ -3,7 +3,7 @@ title: "WPScan"
 category: "tools"
 tags: []
 excerpt: "WPScan is a black-box WordPress security scanner used to identify vulnerabilities, enumerate plugins and themes, detect..."
-date: "2026-06-20"
+date: "2026-06-22"
 ---
 
 ---
@@ -16,36 +16,58 @@ WordPress-based web applications during external or internal web penetration tes
 ---
 ## Installation
 
-> [!INFO]- Installation Commands:
-> `gem install wpscan`
-> Docker: `docker pull wpscanteam/wpscan`
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Installation Commands:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>gem install wpscan</code></li>
+</ul>
+Docker: <code>docker pull wpscanteam/wpscan</code>
+
+</div>
+</details>
 
 ---
 ## Basic Usage
 
-> [!INFO]- Basic Usage:
-> `wpscan --url https://<target>`
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Basic Usage:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>wpscan --url https://<target></code></li>
+</ul>
+
+</div>
+</details>
 
 ---
 ## Flags & Options
 
-> [!INFO]- Flags & Options:
-> | Flag | Description | Example |
-> |------|-------------|---------|
-> | `--url` | Target WordPress URL | `--url https://10.129.12.10` |
-> | `-e p` | Enumerate installed plugins | `-e p` |
-> | `-e u` | Enumerate user accounts | `-e u` |
-> | `-e t` | Enumerate installed themes | `-e t` |
-> | `-e ap` | Enumerate all plugins (passive + aggressive) | `-e ap` |
-> | `--plugins-detection` | Set plugin detection mode: passive, mixed, aggressive | `--plugins-detection aggressive` |
-> | `--disable-tls-checks` | Skip TLS/SSL certificate verification | `--disable-tls-checks` |
-> | `--no-banner` | Suppress the WPScan banner in output | `--no-banner` |
-> | `-t` | Number of threads to use | `-t 100` |
-> | `-o` | Write output to a file | `-o wpscan_results.txt` |
-> | `--api-token` | WPScan API token for vulnerability data from WPVulnDB | `--api-token <token>` |
-> | `--password-attack` | Attack method for brute force: `xmlrpc` or `wp-login` | `--password-attack xmlrpc` |
-> | `-U` | Target username(s) for brute force; comma-separated | `-U admin,editor` |
-> | `-P` | Path to password wordlist for brute force | `-P /usr/share/wordlists/rockyou.txt` |
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Flags & Options:</span></summary>
+<div class="callout-body">
+
+| Flag | Description | Example |
+|------|-------------|---------|
+| <code>--url</code> | Target WordPress URL | <code>--url https://10.129.12.10</code> |
+| <code>-e p</code> | Enumerate installed plugins | <code>-e p</code> |
+| <code>-e u</code> | Enumerate user accounts | <code>-e u</code> |
+| <code>-e t</code> | Enumerate installed themes | <code>-e t</code> |
+| <code>-e ap</code> | Enumerate all plugins (passive + aggressive) | <code>-e ap</code> |
+| <code>--plugins-detection</code> | Set plugin detection mode: passive, mixed, aggressive | <code>--plugins-detection aggressive</code> |
+| <code>--disable-tls-checks</code> | Skip TLS/SSL certificate verification | <code>--disable-tls-checks</code> |
+| <code>--no-banner</code> | Suppress the WPScan banner in output | <code>--no-banner</code> |
+| <code>-t</code> | Number of threads to use | <code>-t 100</code> |
+| <code>-o</code> | Write output to a file | <code>-o wpscan_results.txt</code> |
+| <code>--api-token</code> | WPScan API token for vulnerability data from WPVulnDB | <code>--api-token <token></code> |
+| <code>--password-attack</code> | Attack method for brute force: <code>xmlrpc</code> or <code>wp-login</code> | <code>--password-attack xmlrpc</code> |
+| <code>-U</code> | Target username(s) for brute force; comma-separated | <code>-U admin,editor</code> |
+| <code>-P</code> | Path to password wordlist for brute force | <code>-P /usr/share/wordlists/rockyou.txt</code> |
+
+</div>
+</details>
 
 ---
 ## Common Use Cases
@@ -53,27 +75,59 @@ WordPress-based web applications during external or internal web penetration tes
 ### Plugin Enumeration (Aggressive)
 Enumerates all plugins using aggressive detection — sends more requests but finds more results.
 
-> [!INFO]- Commands:
-> `wpscan -e p --url https://10.129.12.10 --disable-tls-checks --no-banner --plugins-detection aggressive -t 100`
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>wpscan -e p --url https://10.129.12.10 --disable-tls-checks --no-banner --plugins-detection aggressive -t 100</code></li>
+</ul>
+
+</div>
+</details>
 
 ### User Enumeration
 Enumerate WordPress user accounts, which can then be targeted for brute-force or credential testing.
 
-> [!INFO]- Commands:
-> `wpscan --url https://<target> -e u --disable-tls-checks`
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>wpscan --url https://<target> -e u --disable-tls-checks</code></li>
+</ul>
+
+</div>
+</details>
 
 ### Full Enumeration
 Enumerate plugins, themes, users, and timthumbs in a single run.
 
-> [!INFO]- Commands:
-> `wpscan --url https://<target> -e ap,at,u --disable-tls-checks --no-banner -t 50`
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>wpscan --url https://<target> -e ap,at,u --disable-tls-checks --no-banner -t 50</code></li>
+</ul>
+
+</div>
+</details>
 
 ### Password Brute Force
 Brute-force credentials against a WordPress login using either the xmlrpc.php endpoint or the wp-login form. The xmlrpc method is generally faster and less likely to be blocked.
 
-> [!INFO]- Commands:
-> `wpscan --password-attack xmlrpc -t 20 -U <user1>,<user2> -P <wordlist.txt> --url http://<target>`
-> `wpscan --password-attack wp-login -t 5 -U <username> -P <wordlist.txt> --url http://<target>`
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>wpscan --password-attack xmlrpc -t 20 -U <user1>,<user2> -P <wordlist.txt> --url http://<target></code></li>
+  <li><code>wpscan --password-attack wp-login -t 5 -U <username> -P <wordlist.txt> --url http://<target></code></li>
+</ul>
+
+</div>
+</details>
 
 | Flag | Description |
 |------|-------------|
@@ -85,11 +139,19 @@ Brute-force credentials against a WordPress login using either the xmlrpc.php en
 ### Vulnerability Research via Metasploit
 After identifying a plugin or theme version, search for known exploits in Metasploit.
 
-> [!INFO]- Commands:
-> `msfconsole -q`
-> `search wordpress <plugin-name>`
-> `use 0`
-> `info 0` — verify the module targets the identified version before using
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+
+<ul class="callout-list">
+  <li><code>msfconsole -q</code></li>
+  <li><code>search wordpress <plugin-name></code></li>
+  <li><code>use 0</code></li>
+</ul>
+<code>info 0</code> — verify the module targets the identified version before using
+
+</div>
+</details>
 
 ---
 ## Related Techniques
