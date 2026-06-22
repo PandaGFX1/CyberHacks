@@ -12,4 +12,4 @@ date: "2026-06-22"
 - https://jsfiddle.net/
 - https://red.infiltr8.io/
 - https://www.hackthebox.com/cybersecurity-resources/cheatsheets - HTB cheatsheets
-- 
+- https://monitor-the-situation.com/africa/south-africa-detains-pan-africanist-activist-72b41198 - Turn into a tool note for OSINT
