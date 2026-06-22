@@ -1,0 +1,547 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Personal cybersecurity notes, writeups, and reference vault"><title>Incident Response Fundamentals — CyberHacks</title><link rel="stylesheet" href="/styles/global.css"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><style>.site-header{position:sticky;top:0;z-index:100;height:56px;background:#09070fed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;gap:2rem;height:100%;padding:0 1.5rem}.logo{display:flex;align-items:center;gap:.5rem;color:var(--text);font-family:var(--font-display);font-weight:800;font-size:1.1rem;text-decoration:none;flex-shrink:0;letter-spacing:-.02em}.logo-icon{color:var(--purple-3)}.logo:hover{color:var(--purple-1)}.header-nav{display:flex;align-items:center;gap:.2rem}.nav-link{color:var(--text-muted);font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .7rem;border-radius:6px;text-decoration:none;transition:color .15s,background .15s;position:relative}.nav-link:hover{color:var(--purple-1);background:var(--surface)}.nav-link.active{color:var(--purple-2);background:var(--surface)}.nav-link.active:after{content:"";position:absolute;bottom:-1px;left:.7rem;right:.7rem;height:2px;background:var(--purple-3);border-radius:2px 2px 0 0}.hdr-search{position:relative;flex-shrink:0}.hdr-search-box{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.28rem .6rem;width:210px;transition:border-color .15s;cursor:text}.hdr-search-box:focus-within{border-color:var(--purple-3)}#hdr-input{background:transparent;border:none;outline:none;color:var(--text);font-size:.8rem;font-family:var(--font-sans);width:100%}#hdr-input::placeholder{color:var(--text-dim)}.hdr-search-box kbd{font-size:.58rem;background:var(--surface-2);border:1px solid var(--border-2);border-radius:4px;padding:.1rem .3rem;color:var(--text-dim);flex-shrink:0}.hdr-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:380px;background:#0b0814fa;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 20px 60px #000000b3;padding:.35rem;z-index:999}#hdr-results{display:flex;flex-direction:column;gap:.25rem;max-height:420px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}#hdr-results::-webkit-scrollbar{width:3px}#hdr-results::-webkit-scrollbar-track{background:transparent}#hdr-results::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}#hdr-results::-webkit-scrollbar-thumb:hover{background:var(--purple-3)}.hdr-result{display:block;padding:.6rem .75rem;background:#140f22cc;border:1px solid rgba(42,32,64,.9);border-radius:8px;text-decoration:none;transition:background .15s,border-color .15s,transform .15s;cursor:pointer;overflow:hidden}.hdr-result:hover{background:#5a3db833;border-color:var(--purple-3);transform:translate(2px);pointer-events:auto}.hdr-result-title{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-bottom:.2rem}.hdr-result:hover .hdr-result-title{color:var(--purple-1)}.hdr-result-path{font-size:.62rem;color:var(--text-dim);text-transform:capitalize;letter-spacing:.02em}.hdr-result-path span{color:var(--purple-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem}.hdr-empty{padding:1rem;text-align:center;color:var(--text-dim);font-size:.76rem}.hdr-view-all{display:block;margin-top:.3rem;padding:.45rem .75rem;background:#140f2280;border:1px solid var(--border);border-radius:7px;font-size:.7rem;color:var(--text-muted);text-align:center;text-decoration:none;transition:color .15s,border-color .15s;flex-shrink:0}.hdr-view-all:hover{color:var(--purple-2);border-color:var(--purple-3);background:#140f2280;transform:none}.hdr-result-excerpt{font-size:.62rem;color:var(--text-muted);line-height:1.35;margin-top:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hdr-result-excerpt mark{background:#7c5ce84d;color:var(--purple-1);border-radius:2px;padding:0 2px;font-style:normal}@media(max-width:768px){.header-nav,.hdr-search-box kbd{display:none}.hdr-dropdown{width:calc(100vw - 2rem);right:-.5rem}}
+</style><link rel="stylesheet" href="/_astro/_..CUfV36Wy.css"></head> <body> <div class="bg-gradient"></div> <div class="bg-noise"></div> <div class="bg-grid"></div> <div class="site-wrap">  <header class="site-header"> <div class="header-inner"> <a href="/" class="logo"> <span class="logo-icon">⬡</span> <span class="logo-text">CyberHacks</span> </a> <nav class="header-nav"> <a href="/knowledge" class="nav-link active"> Knowledge </a><a href="/techniques" class="nav-link "> Techniques </a><a href="/playbooks" class="nav-link "> Playbooks </a><a href="/tools" class="nav-link "> Tools </a><a href="/resources" class="nav-link "> Resources </a><a href="/labs" class="nav-link "> Labs </a> </nav> <div class="hdr-search" id="hdr-search"> <div class="hdr-search-box"> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input id="hdr-input" type="text" placeholder="Search notes..." autocomplete="off" spellcheck="false"> <kbd>⌘K</kbd> </div> <div class="hdr-dropdown" id="hdr-dropdown" style="display:none"> <div id="hdr-results"></div> <a id="hdr-all" href="/search" class="hdr-view-all">View all results →</a> </div> </div> </div> </header>  <script>
+(function(){
+  let pf = null;
+  let timer = null;
+  const input = document.getElementById('hdr-input');
+  const dropdown = document.getElementById('hdr-dropdown');
+  const results = document.getElementById('hdr-results');
+  const viewAll = document.getElementById('hdr-all');
+  if(!input) return;
+
+  async function init() {
+    if(pf) return pf;
+    try {
+      pf = await import('/pagefind/pagefind.js');
+      await pf.init();
+    } catch(e){ pf=null; }
+    return pf;
+  }
+
+  input.addEventListener('focus', init);
+
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(async ()=>{
+      const q = input.value.trim();
+      if(!q){ dropdown.style.display='none'; return; }
+
+      const lib = await init();
+      if(!lib){
+        results.innerHTML = '<div class="hdr-empty">Run a build to enable search.</div>';
+        dropdown.style.display='block';
+        return;
+      }
+
+      const res = await lib.search(q);
+      const top = await Promise.all(res.results.slice(0,5).map(r=>r.data()));
+      viewAll.href = '/search?q='+encodeURIComponent(q);
+
+      if(!top.length){
+        results.innerHTML = '<div class="hdr-empty">No results for "'+q+'"</div>';
+      } else {
+        results.innerHTML = top.map(r=>{
+          const parts = r.url.split('/').filter(Boolean);
+          const cat = parts[0]||'';
+          const sub = parts.length>2 ? parts[1].replace(/-/g,' ') : '';
+          const title = (r.meta&&r.meta.title||'')
+            .replace(/\s*[—–-]+\s*CyberHacks\s*$/i,'').trim()
+            || parts[parts.length-1].replace(/-/g,' ');
+          const path = sub ? `<span>${cat}</span> / ${sub}` : `<span>${cat}</span>`;
+          const excerpt = (r.excerpt||'')
+            .replace(/<(?!\/?mark)[^>]+>/g,'')
+            .replace(/\s+/g,' ')
+            .replace(/^[\s\/\-–—]+/,'')
+            .trim()
+            .slice(0,90);
+          return '<a href="'+r.url+'" class="hdr-result">'
+            +'<div class="hdr-result-title">'+title+'</div>'
+            +'<div class="hdr-result-path">'+path+'</div>'
+            +(excerpt?'<div class="hdr-result-excerpt">'+excerpt+'</div>':'')
+            +'</a>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }, 180);
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('hdr-search').contains(e.target))
+      dropdown.style.display='none';
+  });
+
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+      e.preventDefault(); input.focus(); input.select();
+    }
+    if(e.key==='Escape'){ dropdown.style.display='none'; input.blur(); }
+    if(e.key==='Enter'&&dropdown.style.display!=='none'&&input.value.trim())
+      window.location.href='/search?q='+encodeURIComponent(input.value.trim());
+  });
+})();
+</script> <div class="note-shell" data-astro-cid-o5gmpz7g> <aside class="sidebar" id="sidebar" data-astro-cid-o5gmpz7g> <div class="sidebar-inner" data-astro-cid-o5gmpz7g> <nav class="sidebar-nav" data-astro-cid-o5gmpz7g> <nav class="sidebar-tree" data-astro-cid-gvqsdny3> <div class="cat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge" class="cat-label-link active" data-astro-cid-gvqsdny3> Knowledge </a> <span class="cat-count" data-astro-cid-gvqsdny3>91</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Artificial%20Intelligence" class="subcat-label-link " data-astro-cid-gvqsdny3> Artificial Intelligence </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/artificial-intelligence/ai-ml-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> AI ML Fundamentals </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Core%20Security%20Concepts" class="subcat-label-link " data-astro-cid-gvqsdny3> Core Security Concepts </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/core-security-concepts/cyber-kill-chain" class="nav-note " data-astro-cid-gvqsdny3> Cyber Kill Chain </a><a href="/knowledge/core-security-concepts/ddos" class="nav-note " data-astro-cid-gvqsdny3> DDoS </a><a href="/knowledge/core-security-concepts/insider-threat" class="nav-note " data-astro-cid-gvqsdny3> Insider Threat </a><a href="/knowledge/core-security-concepts/mitre-attck-framework" class="nav-note " data-astro-cid-gvqsdny3> MITRE ATTCK Framework </a><a href="/knowledge/core-security-concepts/osint" class="nav-note " data-astro-cid-gvqsdny3> OSINT </a><a href="/knowledge/core-security-concepts/ransomware" class="nav-note " data-astro-cid-gvqsdny3> Ransomware </a><a href="/knowledge/core-security-concepts/security-domains" class="nav-note " data-astro-cid-gvqsdny3> Security Domains </a><a href="/knowledge/core-security-concepts/security-principles" class="nav-note " data-astro-cid-gvqsdny3> Security Principles </a><a href="/knowledge/core-security-concepts/social-engineering" class="nav-note " data-astro-cid-gvqsdny3> Social Engineering </a><a href="/knowledge/core-security-concepts/threat-actors" class="nav-note " data-astro-cid-gvqsdny3> Threat Actors </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/cryptography/cryptography-basics" class="nav-note " data-astro-cid-gvqsdny3> Cryptography Basics </a><a href="/knowledge/cryptography/hashing-basics" class="nav-note " data-astro-cid-gvqsdny3> Hashing Basics </a><a href="/knowledge/cryptography/public-key-basics" class="nav-note " data-astro-cid-gvqsdny3> Public Key Basics </a> </div> </div><div class="subcat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Defensive%20Security" class="subcat-label-link active" data-astro-cid-gvqsdny3> Defensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/defensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Defensive Security Intro </a><a href="/knowledge/defensive-security/digital-forensics-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Digital Forensics Fundamentals </a><a href="/knowledge/defensive-security/incident-response-fundamentals" class="nav-note active" data-astro-cid-gvqsdny3> Incident Response Fundamentals </a><a href="/knowledge/defensive-security/log-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Log Fundamentals </a><a href="/knowledge/defensive-security/network-traffic-analysis" class="nav-note " data-astro-cid-gvqsdny3> Network Traffic Analysis </a><a href="/knowledge/defensive-security/soc-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SOC Fundamentals </a><a href="/knowledge/defensive-security/threat-hunting" class="nav-note " data-astro-cid-gvqsdny3> Threat Hunting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Security%20Solutions" class="subcat-label-link " data-astro-cid-gvqsdny3> Security Solutions </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/security-solutions/intro-to-siem" class="nav-note " data-astro-cid-gvqsdny3> Intro To SIEM </a><a href="/knowledge/defensive-security/security-solutions/intrusion-detection-systems-ids" class="nav-note " data-astro-cid-gvqsdny3> Intrusion Detection Systems IDS </a><a href="/knowledge/defensive-security/security-solutions/siem-use-case-development" class="nav-note " data-astro-cid-gvqsdny3> SIEM Use Case Development </a><a href="/knowledge/defensive-security/security-solutions/vulnerability-scanners" class="nav-note " data-astro-cid-gvqsdny3> Vulnerability Scanners </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Foundational%20Cs" class="subcat-label-link " data-astro-cid-gvqsdny3> Foundational Cs </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/foundational-cs/arm-processor-architecture" class="nav-note " data-astro-cid-gvqsdny3> ARM Processor Architecture </a><a href="/knowledge/foundational-cs/cpu-architecture" class="nav-note " data-astro-cid-gvqsdny3> CPU Architecture </a><a href="/knowledge/foundational-cs/data-representation" class="nav-note " data-astro-cid-gvqsdny3> Data Representation </a><a href="/knowledge/foundational-cs/input-and-output" class="nav-note " data-astro-cid-gvqsdny3> Input And Output </a><a href="/knowledge/foundational-cs/memory-architecture" class="nav-note " data-astro-cid-gvqsdny3> Memory Architecture </a><a href="/knowledge/foundational-cs/multi-processing" class="nav-note " data-astro-cid-gvqsdny3> Multi Processing </a><a href="/knowledge/foundational-cs/x86-architecture" class="nav-note " data-astro-cid-gvqsdny3> X86 Architecture </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Networking" class="subcat-label-link " data-astro-cid-gvqsdny3> Networking </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/networking/data-transmission-methods" class="nav-note " data-astro-cid-gvqsdny3> Data Transmission Methods </a><a href="/knowledge/networking/dns-domain-name-system" class="nav-note " data-astro-cid-gvqsdny3> DNS Domain Name System </a><a href="/knowledge/networking/firewalls" class="nav-note " data-astro-cid-gvqsdny3> Firewalls </a><a href="/knowledge/networking/ftp" class="nav-note " data-astro-cid-gvqsdny3> FTP </a><a href="/knowledge/networking/http-https" class="nav-note " data-astro-cid-gvqsdny3> HTTP HTTPS </a><a href="/knowledge/networking/imap-pop3" class="nav-note " data-astro-cid-gvqsdny3> IMAP POP3 </a><a href="/knowledge/networking/ip-addressing" class="nav-note " data-astro-cid-gvqsdny3> IP Addressing </a><a href="/knowledge/networking/ipmi" class="nav-note " data-astro-cid-gvqsdny3> IPMI </a><a href="/knowledge/networking/lan-topologies" class="nav-note " data-astro-cid-gvqsdny3> LAN Topologies </a><a href="/knowledge/networking/mssql" class="nav-note " data-astro-cid-gvqsdny3> MSSQL </a><a href="/knowledge/networking/mysql" class="nav-note " data-astro-cid-gvqsdny3> MySQL </a><a href="/knowledge/networking/network-media-connections" class="nav-note " data-astro-cid-gvqsdny3> Network Media Connections </a><a href="/knowledge/networking/networking-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Networking Fundamentals </a><a href="/knowledge/networking/nfs" class="nav-note " data-astro-cid-gvqsdny3> NFS </a><a href="/knowledge/networking/oracle-tns" class="nav-note " data-astro-cid-gvqsdny3> Oracle TNS </a><a href="/knowledge/networking/osi-model" class="nav-note " data-astro-cid-gvqsdny3> OSI Model </a><a href="/knowledge/networking/packets-and-frames" class="nav-note " data-astro-cid-gvqsdny3> Packets And Frames </a><a href="/knowledge/networking/ports" class="nav-note " data-astro-cid-gvqsdny3> Ports </a><a href="/knowledge/networking/protocols" class="nav-note " data-astro-cid-gvqsdny3> Protocols </a><a href="/knowledge/networking/smb" class="nav-note " data-astro-cid-gvqsdny3> SMB </a><a href="/knowledge/networking/smtp" class="nav-note " data-astro-cid-gvqsdny3> SMTP </a><a href="/knowledge/networking/snmp" class="nav-note " data-astro-cid-gvqsdny3> SNMP </a><a href="/knowledge/networking/subnetting" class="nav-note " data-astro-cid-gvqsdny3> Subnetting </a><a href="/knowledge/networking/tls-ssl" class="nav-note " data-astro-cid-gvqsdny3> TLS SSL </a><a href="/knowledge/networking/vpn-basics" class="nav-note " data-astro-cid-gvqsdny3> VPN Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Offensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Offensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/offensive-security/footprinting-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Footprinting Enumeration </a><a href="/knowledge/offensive-security/offensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Offensive Security Intro </a><a href="/knowledge/offensive-security/pentesting-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Pentesting Fundamentals </a><a href="/knowledge/offensive-security/web-reconnaissance" class="nav-note " data-astro-cid-gvqsdny3> Web Reconnaissance </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Operating%20Systems" class="subcat-label-link " data-astro-cid-gvqsdny3> Operating Systems </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/boot-and-file-systems" class="nav-note " data-astro-cid-gvqsdny3> Boot And File Systems </a><a href="/knowledge/operating-systems/containerization" class="nav-note " data-astro-cid-gvqsdny3> Containerization </a><a href="/knowledge/operating-systems/operating-system-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Fundamentals </a><a href="/knowledge/operating-systems/operating-system-internals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Internals </a><a href="/knowledge/operating-systems/solaris" class="nav-note " data-astro-cid-gvqsdny3> Solaris </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Linux" class="subcat-label-link " data-astro-cid-gvqsdny3> Linux </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/linux/linux-file-system" class="nav-note " data-astro-cid-gvqsdny3> Linux File System </a><a href="/knowledge/operating-systems/linux/linux-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Linux Fundamentals </a><a href="/knowledge/operating-systems/linux/linux-hardening" class="nav-note " data-astro-cid-gvqsdny3> Linux Hardening </a><a href="/knowledge/operating-systems/linux/linux-networking" class="nav-note " data-astro-cid-gvqsdny3> Linux Networking </a><a href="/knowledge/operating-systems/linux/linux-shells" class="nav-note " data-astro-cid-gvqsdny3> Linux Shells </a><a href="/knowledge/operating-systems/linux/linux-system-management" class="nav-note " data-astro-cid-gvqsdny3> Linux System Management </a><a href="/knowledge/operating-systems/linux/shell-scripting" class="nav-note " data-astro-cid-gvqsdny3> Shell Scripting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Windows" class="subcat-label-link " data-astro-cid-gvqsdny3> Windows </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/event-tracing-for-windows-etw" class="nav-note " data-astro-cid-gvqsdny3> Event Tracing For Windows ETW </a><a href="/knowledge/operating-systems/windows/windows-command-line" class="nav-note " data-astro-cid-gvqsdny3> Windows Command Line </a><a href="/knowledge/operating-systems/windows/windows-event-logs" class="nav-note " data-astro-cid-gvqsdny3> Windows Event Logs </a><a href="/knowledge/operating-systems/windows/windows-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Windows Fundamentals </a><a href="/knowledge/operating-systems/windows/windows-powershell" class="nav-note " data-astro-cid-gvqsdny3> Windows PowerShell </a><a href="/knowledge/operating-systems/windows/windows-remote-management" class="nav-note " data-astro-cid-gvqsdny3> Windows Remote Management </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Active%20Directory" class="subcat-label-link " data-astro-cid-gvqsdny3> Active Directory </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/active-directory/active-directory-basics" class="nav-note " data-astro-cid-gvqsdny3> Active Directory Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Web%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/web-security/certificate-transparency-logs" class="nav-note " data-astro-cid-gvqsdny3> Certificate Transparency Logs </a><a href="/knowledge/web-security/javascript-essentials" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Essentials </a><a href="/knowledge/web-security/owasp-top-10---2021" class="nav-note " data-astro-cid-gvqsdny3> OWASP Top 10   2021 </a><a href="/knowledge/web-security/sql-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SQL Fundamentals </a><a href="/knowledge/web-security/virtual-hosts" class="nav-note " data-astro-cid-gvqsdny3> Virtual Hosts </a><a href="/knowledge/web-security/web-apis" class="nav-note " data-astro-cid-gvqsdny3> Web APIs </a><a href="/knowledge/web-security/web-application-proxies" class="nav-note " data-astro-cid-gvqsdny3> Web Application Proxies </a><a href="/knowledge/web-security/web-crawling" class="nav-note " data-astro-cid-gvqsdny3> Web Crawling </a><a href="/knowledge/web-security/web-fingerprinting" class="nav-note " data-astro-cid-gvqsdny3> Web Fingerprinting </a><a href="/knowledge/web-security/website-innerworkings" class="nav-note " data-astro-cid-gvqsdny3> Website Innerworkings </a><a href="/knowledge/web-security/wordpress" class="nav-note " data-astro-cid-gvqsdny3> WordPress </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques" class="cat-label-link " data-astro-cid-gvqsdny3> Techniques </a> <span class="cat-count" data-astro-cid-gvqsdny3>10</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/techniques/api-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> API Fuzzing </a><a href="/techniques/command-injection" class="nav-note " data-astro-cid-gvqsdny3> Command Injection </a><a href="/techniques/dns-enumeration" class="nav-note " data-astro-cid-gvqsdny3> DNS Enumeration </a><a href="/techniques/javascript-deobfuscation" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Deobfuscation </a><a href="/techniques/sql-injection" class="nav-note " data-astro-cid-gvqsdny3> SQL Injection </a><a href="/techniques/subdomain-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Subdomain Enumeration </a><a href="/techniques/vhost-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> VHost Fuzzing </a><a href="/techniques/wordpress-attacks" class="nav-note " data-astro-cid-gvqsdny3> WordPress Attacks </a><a href="/techniques/xss" class="nav-note " data-astro-cid-gvqsdny3> XSS </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques?filter=Cryptography%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/techniques/cryptography-attacks/rsa-cracking" class="nav-note " data-astro-cid-gvqsdny3> RSA Cracking </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks" class="cat-label-link " data-astro-cid-gvqsdny3> Playbooks </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/linux-forensics-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Forensics Playbook </a><a href="/playbooks/linux-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Pentest Playbook </a><a href="/playbooks/osint-playbook" class="nav-note " data-astro-cid-gvqsdny3> OSINT Playbook </a><a href="/playbooks/windows-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Windows Pentest Playbook </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks?filter=Methodologies" class="subcat-label-link " data-astro-cid-gvqsdny3> Methodologies </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/methodologies/blue-team" class="nav-note " data-astro-cid-gvqsdny3> Blue Team </a><a href="/playbooks/methodologies/red-team" class="nav-note " data-astro-cid-gvqsdny3> Red Team </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools" class="cat-label-link " data-astro-cid-gvqsdny3> Tools </a> <span class="cat-count" data-astro-cid-gvqsdny3>63</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/cryptography/cyberchef" class="nav-note " data-astro-cid-gvqsdny3> CyberChef </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Defense%20Monitoring" class="subcat-label-link " data-astro-cid-gvqsdny3> Defense Monitoring </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/defense-monitoring/elastic-stack" class="nav-note " data-astro-cid-gvqsdny3> Elastic Stack </a><a href="/tools/defense-monitoring/iptables" class="nav-note " data-astro-cid-gvqsdny3> Iptables </a><a href="/tools/defense-monitoring/silketw" class="nav-note " data-astro-cid-gvqsdny3> SilkETW </a><a href="/tools/defense-monitoring/snort" class="nav-note " data-astro-cid-gvqsdny3> Snort </a><a href="/tools/defense-monitoring/sysmon" class="nav-note " data-astro-cid-gvqsdny3> Sysmon </a><a href="/tools/defense-monitoring/thehive" class="nav-note " data-astro-cid-gvqsdny3> TheHive </a><a href="/tools/defense-monitoring/uncomplicated-firewall-ufw" class="nav-note " data-astro-cid-gvqsdny3> Uncomplicated Firewall UFW </a><a href="/tools/defense-monitoring/windows-defender-firewall" class="nav-note " data-astro-cid-gvqsdny3> Windows Defender Firewall </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Enumeration" class="subcat-label-link " data-astro-cid-gvqsdny3> Enumeration </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/enumeration/crackmapexec" class="nav-note " data-astro-cid-gvqsdny3> CrackMapExec </a><a href="/tools/enumeration/dnsenum" class="nav-note " data-astro-cid-gvqsdny3> DNSenum </a><a href="/tools/enumeration/enum4linux-ng" class="nav-note " data-astro-cid-gvqsdny3> Enum4linux Ng </a><a href="/tools/enumeration/feroxbuster" class="nav-note " data-astro-cid-gvqsdny3> Feroxbuster </a><a href="/tools/enumeration/gobuster" class="nav-note " data-astro-cid-gvqsdny3> Gobuster </a><a href="/tools/enumeration/netexec" class="nav-note " data-astro-cid-gvqsdny3> NetExec </a><a href="/tools/enumeration/nmap" class="nav-note " data-astro-cid-gvqsdny3> Nmap </a><a href="/tools/enumeration/odat" class="nav-note " data-astro-cid-gvqsdny3> ODAT </a><a href="/tools/enumeration/rdp-sec-check" class="nav-note " data-astro-cid-gvqsdny3> RDP Sec Check </a><a href="/tools/enumeration/rpcclient" class="nav-note " data-astro-cid-gvqsdny3> Rpcclient </a><a href="/tools/enumeration/smtp-user-enum" class="nav-note " data-astro-cid-gvqsdny3> SMTP User Enum </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Forensics" class="subcat-label-link " data-astro-cid-gvqsdny3> Forensics </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/forensics/capa" class="nav-note " data-astro-cid-gvqsdny3> CAPA </a><a href="/tools/forensics/inetsim" class="nav-note " data-astro-cid-gvqsdny3> INetSim </a><a href="/tools/forensics/oledumppy" class="nav-note " data-astro-cid-gvqsdny3> Oledumppy </a><a href="/tools/forensics/volatility-3" class="nav-note " data-astro-cid-gvqsdny3> Volatility 3 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Metasploit" class="subcat-label-link " data-astro-cid-gvqsdny3> Metasploit </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/frameworks/metasploit/metasploit" class="nav-note " data-astro-cid-gvqsdny3> Metasploit </a><a href="/tools/frameworks/metasploit/meterpreter" class="nav-note " data-astro-cid-gvqsdny3> Meterpreter </a><a href="/tools/frameworks/metasploit/msfconsole" class="nav-note " data-astro-cid-gvqsdny3> MSFConsole </a><a href="/tools/frameworks/metasploit/msfvenom" class="nav-note " data-astro-cid-gvqsdny3> MSFVenom </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Network%20Analysis" class="subcat-label-link " data-astro-cid-gvqsdny3> Network Analysis </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/network-analysis/tcpdump" class="nav-note " data-astro-cid-gvqsdny3> TCPDump </a><a href="/tools/network-analysis/wireshark" class="nav-note " data-astro-cid-gvqsdny3> Wireshark </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Osint%20Recon" class="subcat-label-link " data-astro-cid-gvqsdny3> Osint Recon </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/osint-recon/dig" class="nav-note " data-astro-cid-gvqsdny3> Dig </a><a href="/tools/osint-recon/finalrecon" class="nav-note " data-astro-cid-gvqsdny3> FinalRecon </a><a href="/tools/osint-recon/nslookup" class="nav-note " data-astro-cid-gvqsdny3> Nslookup </a><a href="/tools/osint-recon/shodan" class="nav-note " data-astro-cid-gvqsdny3> Shodan </a><a href="/tools/osint-recon/whois" class="nav-note " data-astro-cid-gvqsdny3> WHOIS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Password%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Password Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/password-attacks/hashcat" class="nav-note " data-astro-cid-gvqsdny3> Hashcat </a><a href="/tools/password-attacks/hydra" class="nav-note " data-astro-cid-gvqsdny3> Hydra </a><a href="/tools/password-attacks/johntheripper" class="nav-note " data-astro-cid-gvqsdny3> JohnTheRipper </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Post%20Exploitation" class="subcat-label-link " data-astro-cid-gvqsdny3> Post Exploitation </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/post-exploitation/evil-winrm" class="nav-note " data-astro-cid-gvqsdny3> Evil Winrm </a><a href="/tools/post-exploitation/peass-ng" class="nav-note " data-astro-cid-gvqsdny3> PEASS Ng </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Utilities" class="subcat-label-link " data-astro-cid-gvqsdny3> Utilities </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/utilities/curl" class="nav-note " data-astro-cid-gvqsdny3> Curl </a><a href="/tools/utilities/docker" class="nav-note " data-astro-cid-gvqsdny3> Docker </a><a href="/tools/utilities/rsync" class="nav-note " data-astro-cid-gvqsdny3> Rsync </a><a href="/tools/utilities/sqlplus" class="nav-note " data-astro-cid-gvqsdny3> SQLplus </a><a href="/tools/utilities/telnet" class="nav-note " data-astro-cid-gvqsdny3> Telnet </a><a href="/tools/utilities/xfreerdp" class="nav-note " data-astro-cid-gvqsdny3> Xfreerdp </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Vulnerability%20Scanning" class="subcat-label-link " data-astro-cid-gvqsdny3> Vulnerability Scanning </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/vulnerability-scanning/openvas" class="nav-note " data-astro-cid-gvqsdny3> OpenVAS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Web%20Testing" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Testing </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/ffuf" class="nav-note " data-astro-cid-gvqsdny3> Ffuf </a><a href="/tools/web-testing/nikto" class="nav-note " data-astro-cid-gvqsdny3> Nikto </a><a href="/tools/web-testing/sqlmap" class="nav-note " data-astro-cid-gvqsdny3> SQLMap </a><a href="/tools/web-testing/wafw00f" class="nav-note " data-astro-cid-gvqsdny3> Wafw00f </a><a href="/tools/web-testing/wenum" class="nav-note " data-astro-cid-gvqsdny3> Wenum </a><a href="/tools/web-testing/wpscan" class="nav-note " data-astro-cid-gvqsdny3> WPScan </a><a href="/tools/web-testing/xsstrike" class="nav-note " data-astro-cid-gvqsdny3> XSStrike </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Burp%20Suite" class="subcat-label-link " data-astro-cid-gvqsdny3> Burp Suite </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/burp-suite/burp-intruder" class="nav-note " data-astro-cid-gvqsdny3> Burp Intruder </a><a href="/tools/web-testing/burp-suite/burp-proxy" class="nav-note " data-astro-cid-gvqsdny3> Burp Proxy </a><a href="/tools/web-testing/burp-suite/burp-repeater" class="nav-note " data-astro-cid-gvqsdny3> Burp Repeater </a><a href="/tools/web-testing/burp-suite/burp-scanner" class="nav-note " data-astro-cid-gvqsdny3> Burp Scanner </a><a href="/tools/web-testing/burp-suite/burp-suite" class="nav-note " data-astro-cid-gvqsdny3> Burp Suite </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Owasp%20Zap" class="subcat-label-link " data-astro-cid-gvqsdny3> Owasp Zap </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/owasp-zap/owasp-zap" class="nav-note " data-astro-cid-gvqsdny3> OWASP ZAP </a><a href="/tools/web-testing/owasp-zap/zap-fuzzer" class="nav-note " data-astro-cid-gvqsdny3> ZAP Fuzzer </a><a href="/tools/web-testing/owasp-zap/zap-proxy" class="nav-note " data-astro-cid-gvqsdny3> ZAP Proxy </a><a href="/tools/web-testing/owasp-zap/zap-scanner" class="nav-note " data-astro-cid-gvqsdny3> ZAP Scanner </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs" class="cat-label-link " data-astro-cid-gvqsdny3> Labs </a> <span class="cat-count" data-astro-cid-gvqsdny3>7</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Cjca" class="subcat-label-link " data-astro-cid-gvqsdny3> Cjca </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/cjca-siem-triage" class="nav-note " data-astro-cid-gvqsdny3> CJCA SIEM Triage </a><a href="/labs/hackthebox/exams/cjca/htb-cjca-exam---april-2026" class="nav-note " data-astro-cid-gvqsdny3> HTB CJCA Exam   April 2026 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Machines" class="subcat-label-link " data-astro-cid-gvqsdny3> Machines </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/machines/nix01" class="nav-note " data-astro-cid-gvqsdny3> NIX01 </a><a href="/labs/hackthebox/exams/cjca/machines/nix02" class="nav-note " data-astro-cid-gvqsdny3> NIX02 </a><a href="/labs/hackthebox/exams/cjca/machines/web01" class="nav-note " data-astro-cid-gvqsdny3> WEB01 </a><a href="/labs/hackthebox/exams/cjca/machines/win01" class="nav-note " data-astro-cid-gvqsdny3> WIN01 </a><a href="/labs/hackthebox/exams/cjca/machines/win02" class="nav-note " data-astro-cid-gvqsdny3> WIN02 </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/resources" class="cat-label-link " data-astro-cid-gvqsdny3> Resources </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/resources/common-distros" class="nav-note " data-astro-cid-gvqsdny3> Common Distros </a><a href="/resources/ctf-methodology" class="nav-note " data-astro-cid-gvqsdny3> CTF Methodology </a><a href="/resources/cyber-resources" class="nav-note " data-astro-cid-gvqsdny3> Cyber Resources </a><a href="/resources/github-repositories" class="nav-note " data-astro-cid-gvqsdny3> Github Repositories </a><a href="/resources/obsidian-guides" class="nav-note " data-astro-cid-gvqsdny3> Obsidian Guides </a><a href="/resources/try-hack-me-rooms" class="nav-note " data-astro-cid-gvqsdny3> Try Hack Me Rooms </a> </div> </div> </nav>  <script type="module">document.querySelectorAll(".cat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".cat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});document.querySelectorAll(".subcat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".subcat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});</script> </nav> </div> </aside> <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" data-astro-cid-o5gmpz7g>‹</button> <div class="note-gap" data-astro-cid-o5gmpz7g></div> <main class="note-main" data-astro-cid-o5gmpz7g> <div class="note-content" data-astro-cid-o5gmpz7g> <div class="note-meta" data-astro-cid-o5gmpz7g> <span class="note-category" data-astro-cid-o5gmpz7g>knowledge</span>  </div>    <hr>
+<h2 id="overview">Overview</h2>
+<p>Incident Response (IR) is the structured approach organizations use to detect, investigate, and respond to cybersecurity incidents. It aims to minimize damage, reduce recovery time, preserve evidence, and prevent future occurrences. Incident handling is not limited to intrusion events — it encompasses any security event with a clear intent to cause harm. A well-defined IR process enables rapid response, supports regulatory compliance, and reduces the financial and operational impact of breaches.</p>
+<hr>
+<h2 id="terminology">Terminology</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Event</td><td>Any action occurring in a system or network — sending an email, clicking a mouse, or a service starting</td></tr><tr><td>Incident</td><td>An event with a negative consequence — a system crash, data leak, or unauthorized access</td></tr><tr><td>IT Security Incident</td><td>An event with a clear intent to cause harm performed against a computer system</td></tr><tr><td>Incident Handling</td><td>A clearly defined set of procedures for managing and responding to security incidents</td></tr><tr><td>Containment</td><td>Actions taken to limit the spread or impact of an incident</td></tr><tr><td>Eradication</td><td>Removal of malware, backdoors, or vulnerabilities introduced during an incident</td></tr><tr><td>Recovery</td><td>Restoring affected systems to normal, verified operation</td></tr><tr><td>EDR</td><td>Endpoint Detection and Response — monitors endpoint behavior and supports remediation</td></tr><tr><td>IOC (Indicator of Compromise)</td><td>Evidence that a system has been compromised — suspicious IPs, file hashes, registry keys, domains</td></tr><tr><td>Jump Bag</td><td>Pre-staged kit of tools and equipment maintained by IR teams for immediate deployment</td></tr><tr><td>Chain of Custody</td><td>Documentation proving evidence integrity and continuity — required for evidence to be court-admissible</td></tr><tr><td>Patient Zero</td><td>The first system or user infected in an incident; establishing this anchors the incident timeline</td></tr></tbody></table>
+<hr>
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="incident-handling-frameworks">Incident Handling Frameworks</h3>
+<p>Two widely used models describe the IR lifecycle:</p>
+<ul>
+<li><strong>NIST SP 800-61</strong> — Four-stage model: Preparation → Detection &#x26; Analysis → Containment, Eradication, Recovery → Post-Incident Activity</li>
+<li><strong>SANS/PICERL</strong> — Six-phase model: Preparation → Identification → Containment → Eradication → Recovery → Lessons Learned</li>
+</ul>
+<p>Both models describe the same underlying process. The NIST model groups phases more broadly; SANS/PICERL is more granular. Both are referenced across certifications and industry frameworks.</p>
+<hr>
+<h3 id="the-six-phases-of-incident-response-sanspicerl">The Six Phases of Incident Response (SANS/PICERL)</h3>
+<p>4 Steps To Incident Response</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Phase</th><th>Description</th></tr></thead><tbody><tr><td>Preparation</td><td>Develop policies, procedures, and tools; train personnel; conduct security awareness activities</td></tr><tr><td>Identification</td><td>Detect and confirm potential incidents using SIEMs, IDS/IPS, and log analysis</td></tr><tr><td>Containment</td><td>Isolate affected systems (short-term); implement fixes to prevent recurrence (long-term)</td></tr><tr><td>Eradication</td><td>Remove malware and vulnerabilities; clean and restore affected systems</td></tr><tr><td>Recovery</td><td>Restore systems to normal operation; monitor for reinfection or recurring issues</td></tr><tr><td>Lessons Learned</td><td>Review the incident; update policies, procedures, and controls; document findings</td></tr></tbody></table>
+<hr>
+<h3 id="nist-four-stage-model">NIST Four-Stage Model</h3>
+<p>IR is a cyclic, not linear, process. As new evidence surfaces, the investigation loops back — new leads produce new IOCs, which reveal new impacted systems. Incident handlers spend the majority of time in Preparation and Detection &#x26; Analysis, even during an active incident.</p>
+<h4 id="stage-1--preparation">Stage 1 — Preparation</h4>
+<p>Preparation has two distinct objectives:</p>
+<ol>
+<li><strong>Establish incident handling capability</strong> — policies, contacts, tools, and procedures for responding when an incident occurs</li>
+<li><strong>Prevent incidents proactively</strong> — implement defensive measures that reduce the likelihood and impact of incidents</li>
+</ol>
+<h5 id="documentation-requirements">Documentation Requirements</h5>
+<p>Preparation requires maintaining up-to-date documentation including:</p>
+<ul>
+<li>Contact information and roles for all incident handling team members</li>
+<li>Legal, management, and IT escalation contacts</li>
+<li>Network and system baselines</li>
+<li>Known high-privilege accounts and their justification</li>
+<li>Asset inventory with system owners and sensitivity classifications</li>
+</ul>
+<p>All IR documentation and communication channels must be independent from the organization’s primary infrastructure — assume adversaries may have access to internal systems.</p>
+<h5 id="jump-bag">Jump Bag</h5>
+<p>IR teams maintain a pre-staged jump bag of tools for immediate deployment:</p>
+<ul>
+<li>Forensic workstation or laptop for disk imaging and log analysis</li>
+<li>Digital forensic image acquisition tools</li>
+<li>Log analysis tools</li>
+<li>Network capture tools and packet analyzers</li>
+<li>Write blockers for evidence preservation</li>
+</ul>
+<h5 id="protective-measures">Protective Measures</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Measure</th><th>Description</th></tr></thead><tbody><tr><td>DMARC</td><td>Email authentication built on SPF and DKIM — rejects spoofed emails pretending to originate from your domain; requires thorough testing before enforcement to avoid blocking legitimate mail</td></tr><tr><td>Endpoint Hardening</td><td>Follow CIS or Microsoft baselines; disable LLMNR/NetBIOS; implement LAPS; remove local admin from standard users; configure PowerShell Constrained Language Mode</td></tr><tr><td>Network Segmentation</td><td>Divide network to contain blast radius; add IDS/IPS with TLS inspection; restrict non-approved devices</td></tr><tr><td>Privileged Identity &#x26; MFA</td><td>Enforce complex passwords; require MFA for all administrative access</td></tr><tr><td>Vulnerability Management</td><td>Continuously scan and remediate high/critical vulnerabilities</td></tr><tr><td>User Awareness Training</td><td>Regular security training plus surprise phishing simulations</td></tr><tr><td>Active Directory Security</td><td>Assess AD for misconfigurations as an attacker would; engage third-party assessors; review frequently as new vulnerabilities emerge</td></tr><tr><td>Purple Team Exercises</td><td>Red team assessments that continuously or eventually inform the blue team — improves detection, visibility, and response across the whole organization</td></tr></tbody></table>
+<p>Monitor for LOLBins — legitimate OS binaries that attackers abuse for execution and privilege escalation without dropping custom tools. See the LOLBAS Project reference below.</p>
+<hr>
+<h4 id="stage-2--detection-and-analysis">Stage 2 — Detection and Analysis</h4>
+<p>Detection can originate from any layer of the environment:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Detection Layer</th><th>Sources</th></tr></thead><tbody><tr><td>Network Perimeter</td><td>Firewalls, internet-facing IDS/IPS, DMZ sensors</td></tr><tr><td>Internal Network</td><td>Host-based IDS/IPS, internal network monitoring</td></tr><tr><td>Endpoint</td><td>Antivirus, EDR systems</td></tr><tr><td>Application</td><td>Application logs, service logs, authentication logs</td></tr><tr><td>Human</td><td>Employees reporting unusual behavior or suspicious emails</td></tr></tbody></table>
+<h5 id="initial-investigation-checklist">Initial Investigation Checklist</h5>
+<p>Before assembling a full response team, gather context:</p>
+<ul>
+<li>Date, time, and who detected or reported the incident</li>
+<li>How it was detected and what tool or person surfaced it</li>
+<li>Description of the incident and affected systems</li>
+<li>List of impacted hosts with IP addresses, hostnames, OS types, owners, and purpose</li>
+<li>Document all actions already taken and by whom — flag if incident is still ongoing</li>
+<li>List of malware signatures or indicators if malware is involved</li>
+</ul>
+<h5 id="incident-timeline">Incident Timeline</h5>
+<p>Build a running timeline sorted by event time throughout the investigation. Each entry should capture:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td>Date</td><td>Date the event occurred</td></tr><tr><td>Time</td><td>Time of event (standardize to UTC where possible)</td></tr><tr><td>Hostname</td><td>System where the event occurred</td></tr><tr><td>Event Description</td><td>What happened</td></tr><tr><td>Data Source</td><td>Log or artifact that captured the event</td></tr></tbody></table>
+<p>Focus the timeline on attacker behavior: when connections were established, what was downloaded, what commands ran.</p>
+<h5 id="incident-severity-questions">Incident Severity Questions</h5>
+<p>Answer these questions to prioritize the response:</p>
+<ul>
+<li>What is the exploitation impact?</li>
+<li>What are the requirements to exploit?</li>
+<li>Can business-critical systems be affected?</li>
+<li>Are there suggested remediation steps available?</li>
+<li>How many systems are impacted?</li>
+<li>Is this exploit being actively used in the wild?</li>
+<li>Does the exploit have worm-like propagation capabilities?</li>
+</ul>
+<p>Worm capability and in-the-wild exploitation indicate high-sophistication, high-impact incidents requiring the most urgent attention.</p>
+<h5 id="incident-confidentiality">Incident Confidentiality</h5>
+<p>IR information is need-to-know only unless legal obligations or management direction specify otherwise. The adversary may still be in the network or may be an insider — limit exposure of investigation details accordingly.</p>
+<hr>
+<h4 id="the-investigation-cycle">The Investigation Cycle</h4>
+<p>Once the initial context is gathered, the investigation enters a three-step repeating cycle:</p>
+<ol>
+<li><strong>Create and use IOCs</strong> — document indicators of compromise and search for them across the environment</li>
+<li><strong>Identify new leads and impacted systems</strong> — follow IOC hits to surface new evidence</li>
+<li><strong>Collect and analyze data from new leads</strong> — examine new systems; add findings back into the timeline and the next round of IOCs</li>
+</ol>
+<p>Never focus solely on one specific finding. Leads should drive the investigation — if a finding produces no new leads, continue searching other artifacts.</p>
+<h5 id="ioc-documentation-standards">IOC Documentation Standards</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Standard</th><th>Description</th></tr></thead><tbody><tr><td>OpenIOC</td><td>XML-based language for documenting and sharing structured IOCs</td></tr><tr><td>YARA</td><td>Rule-based format for identifying and classifying malware samples</td></tr><tr><td>STIX</td><td>Structured Threat Information eXpression — JSON format for sharing cyber threat intelligence (CTI); used by CISA advisories</td></tr><tr><td>Mandiant IOC Editor</td><td>GUI tool for creating and editing OpenIOC indicators</td></tr></tbody></table>
+<p>IOCs are added as observables in <a href="/tools/Defense-Monitoring/TheHive">TheHive</a> and can be searched across the environment using WMI or PowerShell. When connecting to compromised systems to search for IOCs, use only non-caching connection protocols — WinRM or network logons (type 3). PsExec does not cache credentials when used through the current user’s session, but will cache them if credentials are passed explicitly.</p>
+<h5 id="ai-in-threat-detection">AI in Threat Detection</h5>
+<p>AI tools can automate the review of logs, alerts, and reports — reducing analysis time and improving detection accuracy by learning from historical incidents:</p>
+<ul>
+<li>Elastic Security’s <strong>Attack Discovery</strong> uses generative AI to analyze alerts and generate comprehensive attack overviews</li>
+<li>Use cases: automated triage and alert prioritization, incident correlation and timeline reconstruction, automated response playbooks, post-incident analysis and learning</li>
+</ul>
+<h5 id="data-collection">Data Collection</h5>
+<p>Collect and preserve system state for new leads. Live response is preferred — shutting down a system wipes RAM, which often contains critical forensic artifacts. Common examination types include malware analysis, disk forensics, and memory forensics. Maintain chain of custody for all evidence to ensure court admissibility.</p>
+<hr>
+<h4 id="stage-3--containment-eradication-and-recovery">Stage 3 — Containment, Eradication, and Recovery</h4>
+<h5 id="containment">Containment</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Type</th><th>Goal</th><th>Examples</th></tr></thead><tbody><tr><td>Short-term Containment</td><td>Limit spread with minimal footprint on evidence</td><td>Isolate system in a VLAN, pull network cable, sinkhole C2 DNS, take forensic image</td></tr><tr><td>Long-term Containment</td><td>Keep attackers out while remediation proceeds</td><td>Password resets, firewall rules, host-based IDS rules, patching</td></tr></tbody></table>
+<p>Take a forensic disk image during the short-term containment phase if evidence has not already been preserved.</p>
+<h5 id="eradication">Eradication</h5>
+<p>After containment, eliminate the root cause:</p>
+<ul>
+<li>Remove malware, implants, and backdoors</li>
+<li>Restore from known-good backups where needed</li>
+<li>Apply patches and configuration changes that were deferred during containment</li>
+<li>Ensure the adversary has been fully evicted before proceeding</li>
+</ul>
+<h5 id="recovery">Recovery</h5>
+<p>Restore affected systems to production under heavy monitoring:</p>
+<ul>
+<li>Subject all restored systems to heightened logging and alerting — previously compromised systems are frequently targeted again</li>
+<li>Monitor specifically for: unusual logons, suspicious processes, registry changes</li>
+<li>Recovery is often phased over months — early phases focus on immediate security hardening; later phases address permanent structural improvements</li>
+</ul>
+<hr>
+<h4 id="stage-4--post-incident-activity">Stage 4 — Post-Incident Activity</h4>
+<h5 id="reporting">Reporting</h5>
+<p>A complete incident report answers:</p>
+<ul>
+<li>What happened and when?</li>
+<li>How did the response team perform?</li>
+<li>Did the business provide the right information and respond quickly enough?</li>
+<li>What actions were taken to contain and eradicate?</li>
+<li>What preventative measures are needed to prevent recurrence?</li>
+<li>What tools, resources, or training gaps were identified?</li>
+</ul>
+<p>Evaluate whether playbooks, policies, and procedures need updating based on lessons learned. Use the post-incident review as a training opportunity for junior team members.</p>
+<p>The best lessons-learned meetings are held with all stakeholders within a few days of the incident being fully resolved.</p>
+<hr>
+<h3 id="pyramid-of-pain">Pyramid of Pain</h3>
+<p>The Pyramid of Pain illustrates how much operational effort it requires for an adversary to change their approach when defenders detect or block different types of indicators. Blocking indicators high on the pyramid forces fundamental changes in attacker behavior.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Level</th><th>Indicator Type</th><th>Adversary Effort to Change</th></tr></thead><tbody><tr><td>Highest</td><td>TTPs (e.g., PowerShell abuse, living-off-the-land)</td><td>Very hard — requires fundamentally changing how they operate</td></tr><tr><td>High</td><td>Tools (e.g., specific C2 framework, RAT)</td><td>Challenging — requires acquiring or building new tools</td></tr><tr><td>Medium</td><td>Network / Host Artifacts (e.g., registry keys, user agents)</td><td>Annoying — requires operational adjustments</td></tr><tr><td>Low</td><td>Domain Names</td><td>Simple — register new domains</td></tr><tr><td>Lower</td><td>IP Addresses</td><td>Easy — proxy, VPS, or botnet IP rotation</td></tr><tr><td>Lowest</td><td>Hash Values</td><td>Trivial — recompile or repack malware to generate new hash</td></tr></tbody></table>
+<p>Defenders should prioritize detection at the TTP level where possible. Hash-based detection alone is easily defeated.</p>
+<hr>
+<h3 id="ir-tool-categories">IR Tool Categories</h3>
+<h4 id="siem">SIEM</h4>
+<p>Collects logs and events from across the network; correlates data and alerts on suspicious activity.
+See <a href="/knowledge/Defensive-Security/Security-Solutions/Intro-to-SIEM">Intro to SIEM</a></p>
+<h4 id="case-management">Case Management</h4>
+<p>Centralizes investigation workflow — case tracking, IOC management, MITRE ATT&#x26;CK mapping, analyst task assignment.
+See <a href="/tools/Defense-Monitoring/TheHive">TheHive</a></p>
+<h4 id="forensic-tools">Forensic Tools</h4>
+<p>Used for disk and memory acquisition and analysis during investigation.
+See <a href="/knowledge/Defensive-Security/Digital-Forensics-Fundamentals">Digital Forensics Fundamentals</a></p>
+<h4 id="network-monitoring">Network Monitoring</h4>
+<ul>
+<li>IDS/IPS for real-time detection — see <a href="/knowledge/Defensive-Security/Security-Solutions/Intrusion-Detection-Systems-IDS">Intrusion Detection Systems (IDS)</a></li>
+<li>Packet capture tools for traffic analysis — see <a href="/tools/Network-Analysis/Wireshark">Wireshark</a>, <a href="/tools/Network-Analysis/TCPDump">TCPDump</a></li>
+</ul>
+<h4 id="endpoint-detection--response-edr">Endpoint Detection &#x26; Response (EDR)</h4>
+<p>Monitors endpoint behavior continuously; facilitates containment, remediation, and forensic evidence collection.</p>
+<hr>
+<h2 id="related-concepts">Related Concepts</h2>
+<ul>
+<li><a href="/knowledge/Defensive-Security/Defensive-Security-Intro">Defensive Security Intro</a></li>
+<li><a href="/knowledge/Defensive-Security/Digital-Forensics-Fundamentals">Digital Forensics Fundamentals</a></li>
+<li><a href="/knowledge/Defensive-Security/Security-Solutions/Intro-to-SIEM">Intro to SIEM</a></li>
+<li><a href="/knowledge/Defensive-Security/Security-Solutions/Intrusion-Detection-Systems-IDS">Intrusion Detection Systems (IDS)</a></li>
+<li><a href="/knowledge/Core-Security-Concepts/Security-Principles">Security Principles</a></li>
+<li><a href="/knowledge/Defensive-Security/Threat-Hunting">Threat Hunting</a></li>
+<li><a href="/knowledge/Core-Security-Concepts/Cyber-Kill-Chain">Cyber Kill Chain</a></li>
+<li><a href="/knowledge/Core-Security-Concepts/MITRE-ATTCK-Framework">MITRE ATT&#x26;CK Framework</a></li>
+</ul>
+<h2 id="related-techniques">Related Techniques</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id="related-tools">Related Tools</h2>
+<ul>
+<li><a href="/tools/Defense-Monitoring/TheHive">TheHive</a></li>
+<li><a href="/tools/Network-Analysis/Wireshark">Wireshark</a></li>
+<li><a href="/tools/Network-Analysis/TCPDump">TCPDump</a></li>
+<li><a href="/tools/Forensics/Volatility-3">Volatility 3</a></li>
+<li>Autopsy</li>
+</ul>
+<hr>
+<h2 id="references--images">References / Images</h2>
+<ul>
+<li>4 Steps To Incident Response</li>
+<li>NIST SP 800-61r3 — Computer Security Incident Handling Guide — <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf">https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf</a></li>
+<li>LOLBAS Project — <a href="https://lolbas-project.github.io/">https://lolbas-project.github.io/</a></li>
+<li>The DFIR Report (incident report examples) — <a href="https://thedfirreport.com/">https://thedfirreport.com/</a></li>
+<li>Palo Alto Unit 42 Global IR Report — <a href="https://www.paloaltonetworks.com/engage/unit42-2025-global-incident-response-report">https://www.paloaltonetworks.com/engage/unit42-2025-global-incident-response-report</a></li>
+</ul>  </div> </main> <aside class="toc" id="toc" data-astro-cid-o5gmpz7g> <div class="toc-inner" data-astro-cid-o5gmpz7g> <p class="toc-label" data-astro-cid-o5gmpz7g>On this page</p> <aside id="toc-container"> <a href="#overview" class="toc-link toc-h2" data-heading="overview"> Overview </a><a href="#terminology" class="toc-link toc-h2" data-heading="terminology"> Terminology </a><a href="#core-concepts" class="toc-link toc-h2" data-heading="core-concepts"> Core Concepts </a><a href="#incident-handling-frameworks" class="toc-link toc-h3" data-heading="incident-handling-frameworks"> Incident Handling Frameworks </a><a href="#the-six-phases-of-incident-response-sanspicerl" class="toc-link toc-h3" data-heading="the-six-phases-of-incident-response-sanspicerl"> The Six Phases of Incident Response (SANS/PICERL) </a><a href="#nist-four-stage-model" class="toc-link toc-h3" data-heading="nist-four-stage-model"> NIST Four-Stage Model </a><a href="#stage-1--preparation" class="toc-link toc-h4" data-heading="stage-1--preparation"> Stage 1 — Preparation </a><a href="#documentation-requirements" class="toc-link toc-h5" data-heading="documentation-requirements"> Documentation Requirements </a><a href="#jump-bag" class="toc-link toc-h5" data-heading="jump-bag"> Jump Bag </a><a href="#protective-measures" class="toc-link toc-h5" data-heading="protective-measures"> Protective Measures </a><a href="#stage-2--detection-and-analysis" class="toc-link toc-h4" data-heading="stage-2--detection-and-analysis"> Stage 2 — Detection and Analysis </a><a href="#initial-investigation-checklist" class="toc-link toc-h5" data-heading="initial-investigation-checklist"> Initial Investigation Checklist </a><a href="#incident-timeline" class="toc-link toc-h5" data-heading="incident-timeline"> Incident Timeline </a><a href="#incident-severity-questions" class="toc-link toc-h5" data-heading="incident-severity-questions"> Incident Severity Questions </a><a href="#incident-confidentiality" class="toc-link toc-h5" data-heading="incident-confidentiality"> Incident Confidentiality </a><a href="#the-investigation-cycle" class="toc-link toc-h4" data-heading="the-investigation-cycle"> The Investigation Cycle </a><a href="#ioc-documentation-standards" class="toc-link toc-h5" data-heading="ioc-documentation-standards"> IOC Documentation Standards </a><a href="#ai-in-threat-detection" class="toc-link toc-h5" data-heading="ai-in-threat-detection"> AI in Threat Detection </a><a href="#data-collection" class="toc-link toc-h5" data-heading="data-collection"> Data Collection </a><a href="#stage-3--containment-eradication-and-recovery" class="toc-link toc-h4" data-heading="stage-3--containment-eradication-and-recovery"> Stage 3 — Containment, Eradication, and Recovery </a><a href="#containment" class="toc-link toc-h5" data-heading="containment"> Containment </a><a href="#eradication" class="toc-link toc-h5" data-heading="eradication"> Eradication </a><a href="#recovery" class="toc-link toc-h5" data-heading="recovery"> Recovery </a><a href="#stage-4--post-incident-activity" class="toc-link toc-h4" data-heading="stage-4--post-incident-activity"> Stage 4 — Post-Incident Activity </a><a href="#reporting" class="toc-link toc-h5" data-heading="reporting"> Reporting </a><a href="#pyramid-of-pain" class="toc-link toc-h3" data-heading="pyramid-of-pain"> Pyramid of Pain </a><a href="#ir-tool-categories" class="toc-link toc-h3" data-heading="ir-tool-categories"> IR Tool Categories </a><a href="#siem" class="toc-link toc-h4" data-heading="siem"> SIEM </a><a href="#case-management" class="toc-link toc-h4" data-heading="case-management"> Case Management </a><a href="#forensic-tools" class="toc-link toc-h4" data-heading="forensic-tools"> Forensic Tools </a><a href="#network-monitoring" class="toc-link toc-h4" data-heading="network-monitoring"> Network Monitoring </a><a href="#endpoint-detection--response-edr" class="toc-link toc-h4" data-heading="endpoint-detection--response-edr"> Endpoint Detection &amp; Response (EDR) </a> </aside> </div> </aside> <div class="note-spacer" data-astro-cid-o5gmpz7g></div> </div>  </div> </body></html>  <script type="module">const e=document.getElementById("sidebar-toggle"),l=document.getElementById("sidebar");if(e&&l){let a=function(o){o?(l.setAttribute("data-collapsed",""),e.textContent="›",e.style.left="0px"):(l.removeAttribute("data-collapsed"),e.textContent="‹",e.style.left="240px")},t=localStorage.getItem("sidebar")==="1";a(t),e.addEventListener("click",()=>{t=!t,localStorage.setItem("sidebar",t?"1":"0"),a(t)})}</script> <script type="module">window.addEventListener("DOMContentLoaded",()=>{const c=document.querySelectorAll(".toc-link[data-heading]");if(!c.length)return;const d=["related concepts","related techniques","related tools","related playbooks","related knowledge","references","references / images","references/images"],o=Array.from(document.querySelectorAll(".note-content h1, .note-content h2, .note-content h3, .note-content h4")).filter(e=>{if(!e.id)return!1;const t=e.textContent.trim().toLowerCase();return!d.some(n=>t.includes(n))});if(!o.length)return;function r(e){c.forEach(n=>{n.classList.toggle("active",n.dataset.heading===e)});const t=document.querySelector(`.toc-link[data-heading="${e}"]`);t&&t.scrollIntoView({block:"nearest",behavior:"smooth"})}function i(){const e=window.scrollY,t=document.documentElement.scrollHeight,n=window.innerHeight,a=100;if(e+n>=t-10){r(o[o.length-1].id);return}let s=o[0];for(const l of o)l.getBoundingClientRect().top<=a&&(s=l);r(s.id)}window.addEventListener("scroll",i,{passive:!0}),i()});</script>

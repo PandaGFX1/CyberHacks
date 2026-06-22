@@ -1,0 +1,413 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
+
+/* ── TOKENS ── */
+:root {
+  --bg:         #09070f;
+  --bg-2:       #0f0c1a;
+  --surface:    #140f22;
+  --surface-2:  #1c1630;
+  --border:     #2a2040;
+  --border-2:   #3d3060;
+  --text:       #e8e0ff;
+  --text-muted: #8070a8;
+  --text-dim:   #4a3d6e;
+  --purple-1:   #c4b0ff;
+  --purple-2:   #9d80f0;
+  --purple-3:   #7c5ce8;
+  --purple-4:   #5a3db8;
+  --glow:       rgba(124, 92, 232, 0.15);
+  --glow-2:     rgba(124, 92, 232, 0.30);
+  --font-sans:  'Inter', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Syne', sans-serif;
+  --radius:     8px;
+  --radius-lg:  12px;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── BACKGROUND ── */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(90, 61, 184, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(124, 92, 232, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 60% 40%, rgba(60, 30, 120, 0.08) 0%, transparent 50%),
+    #09070f;
+  pointer-events: none;
+}
+
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.site-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+a { color: var(--purple-2); text-decoration: none; transition: color 0.15s; }
+a:hover { color: var(--purple-1); }
+
+img { max-width: 100%; height: auto; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--purple-3); }
+
+/* ── UTILITIES ── */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* ── NOTE CONTENT TYPOGRAPHY ── */
+.note-shell .note-main h1 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--purple-1);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-2);
+}
+
+.note-shell .note-main h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--purple-2);
+  margin: 2rem 0 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--purple-3);
+}
+
+.note-shell .note-main h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 1.5rem 0 0.5rem;
+}
+
+.note-shell .note-main h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 1rem 0 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.note-shell .note-main p {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.note-shell .note-main ul,
+.note-shell .note-main ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.note-shell .note-main li {
+  margin-bottom: 0.3rem;
+  color: var(--text);
+}
+
+.note-shell .note-main a {
+  color: var(--purple-2);
+  border-bottom: 1px solid var(--border-2);
+}
+
+.note-shell .note-main a:hover {
+  color: var(--purple-1);
+  border-bottom-color: var(--purple-3);
+}
+
+/* ── CODE BLOCKS — TERMINAL STYLE ── */
+.note-shell .note-main pre {
+  position: relative;
+  background: #0a0812 !important;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2.5rem 1.25rem 1.25rem !important;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+.note-shell .note-main pre::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2rem;
+  background: #130f20;
+  border-bottom: 1px solid var(--border);
+  border-radius: 10px 10px 0 0;
+}
+
+.note-shell .note-main pre::after {
+  content: '';
+  position: absolute;
+  top: 0.65rem;
+  left: 0.75rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 1rem 0 0 #ffbd2e, 2rem 0 0 #27c93f;
+}
+
+.note-shell .note-main pre code {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* ── INLINE CODE ── */
+
+/* ── TABLES ── */
+.note-shell .note-main table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(20, 15, 34, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.note-shell .note-main th {
+  background: rgba(90, 61, 184, 0.25);
+  color: var(--purple-1);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-2);
+}
+
+.note-shell .note-main td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+
+.note-shell .note-main tr:last-child td { border-bottom: none; }
+.note-shell .note-main tr:hover td {
+  background: rgba(124, 92, 232, 0.06);
+}
+
+/* ── CALLOUTS ── */
+.callout {
+  margin: 1.25rem 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-2);
+  overflow: hidden;
+  background: rgba(20, 15, 34, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+details.callout[open] .callout-body,
+div.callout .callout-body {
+  display: block;
+}
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(90, 61, 184, 0.15);
+  border-bottom: 1px solid var(--border);
+  list-style: none;
+}
+
+details.callout > summary { list-style: none; }
+details.callout > summary::-webkit-details-marker { display: none; }
+
+.callout-title::after {
+  content: '▾';
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  transition: transform 0.2s;
+}
+
+details.callout[open] .callout-title::after { transform: rotate(180deg); }
+div.callout .callout-title::after { display: none; }
+
+.callout-icon {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.callout-body {
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.callout-body code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  background: var(--surface-2);
+  color: var(--purple-1);
+  padding: 0.25em 0.6em;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.callout-body p { margin-bottom: 0.5rem; }
+.callout-body p:last-child { margin-bottom: 0; }
+
+/* Only make code block-level when paragraph contains ONLY code elements
+   (no surrounding text nodes) — detected via :only-child */
+.callout-body p > code:only-child {
+  display: block;
+  width: fit-content;
+  margin: 0.2rem 0;
+}
+
+/* Multiple code siblings with no text — stack them */
+.callout-body p:not(:has(> :not(code))) > code {
+  display: block;
+  width: fit-content;
+  margin: 0.2rem 0;
+}
+
+/* Type-specific accent colors */
+.callout-info .callout-title,
+.callout-note .callout-title  { border-left: 3px solid #4fc3f7; }
+.callout-warning .callout-title,
+.callout-warn .callout-title  { border-left: 3px solid #ffb74d; }
+.callout-danger .callout-title,
+.callout-error .callout-title  { border-left: 3px solid #ef5350; }
+.callout-tip .callout-title,
+.callout-hint .callout-title  { border-left: 3px solid #66bb6a; }
+.callout-success .callout-title,
+.callout-check .callout-title  { border-left: 3px solid #66bb6a; }
+.callout-example .callout-title { border-left: 3px solid var(--purple-3); }
+.callout-abstract .callout-title,
+.callout-summary .callout-title { border-left: 3px solid var(--purple-2); }
+
+.callout-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.callout-list li {
+  display: flex;
+  align-items: center;
+}
+
+.callout-list li code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  background: var(--surface-2);
+  color: var(--purple-1);
+  padding: 0.25em 0.6em;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* ── TOC INNER (slot content — must be global) ── */
+.toc-inner {
+  position: sticky;
+  top: 76px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  background: rgba(20, 15, 34, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0;
+}
+
+.toc-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 0.75rem 0.5rem 0.75rem;
+  margin: 0 0 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  display: block;
+}
+
+.toc-link {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  padding: 0.25rem 0.75rem;
+  border-left: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  text-decoration: none;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover { color: var(--text); }
+
+.toc-link.active {
+  color: var(--purple-1);
+  border-left-color: var(--purple-3);
+  background: rgba(124, 92, 232, 0.1);
+  font-weight: 500;
+}
+
+.toc-h2 { padding-left: 0.75rem; }
+.toc-h3 { padding-left: 1.5rem; font-size: 0.69rem; }
+.toc-h4 { padding-left: 2.25rem; font-size: 0.65rem; color: var(--text-dim); }
+
+/* ── BACKGROUND GRID OVERLAY ── */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(124, 92, 232, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 92, 232, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}

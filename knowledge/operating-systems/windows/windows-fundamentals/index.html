@@ -1,0 +1,1256 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Personal cybersecurity notes, writeups, and reference vault"><title>Windows Fundamentals — CyberHacks</title><link rel="stylesheet" href="/styles/global.css"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><style>.site-header{position:sticky;top:0;z-index:100;height:56px;background:#09070fed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;gap:2rem;height:100%;padding:0 1.5rem}.logo{display:flex;align-items:center;gap:.5rem;color:var(--text);font-family:var(--font-display);font-weight:800;font-size:1.1rem;text-decoration:none;flex-shrink:0;letter-spacing:-.02em}.logo-icon{color:var(--purple-3)}.logo:hover{color:var(--purple-1)}.header-nav{display:flex;align-items:center;gap:.2rem}.nav-link{color:var(--text-muted);font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .7rem;border-radius:6px;text-decoration:none;transition:color .15s,background .15s;position:relative}.nav-link:hover{color:var(--purple-1);background:var(--surface)}.nav-link.active{color:var(--purple-2);background:var(--surface)}.nav-link.active:after{content:"";position:absolute;bottom:-1px;left:.7rem;right:.7rem;height:2px;background:var(--purple-3);border-radius:2px 2px 0 0}.hdr-search{position:relative;flex-shrink:0}.hdr-search-box{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.28rem .6rem;width:210px;transition:border-color .15s;cursor:text}.hdr-search-box:focus-within{border-color:var(--purple-3)}#hdr-input{background:transparent;border:none;outline:none;color:var(--text);font-size:.8rem;font-family:var(--font-sans);width:100%}#hdr-input::placeholder{color:var(--text-dim)}.hdr-search-box kbd{font-size:.58rem;background:var(--surface-2);border:1px solid var(--border-2);border-radius:4px;padding:.1rem .3rem;color:var(--text-dim);flex-shrink:0}.hdr-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:380px;background:#0b0814fa;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 20px 60px #000000b3;padding:.35rem;z-index:999}#hdr-results{display:flex;flex-direction:column;gap:.25rem;max-height:420px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}#hdr-results::-webkit-scrollbar{width:3px}#hdr-results::-webkit-scrollbar-track{background:transparent}#hdr-results::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}#hdr-results::-webkit-scrollbar-thumb:hover{background:var(--purple-3)}.hdr-result{display:block;padding:.6rem .75rem;background:#140f22cc;border:1px solid rgba(42,32,64,.9);border-radius:8px;text-decoration:none;transition:background .15s,border-color .15s,transform .15s;cursor:pointer;overflow:hidden}.hdr-result:hover{background:#5a3db833;border-color:var(--purple-3);transform:translate(2px);pointer-events:auto}.hdr-result-title{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-bottom:.2rem}.hdr-result:hover .hdr-result-title{color:var(--purple-1)}.hdr-result-path{font-size:.62rem;color:var(--text-dim);text-transform:capitalize;letter-spacing:.02em}.hdr-result-path span{color:var(--purple-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem}.hdr-empty{padding:1rem;text-align:center;color:var(--text-dim);font-size:.76rem}.hdr-view-all{display:block;margin-top:.3rem;padding:.45rem .75rem;background:#140f2280;border:1px solid var(--border);border-radius:7px;font-size:.7rem;color:var(--text-muted);text-align:center;text-decoration:none;transition:color .15s,border-color .15s;flex-shrink:0}.hdr-view-all:hover{color:var(--purple-2);border-color:var(--purple-3);background:#140f2280;transform:none}.hdr-result-excerpt{font-size:.62rem;color:var(--text-muted);line-height:1.35;margin-top:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hdr-result-excerpt mark{background:#7c5ce84d;color:var(--purple-1);border-radius:2px;padding:0 2px;font-style:normal}@media(max-width:768px){.header-nav,.hdr-search-box kbd{display:none}.hdr-dropdown{width:calc(100vw - 2rem);right:-.5rem}}
+</style><link rel="stylesheet" href="/_astro/_..CUfV36Wy.css"></head> <body> <div class="bg-gradient"></div> <div class="bg-noise"></div> <div class="bg-grid"></div> <div class="site-wrap">  <header class="site-header"> <div class="header-inner"> <a href="/" class="logo"> <span class="logo-icon">⬡</span> <span class="logo-text">CyberHacks</span> </a> <nav class="header-nav"> <a href="/knowledge" class="nav-link active"> Knowledge </a><a href="/techniques" class="nav-link "> Techniques </a><a href="/playbooks" class="nav-link "> Playbooks </a><a href="/tools" class="nav-link "> Tools </a><a href="/resources" class="nav-link "> Resources </a><a href="/labs" class="nav-link "> Labs </a> </nav> <div class="hdr-search" id="hdr-search"> <div class="hdr-search-box"> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input id="hdr-input" type="text" placeholder="Search notes..." autocomplete="off" spellcheck="false"> <kbd>⌘K</kbd> </div> <div class="hdr-dropdown" id="hdr-dropdown" style="display:none"> <div id="hdr-results"></div> <a id="hdr-all" href="/search" class="hdr-view-all">View all results →</a> </div> </div> </div> </header>  <script>
+(function(){
+  let pf = null;
+  let timer = null;
+  const input = document.getElementById('hdr-input');
+  const dropdown = document.getElementById('hdr-dropdown');
+  const results = document.getElementById('hdr-results');
+  const viewAll = document.getElementById('hdr-all');
+  if(!input) return;
+
+  async function init() {
+    if(pf) return pf;
+    try {
+      pf = await import('/pagefind/pagefind.js');
+      await pf.init();
+    } catch(e){ pf=null; }
+    return pf;
+  }
+
+  input.addEventListener('focus', init);
+
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(async ()=>{
+      const q = input.value.trim();
+      if(!q){ dropdown.style.display='none'; return; }
+
+      const lib = await init();
+      if(!lib){
+        results.innerHTML = '<div class="hdr-empty">Run a build to enable search.</div>';
+        dropdown.style.display='block';
+        return;
+      }
+
+      const res = await lib.search(q);
+      const top = await Promise.all(res.results.slice(0,5).map(r=>r.data()));
+      viewAll.href = '/search?q='+encodeURIComponent(q);
+
+      if(!top.length){
+        results.innerHTML = '<div class="hdr-empty">No results for "'+q+'"</div>';
+      } else {
+        results.innerHTML = top.map(r=>{
+          const parts = r.url.split('/').filter(Boolean);
+          const cat = parts[0]||'';
+          const sub = parts.length>2 ? parts[1].replace(/-/g,' ') : '';
+          const title = (r.meta&&r.meta.title||'')
+            .replace(/\s*[—–-]+\s*CyberHacks\s*$/i,'').trim()
+            || parts[parts.length-1].replace(/-/g,' ');
+          const path = sub ? `<span>${cat}</span> / ${sub}` : `<span>${cat}</span>`;
+          const excerpt = (r.excerpt||'')
+            .replace(/<(?!\/?mark)[^>]+>/g,'')
+            .replace(/\s+/g,' ')
+            .replace(/^[\s\/\-–—]+/,'')
+            .trim()
+            .slice(0,90);
+          return '<a href="'+r.url+'" class="hdr-result">'
+            +'<div class="hdr-result-title">'+title+'</div>'
+            +'<div class="hdr-result-path">'+path+'</div>'
+            +(excerpt?'<div class="hdr-result-excerpt">'+excerpt+'</div>':'')
+            +'</a>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }, 180);
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('hdr-search').contains(e.target))
+      dropdown.style.display='none';
+  });
+
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+      e.preventDefault(); input.focus(); input.select();
+    }
+    if(e.key==='Escape'){ dropdown.style.display='none'; input.blur(); }
+    if(e.key==='Enter'&&dropdown.style.display!=='none'&&input.value.trim())
+      window.location.href='/search?q='+encodeURIComponent(input.value.trim());
+  });
+})();
+</script> <div class="note-shell" data-astro-cid-o5gmpz7g> <aside class="sidebar" id="sidebar" data-astro-cid-o5gmpz7g> <div class="sidebar-inner" data-astro-cid-o5gmpz7g> <nav class="sidebar-nav" data-astro-cid-o5gmpz7g> <nav class="sidebar-tree" data-astro-cid-gvqsdny3> <div class="cat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge" class="cat-label-link active" data-astro-cid-gvqsdny3> Knowledge </a> <span class="cat-count" data-astro-cid-gvqsdny3>91</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Artificial%20Intelligence" class="subcat-label-link " data-astro-cid-gvqsdny3> Artificial Intelligence </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/artificial-intelligence/ai-ml-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> AI ML Fundamentals </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Core%20Security%20Concepts" class="subcat-label-link " data-astro-cid-gvqsdny3> Core Security Concepts </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/core-security-concepts/cyber-kill-chain" class="nav-note " data-astro-cid-gvqsdny3> Cyber Kill Chain </a><a href="/knowledge/core-security-concepts/ddos" class="nav-note " data-astro-cid-gvqsdny3> DDoS </a><a href="/knowledge/core-security-concepts/insider-threat" class="nav-note " data-astro-cid-gvqsdny3> Insider Threat </a><a href="/knowledge/core-security-concepts/mitre-attck-framework" class="nav-note " data-astro-cid-gvqsdny3> MITRE ATTCK Framework </a><a href="/knowledge/core-security-concepts/osint" class="nav-note " data-astro-cid-gvqsdny3> OSINT </a><a href="/knowledge/core-security-concepts/ransomware" class="nav-note " data-astro-cid-gvqsdny3> Ransomware </a><a href="/knowledge/core-security-concepts/security-domains" class="nav-note " data-astro-cid-gvqsdny3> Security Domains </a><a href="/knowledge/core-security-concepts/security-principles" class="nav-note " data-astro-cid-gvqsdny3> Security Principles </a><a href="/knowledge/core-security-concepts/social-engineering" class="nav-note " data-astro-cid-gvqsdny3> Social Engineering </a><a href="/knowledge/core-security-concepts/threat-actors" class="nav-note " data-astro-cid-gvqsdny3> Threat Actors </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/cryptography/cryptography-basics" class="nav-note " data-astro-cid-gvqsdny3> Cryptography Basics </a><a href="/knowledge/cryptography/hashing-basics" class="nav-note " data-astro-cid-gvqsdny3> Hashing Basics </a><a href="/knowledge/cryptography/public-key-basics" class="nav-note " data-astro-cid-gvqsdny3> Public Key Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Defensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Defensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/defensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Defensive Security Intro </a><a href="/knowledge/defensive-security/digital-forensics-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Digital Forensics Fundamentals </a><a href="/knowledge/defensive-security/incident-response-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Incident Response Fundamentals </a><a href="/knowledge/defensive-security/log-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Log Fundamentals </a><a href="/knowledge/defensive-security/network-traffic-analysis" class="nav-note " data-astro-cid-gvqsdny3> Network Traffic Analysis </a><a href="/knowledge/defensive-security/soc-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SOC Fundamentals </a><a href="/knowledge/defensive-security/threat-hunting" class="nav-note " data-astro-cid-gvqsdny3> Threat Hunting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Security%20Solutions" class="subcat-label-link " data-astro-cid-gvqsdny3> Security Solutions </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/security-solutions/intro-to-siem" class="nav-note " data-astro-cid-gvqsdny3> Intro To SIEM </a><a href="/knowledge/defensive-security/security-solutions/intrusion-detection-systems-ids" class="nav-note " data-astro-cid-gvqsdny3> Intrusion Detection Systems IDS </a><a href="/knowledge/defensive-security/security-solutions/siem-use-case-development" class="nav-note " data-astro-cid-gvqsdny3> SIEM Use Case Development </a><a href="/knowledge/defensive-security/security-solutions/vulnerability-scanners" class="nav-note " data-astro-cid-gvqsdny3> Vulnerability Scanners </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Foundational%20Cs" class="subcat-label-link " data-astro-cid-gvqsdny3> Foundational Cs </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/foundational-cs/arm-processor-architecture" class="nav-note " data-astro-cid-gvqsdny3> ARM Processor Architecture </a><a href="/knowledge/foundational-cs/cpu-architecture" class="nav-note " data-astro-cid-gvqsdny3> CPU Architecture </a><a href="/knowledge/foundational-cs/data-representation" class="nav-note " data-astro-cid-gvqsdny3> Data Representation </a><a href="/knowledge/foundational-cs/input-and-output" class="nav-note " data-astro-cid-gvqsdny3> Input And Output </a><a href="/knowledge/foundational-cs/memory-architecture" class="nav-note " data-astro-cid-gvqsdny3> Memory Architecture </a><a href="/knowledge/foundational-cs/multi-processing" class="nav-note " data-astro-cid-gvqsdny3> Multi Processing </a><a href="/knowledge/foundational-cs/x86-architecture" class="nav-note " data-astro-cid-gvqsdny3> X86 Architecture </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Networking" class="subcat-label-link " data-astro-cid-gvqsdny3> Networking </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/networking/data-transmission-methods" class="nav-note " data-astro-cid-gvqsdny3> Data Transmission Methods </a><a href="/knowledge/networking/dns-domain-name-system" class="nav-note " data-astro-cid-gvqsdny3> DNS Domain Name System </a><a href="/knowledge/networking/firewalls" class="nav-note " data-astro-cid-gvqsdny3> Firewalls </a><a href="/knowledge/networking/ftp" class="nav-note " data-astro-cid-gvqsdny3> FTP </a><a href="/knowledge/networking/http-https" class="nav-note " data-astro-cid-gvqsdny3> HTTP HTTPS </a><a href="/knowledge/networking/imap-pop3" class="nav-note " data-astro-cid-gvqsdny3> IMAP POP3 </a><a href="/knowledge/networking/ip-addressing" class="nav-note " data-astro-cid-gvqsdny3> IP Addressing </a><a href="/knowledge/networking/ipmi" class="nav-note " data-astro-cid-gvqsdny3> IPMI </a><a href="/knowledge/networking/lan-topologies" class="nav-note " data-astro-cid-gvqsdny3> LAN Topologies </a><a href="/knowledge/networking/mssql" class="nav-note " data-astro-cid-gvqsdny3> MSSQL </a><a href="/knowledge/networking/mysql" class="nav-note " data-astro-cid-gvqsdny3> MySQL </a><a href="/knowledge/networking/network-media-connections" class="nav-note " data-astro-cid-gvqsdny3> Network Media Connections </a><a href="/knowledge/networking/networking-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Networking Fundamentals </a><a href="/knowledge/networking/nfs" class="nav-note " data-astro-cid-gvqsdny3> NFS </a><a href="/knowledge/networking/oracle-tns" class="nav-note " data-astro-cid-gvqsdny3> Oracle TNS </a><a href="/knowledge/networking/osi-model" class="nav-note " data-astro-cid-gvqsdny3> OSI Model </a><a href="/knowledge/networking/packets-and-frames" class="nav-note " data-astro-cid-gvqsdny3> Packets And Frames </a><a href="/knowledge/networking/ports" class="nav-note " data-astro-cid-gvqsdny3> Ports </a><a href="/knowledge/networking/protocols" class="nav-note " data-astro-cid-gvqsdny3> Protocols </a><a href="/knowledge/networking/smb" class="nav-note " data-astro-cid-gvqsdny3> SMB </a><a href="/knowledge/networking/smtp" class="nav-note " data-astro-cid-gvqsdny3> SMTP </a><a href="/knowledge/networking/snmp" class="nav-note " data-astro-cid-gvqsdny3> SNMP </a><a href="/knowledge/networking/subnetting" class="nav-note " data-astro-cid-gvqsdny3> Subnetting </a><a href="/knowledge/networking/tls-ssl" class="nav-note " data-astro-cid-gvqsdny3> TLS SSL </a><a href="/knowledge/networking/vpn-basics" class="nav-note " data-astro-cid-gvqsdny3> VPN Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Offensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Offensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/offensive-security/footprinting-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Footprinting Enumeration </a><a href="/knowledge/offensive-security/offensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Offensive Security Intro </a><a href="/knowledge/offensive-security/pentesting-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Pentesting Fundamentals </a><a href="/knowledge/offensive-security/web-reconnaissance" class="nav-note " data-astro-cid-gvqsdny3> Web Reconnaissance </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Operating%20Systems" class="subcat-label-link " data-astro-cid-gvqsdny3> Operating Systems </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/boot-and-file-systems" class="nav-note " data-astro-cid-gvqsdny3> Boot And File Systems </a><a href="/knowledge/operating-systems/containerization" class="nav-note " data-astro-cid-gvqsdny3> Containerization </a><a href="/knowledge/operating-systems/operating-system-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Fundamentals </a><a href="/knowledge/operating-systems/operating-system-internals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Internals </a><a href="/knowledge/operating-systems/solaris" class="nav-note " data-astro-cid-gvqsdny3> Solaris </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Linux" class="subcat-label-link " data-astro-cid-gvqsdny3> Linux </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/linux/linux-file-system" class="nav-note " data-astro-cid-gvqsdny3> Linux File System </a><a href="/knowledge/operating-systems/linux/linux-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Linux Fundamentals </a><a href="/knowledge/operating-systems/linux/linux-hardening" class="nav-note " data-astro-cid-gvqsdny3> Linux Hardening </a><a href="/knowledge/operating-systems/linux/linux-networking" class="nav-note " data-astro-cid-gvqsdny3> Linux Networking </a><a href="/knowledge/operating-systems/linux/linux-shells" class="nav-note " data-astro-cid-gvqsdny3> Linux Shells </a><a href="/knowledge/operating-systems/linux/linux-system-management" class="nav-note " data-astro-cid-gvqsdny3> Linux System Management </a><a href="/knowledge/operating-systems/linux/shell-scripting" class="nav-note " data-astro-cid-gvqsdny3> Shell Scripting </a> </div> </div><div class="subcat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Windows" class="subcat-label-link active" data-astro-cid-gvqsdny3> Windows </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/event-tracing-for-windows-etw" class="nav-note " data-astro-cid-gvqsdny3> Event Tracing For Windows ETW </a><a href="/knowledge/operating-systems/windows/windows-command-line" class="nav-note " data-astro-cid-gvqsdny3> Windows Command Line </a><a href="/knowledge/operating-systems/windows/windows-event-logs" class="nav-note " data-astro-cid-gvqsdny3> Windows Event Logs </a><a href="/knowledge/operating-systems/windows/windows-fundamentals" class="nav-note active" data-astro-cid-gvqsdny3> Windows Fundamentals </a><a href="/knowledge/operating-systems/windows/windows-powershell" class="nav-note " data-astro-cid-gvqsdny3> Windows PowerShell </a><a href="/knowledge/operating-systems/windows/windows-remote-management" class="nav-note " data-astro-cid-gvqsdny3> Windows Remote Management </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Active%20Directory" class="subcat-label-link " data-astro-cid-gvqsdny3> Active Directory </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/active-directory/active-directory-basics" class="nav-note " data-astro-cid-gvqsdny3> Active Directory Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Web%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/web-security/certificate-transparency-logs" class="nav-note " data-astro-cid-gvqsdny3> Certificate Transparency Logs </a><a href="/knowledge/web-security/javascript-essentials" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Essentials </a><a href="/knowledge/web-security/owasp-top-10---2021" class="nav-note " data-astro-cid-gvqsdny3> OWASP Top 10   2021 </a><a href="/knowledge/web-security/sql-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SQL Fundamentals </a><a href="/knowledge/web-security/virtual-hosts" class="nav-note " data-astro-cid-gvqsdny3> Virtual Hosts </a><a href="/knowledge/web-security/web-apis" class="nav-note " data-astro-cid-gvqsdny3> Web APIs </a><a href="/knowledge/web-security/web-application-proxies" class="nav-note " data-astro-cid-gvqsdny3> Web Application Proxies </a><a href="/knowledge/web-security/web-crawling" class="nav-note " data-astro-cid-gvqsdny3> Web Crawling </a><a href="/knowledge/web-security/web-fingerprinting" class="nav-note " data-astro-cid-gvqsdny3> Web Fingerprinting </a><a href="/knowledge/web-security/website-innerworkings" class="nav-note " data-astro-cid-gvqsdny3> Website Innerworkings </a><a href="/knowledge/web-security/wordpress" class="nav-note " data-astro-cid-gvqsdny3> WordPress </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques" class="cat-label-link " data-astro-cid-gvqsdny3> Techniques </a> <span class="cat-count" data-astro-cid-gvqsdny3>10</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/techniques/api-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> API Fuzzing </a><a href="/techniques/command-injection" class="nav-note " data-astro-cid-gvqsdny3> Command Injection </a><a href="/techniques/dns-enumeration" class="nav-note " data-astro-cid-gvqsdny3> DNS Enumeration </a><a href="/techniques/javascript-deobfuscation" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Deobfuscation </a><a href="/techniques/sql-injection" class="nav-note " data-astro-cid-gvqsdny3> SQL Injection </a><a href="/techniques/subdomain-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Subdomain Enumeration </a><a href="/techniques/vhost-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> VHost Fuzzing </a><a href="/techniques/wordpress-attacks" class="nav-note " data-astro-cid-gvqsdny3> WordPress Attacks </a><a href="/techniques/xss" class="nav-note " data-astro-cid-gvqsdny3> XSS </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques?filter=Cryptography%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/techniques/cryptography-attacks/rsa-cracking" class="nav-note " data-astro-cid-gvqsdny3> RSA Cracking </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks" class="cat-label-link " data-astro-cid-gvqsdny3> Playbooks </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/linux-forensics-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Forensics Playbook </a><a href="/playbooks/linux-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Pentest Playbook </a><a href="/playbooks/osint-playbook" class="nav-note " data-astro-cid-gvqsdny3> OSINT Playbook </a><a href="/playbooks/windows-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Windows Pentest Playbook </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks?filter=Methodologies" class="subcat-label-link " data-astro-cid-gvqsdny3> Methodologies </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/methodologies/blue-team" class="nav-note " data-astro-cid-gvqsdny3> Blue Team </a><a href="/playbooks/methodologies/red-team" class="nav-note " data-astro-cid-gvqsdny3> Red Team </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools" class="cat-label-link " data-astro-cid-gvqsdny3> Tools </a> <span class="cat-count" data-astro-cid-gvqsdny3>63</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/cryptography/cyberchef" class="nav-note " data-astro-cid-gvqsdny3> CyberChef </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Defense%20Monitoring" class="subcat-label-link " data-astro-cid-gvqsdny3> Defense Monitoring </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/defense-monitoring/elastic-stack" class="nav-note " data-astro-cid-gvqsdny3> Elastic Stack </a><a href="/tools/defense-monitoring/iptables" class="nav-note " data-astro-cid-gvqsdny3> Iptables </a><a href="/tools/defense-monitoring/silketw" class="nav-note " data-astro-cid-gvqsdny3> SilkETW </a><a href="/tools/defense-monitoring/snort" class="nav-note " data-astro-cid-gvqsdny3> Snort </a><a href="/tools/defense-monitoring/sysmon" class="nav-note " data-astro-cid-gvqsdny3> Sysmon </a><a href="/tools/defense-monitoring/thehive" class="nav-note " data-astro-cid-gvqsdny3> TheHive </a><a href="/tools/defense-monitoring/uncomplicated-firewall-ufw" class="nav-note " data-astro-cid-gvqsdny3> Uncomplicated Firewall UFW </a><a href="/tools/defense-monitoring/windows-defender-firewall" class="nav-note " data-astro-cid-gvqsdny3> Windows Defender Firewall </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Enumeration" class="subcat-label-link " data-astro-cid-gvqsdny3> Enumeration </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/enumeration/crackmapexec" class="nav-note " data-astro-cid-gvqsdny3> CrackMapExec </a><a href="/tools/enumeration/dnsenum" class="nav-note " data-astro-cid-gvqsdny3> DNSenum </a><a href="/tools/enumeration/enum4linux-ng" class="nav-note " data-astro-cid-gvqsdny3> Enum4linux Ng </a><a href="/tools/enumeration/feroxbuster" class="nav-note " data-astro-cid-gvqsdny3> Feroxbuster </a><a href="/tools/enumeration/gobuster" class="nav-note " data-astro-cid-gvqsdny3> Gobuster </a><a href="/tools/enumeration/netexec" class="nav-note " data-astro-cid-gvqsdny3> NetExec </a><a href="/tools/enumeration/nmap" class="nav-note " data-astro-cid-gvqsdny3> Nmap </a><a href="/tools/enumeration/odat" class="nav-note " data-astro-cid-gvqsdny3> ODAT </a><a href="/tools/enumeration/rdp-sec-check" class="nav-note " data-astro-cid-gvqsdny3> RDP Sec Check </a><a href="/tools/enumeration/rpcclient" class="nav-note " data-astro-cid-gvqsdny3> Rpcclient </a><a href="/tools/enumeration/smtp-user-enum" class="nav-note " data-astro-cid-gvqsdny3> SMTP User Enum </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Forensics" class="subcat-label-link " data-astro-cid-gvqsdny3> Forensics </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/forensics/capa" class="nav-note " data-astro-cid-gvqsdny3> CAPA </a><a href="/tools/forensics/inetsim" class="nav-note " data-astro-cid-gvqsdny3> INetSim </a><a href="/tools/forensics/oledumppy" class="nav-note " data-astro-cid-gvqsdny3> Oledumppy </a><a href="/tools/forensics/volatility-3" class="nav-note " data-astro-cid-gvqsdny3> Volatility 3 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Metasploit" class="subcat-label-link " data-astro-cid-gvqsdny3> Metasploit </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/frameworks/metasploit/metasploit" class="nav-note " data-astro-cid-gvqsdny3> Metasploit </a><a href="/tools/frameworks/metasploit/meterpreter" class="nav-note " data-astro-cid-gvqsdny3> Meterpreter </a><a href="/tools/frameworks/metasploit/msfconsole" class="nav-note " data-astro-cid-gvqsdny3> MSFConsole </a><a href="/tools/frameworks/metasploit/msfvenom" class="nav-note " data-astro-cid-gvqsdny3> MSFVenom </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Network%20Analysis" class="subcat-label-link " data-astro-cid-gvqsdny3> Network Analysis </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/network-analysis/tcpdump" class="nav-note " data-astro-cid-gvqsdny3> TCPDump </a><a href="/tools/network-analysis/wireshark" class="nav-note " data-astro-cid-gvqsdny3> Wireshark </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Osint%20Recon" class="subcat-label-link " data-astro-cid-gvqsdny3> Osint Recon </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/osint-recon/dig" class="nav-note " data-astro-cid-gvqsdny3> Dig </a><a href="/tools/osint-recon/finalrecon" class="nav-note " data-astro-cid-gvqsdny3> FinalRecon </a><a href="/tools/osint-recon/nslookup" class="nav-note " data-astro-cid-gvqsdny3> Nslookup </a><a href="/tools/osint-recon/shodan" class="nav-note " data-astro-cid-gvqsdny3> Shodan </a><a href="/tools/osint-recon/whois" class="nav-note " data-astro-cid-gvqsdny3> WHOIS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Password%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Password Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/password-attacks/hashcat" class="nav-note " data-astro-cid-gvqsdny3> Hashcat </a><a href="/tools/password-attacks/hydra" class="nav-note " data-astro-cid-gvqsdny3> Hydra </a><a href="/tools/password-attacks/johntheripper" class="nav-note " data-astro-cid-gvqsdny3> JohnTheRipper </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Post%20Exploitation" class="subcat-label-link " data-astro-cid-gvqsdny3> Post Exploitation </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/post-exploitation/evil-winrm" class="nav-note " data-astro-cid-gvqsdny3> Evil Winrm </a><a href="/tools/post-exploitation/peass-ng" class="nav-note " data-astro-cid-gvqsdny3> PEASS Ng </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Utilities" class="subcat-label-link " data-astro-cid-gvqsdny3> Utilities </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/utilities/curl" class="nav-note " data-astro-cid-gvqsdny3> Curl </a><a href="/tools/utilities/docker" class="nav-note " data-astro-cid-gvqsdny3> Docker </a><a href="/tools/utilities/rsync" class="nav-note " data-astro-cid-gvqsdny3> Rsync </a><a href="/tools/utilities/sqlplus" class="nav-note " data-astro-cid-gvqsdny3> SQLplus </a><a href="/tools/utilities/telnet" class="nav-note " data-astro-cid-gvqsdny3> Telnet </a><a href="/tools/utilities/xfreerdp" class="nav-note " data-astro-cid-gvqsdny3> Xfreerdp </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Vulnerability%20Scanning" class="subcat-label-link " data-astro-cid-gvqsdny3> Vulnerability Scanning </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/vulnerability-scanning/openvas" class="nav-note " data-astro-cid-gvqsdny3> OpenVAS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Web%20Testing" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Testing </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/ffuf" class="nav-note " data-astro-cid-gvqsdny3> Ffuf </a><a href="/tools/web-testing/nikto" class="nav-note " data-astro-cid-gvqsdny3> Nikto </a><a href="/tools/web-testing/sqlmap" class="nav-note " data-astro-cid-gvqsdny3> SQLMap </a><a href="/tools/web-testing/wafw00f" class="nav-note " data-astro-cid-gvqsdny3> Wafw00f </a><a href="/tools/web-testing/wenum" class="nav-note " data-astro-cid-gvqsdny3> Wenum </a><a href="/tools/web-testing/wpscan" class="nav-note " data-astro-cid-gvqsdny3> WPScan </a><a href="/tools/web-testing/xsstrike" class="nav-note " data-astro-cid-gvqsdny3> XSStrike </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Burp%20Suite" class="subcat-label-link " data-astro-cid-gvqsdny3> Burp Suite </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/burp-suite/burp-intruder" class="nav-note " data-astro-cid-gvqsdny3> Burp Intruder </a><a href="/tools/web-testing/burp-suite/burp-proxy" class="nav-note " data-astro-cid-gvqsdny3> Burp Proxy </a><a href="/tools/web-testing/burp-suite/burp-repeater" class="nav-note " data-astro-cid-gvqsdny3> Burp Repeater </a><a href="/tools/web-testing/burp-suite/burp-scanner" class="nav-note " data-astro-cid-gvqsdny3> Burp Scanner </a><a href="/tools/web-testing/burp-suite/burp-suite" class="nav-note " data-astro-cid-gvqsdny3> Burp Suite </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Owasp%20Zap" class="subcat-label-link " data-astro-cid-gvqsdny3> Owasp Zap </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/owasp-zap/owasp-zap" class="nav-note " data-astro-cid-gvqsdny3> OWASP ZAP </a><a href="/tools/web-testing/owasp-zap/zap-fuzzer" class="nav-note " data-astro-cid-gvqsdny3> ZAP Fuzzer </a><a href="/tools/web-testing/owasp-zap/zap-proxy" class="nav-note " data-astro-cid-gvqsdny3> ZAP Proxy </a><a href="/tools/web-testing/owasp-zap/zap-scanner" class="nav-note " data-astro-cid-gvqsdny3> ZAP Scanner </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs" class="cat-label-link " data-astro-cid-gvqsdny3> Labs </a> <span class="cat-count" data-astro-cid-gvqsdny3>7</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Cjca" class="subcat-label-link " data-astro-cid-gvqsdny3> Cjca </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/cjca-siem-triage" class="nav-note " data-astro-cid-gvqsdny3> CJCA SIEM Triage </a><a href="/labs/hackthebox/exams/cjca/htb-cjca-exam---april-2026" class="nav-note " data-astro-cid-gvqsdny3> HTB CJCA Exam   April 2026 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Machines" class="subcat-label-link " data-astro-cid-gvqsdny3> Machines </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/machines/nix01" class="nav-note " data-astro-cid-gvqsdny3> NIX01 </a><a href="/labs/hackthebox/exams/cjca/machines/nix02" class="nav-note " data-astro-cid-gvqsdny3> NIX02 </a><a href="/labs/hackthebox/exams/cjca/machines/web01" class="nav-note " data-astro-cid-gvqsdny3> WEB01 </a><a href="/labs/hackthebox/exams/cjca/machines/win01" class="nav-note " data-astro-cid-gvqsdny3> WIN01 </a><a href="/labs/hackthebox/exams/cjca/machines/win02" class="nav-note " data-astro-cid-gvqsdny3> WIN02 </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/resources" class="cat-label-link " data-astro-cid-gvqsdny3> Resources </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/resources/common-distros" class="nav-note " data-astro-cid-gvqsdny3> Common Distros </a><a href="/resources/ctf-methodology" class="nav-note " data-astro-cid-gvqsdny3> CTF Methodology </a><a href="/resources/cyber-resources" class="nav-note " data-astro-cid-gvqsdny3> Cyber Resources </a><a href="/resources/github-repositories" class="nav-note " data-astro-cid-gvqsdny3> Github Repositories </a><a href="/resources/obsidian-guides" class="nav-note " data-astro-cid-gvqsdny3> Obsidian Guides </a><a href="/resources/try-hack-me-rooms" class="nav-note " data-astro-cid-gvqsdny3> Try Hack Me Rooms </a> </div> </div> </nav>  <script type="module">document.querySelectorAll(".cat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".cat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});document.querySelectorAll(".subcat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".subcat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});</script> </nav> </div> </aside> <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" data-astro-cid-o5gmpz7g>‹</button> <div class="note-gap" data-astro-cid-o5gmpz7g></div> <main class="note-main" data-astro-cid-o5gmpz7g> <div class="note-content" data-astro-cid-o5gmpz7g> <div class="note-meta" data-astro-cid-o5gmpz7g> <span class="note-category" data-astro-cid-o5gmpz7g>knowledge</span>  </div>    <hr>
+<h2 id="overview">Overview</h2>
+<p>Windows Fundamentals cover the core components, utilities, file system, user management, and security features of modern Windows operating systems. Knowledge of these is essential for system administration, troubleshooting, forensic analysis, and understanding the Windows security model.</p>
+<hr>
+<h2 id="terminology">Terminology</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>NTFS</td><td>New Technology File System; default Windows file system since Windows NT</td></tr><tr><td>ADS (Alternate Data Streams)</td><td>NTFS feature allowing multiple data streams per file; used legitimately and maliciously</td></tr><tr><td>EFS (Encrypting File System)</td><td>NTFS built-in encryption for files and folders</td></tr><tr><td>UAC (User Account Control)</td><td>Windows security feature requiring elevation confirmation for admin actions</td></tr><tr><td>MSConfig</td><td>System Configuration utility for diagnosing startup and boot issues</td></tr><tr><td>Registry</td><td>Central hierarchical database storing all system and application configuration</td></tr><tr><td>VSS (Volume Shadow Copy Service)</td><td>Creates snapshots of volumes for backup and restore purposes</td></tr><tr><td>Patch Tuesday</td><td>Microsoft’s monthly update release cycle; typically 2nd Tuesday of each month</td></tr><tr><td>SID (Security Identifier)</td><td>Unique identifier assigned to every user and group account; used for access control</td></tr><tr><td>SAM (Security Accounts Manager)</td><td>Database storing local user credentials and group memberships</td></tr><tr><td>DACL</td><td>Discretionary Access Control List; defines user/group access to a securable object</td></tr><tr><td>SACL</td><td>System Access Control List; records access attempts for auditing purposes</td></tr><tr><td>ACE</td><td>Access Control Entry; one rule within an ACL, specifying a principal and permission</td></tr><tr><td>SCM (Service Control Manager)</td><td>Windows component managing the lifecycle of system services; accessed via <code>services.msc</code></td></tr><tr><td>SMB</td><td>Server Message Block; protocol used for Windows file and printer sharing</td></tr><tr><td>WMI</td><td>Windows Management Instrumentation; subsystem for managing devices and applications programmatically</td></tr><tr><td>AppLocker</td><td>Microsoft application whitelisting solution controlling which programs users can run</td></tr><tr><td>GPO</td><td>Group Policy Object; policy settings pushed to domain-joined machines from a Domain Controller</td></tr><tr><td>LSA</td><td>Local Security Authority; enforces security policy and creates access tokens at logon</td></tr></tbody></table>
+<hr>
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="windows-version-history">Windows Version History</h3>
+<p>Windows began as a graphical shell for MS-DOS. Windows 95 was the first full integration of Windows and DOS. Windows NT 3.1 Advanced Server was the first Windows Server product line.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Version</th><th>NT Version</th><th>Notes</th></tr></thead><tbody><tr><td>Windows NT 4</td><td>4.0</td><td>First stable NT workstation</td></tr><tr><td>Windows 2000</td><td>5.0</td><td>AD introduced</td></tr><tr><td>Windows XP</td><td>5.1</td><td>Most widely deployed desktop</td></tr><tr><td>Windows Server 2003/2003 R2</td><td>5.2</td><td></td></tr><tr><td>Windows Vista / Server 2008</td><td>6.0</td><td>UAC introduced</td></tr><tr><td>Windows 7 / Server 2008 R2</td><td>6.1</td><td></td></tr><tr><td>Windows 8 / Server 2012</td><td>6.2</td><td></td></tr><tr><td>Windows 8.1 / Server 2012 R2</td><td>6.3</td><td></td></tr><tr><td>Windows 10 / Server 2016 / 2019</td><td>10.0</td><td>WSL introduced</td></tr></tbody></table>
+<p>Query version via PowerShell: <code>Get-WmiObject -Class Win32_OperatingSystem | select Version,BuildNumber</code></p>
+<hr>
+<h3 id="operating-system-structure">Operating System Structure</h3>
+<p>The root drive (boot partition) is where Windows is installed — typically <code>C:\</code>. Other physical or virtual drives are assigned separate drive letters (e.g., <code>D:\</code>, <code>E:\</code>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Directory</th><th>Description</th></tr></thead><tbody><tr><td><code>C:\Perflogs</code></td><td>Windows performance logs; empty by default</td></tr><tr><td><code>C:\Program Files</code></td><td>64-bit programs on 64-bit systems; all programs on 32-bit systems</td></tr><tr><td><code>C:\Program Files (x86)</code></td><td>32-bit and 16-bit programs on 64-bit systems</td></tr><tr><td><code>C:\ProgramData</code></td><td>Hidden folder containing application data shared across all users</td></tr><tr><td><code>C:\Users</code></td><td>User profiles for every account that has logged on</td></tr><tr><td><code>C:\Users\Default</code></td><td>Template profile used when a new user account is first created</td></tr><tr><td><code>C:\Users\Public</code></td><td>Files shared among all local users; accessible over the network by default</td></tr><tr><td><code>C:\Users\&#x3C;user>\AppData\Roaming</code></td><td>Per-user app data that follows the user via roaming profiles</td></tr><tr><td><code>C:\Users\&#x3C;user>\AppData\Local</code></td><td>Per-user app data specific to the local machine; never synced</td></tr><tr><td><code>C:\Users\&#x3C;user>\AppData\LocalLow</code></td><td>Low-integrity app data (e.g., browser protected mode)</td></tr><tr><td><code>C:\Windows</code></td><td>Core Windows OS files</td></tr><tr><td><code>C:\Windows\System32</code></td><td>Critical OS components, DLLs, and the Windows API; searched first for DLL resolution</td></tr><tr><td><code>C:\Windows\SysWOW64</code></td><td>32-bit DLLs on 64-bit systems; used for WOW64 compatibility</td></tr><tr><td><code>C:\Windows\WinSxS</code></td><td>Windows Component Store; holds all OS components, updates, and service packs</td></tr><tr><td><code>C:\Windows\System32\Config</code></td><td>Registry hive files and the SAM database</td></tr></tbody></table>
+<p>Navigate the file system from CMD: <code>dir</code> to list contents, <code>tree</code> to visualize directory structure.</p>
+<hr>
+<h3 id="file-systems">File Systems</h3>
+<p>Windows supports multiple file system types. NTFS is the default for internal drives.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>File System</th><th>Max File Size</th><th>Notes</th></tr></thead><tbody><tr><td>FAT12</td><td>32MB</td><td>Legacy; used on early floppy disks</td></tr><tr><td>FAT16</td><td>2GB</td><td>Legacy; limited compatibility use</td></tr><tr><td>FAT32</td><td>4GB</td><td>Compatible with most devices and operating systems; common for USB/SD cards</td></tr><tr><td>exFAT</td><td>16 EB</td><td>Modern replacement for FAT32; large file support without NTFS overhead</td></tr><tr><td>NTFS</td><td>16 EB</td><td>Default Windows FS; journaling, permissions, encryption, compression</td></tr></tbody></table>
+<p><strong>FAT32 trade-offs:</strong></p>
+<ul>
+<li>Pros: Cross-OS compatibility, works on most embedded devices</li>
+<li>Cons: No files over 4GB, no built-in encryption or compression, no journaling</li>
+</ul>
+<p><strong>NTFS trade-offs:</strong></p>
+<ul>
+<li>Pros: Journaling (recovery from failure), granular permissions (ACL), ADS, EFS encryption, large partition support</li>
+<li>Cons: Limited native support on mobile/non-Windows devices; older media may not support it</li>
+</ul>
+<h3 id="ntfs-permissions">NTFS Permissions</h3>
+<p>NTFS permissions control access to files and folders at the OS level and apply regardless of how the resource is accessed (local or network).</p>
+<p>Viewable via: Right click → Properties → Security, or <code>icacls &#x3C;path></code>
+NTFS Permissions</p>
+<h4 id="standard-permissions">Standard Permissions</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td>Full Control</td><td>Read, write, modify, delete, change permissions, and take ownership; includes all permissions below</td></tr><tr><td>Modify</td><td>Read, write, and delete files and folders; cannot change permissions or take ownership</td></tr><tr><td>Read &#x26; Execute</td><td>View contents and run executables; inherits by both files and folders</td></tr><tr><td>List Folder Contents</td><td>View filenames and subfolder names within a folder; applies to folders only</td></tr><tr><td>Read</td><td>View file contents and attributes; cannot modify, delete, or execute</td></tr><tr><td>Write</td><td>Create files and subfolders, write data, change attributes; cannot delete</td></tr></tbody></table>
+<p>Files and folders inherit NTFS permissions from their parent folder by default; inheritance can be disabled per object.</p>
+<h4 id="special-permissions">Special Permissions</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Special Permission</th><th>Description</th></tr></thead><tbody><tr><td>Traverse Folder / Execute File</td><td>Navigate through folders without read permission; run program files</td></tr><tr><td>List Folder / Read Data</td><td>View filenames in a folder; read file data</td></tr><tr><td>Read Attributes</td><td>View basic file attributes (read-only, hidden, archive, system)</td></tr><tr><td>Read Extended Attributes</td><td>View extended attributes defined by programs</td></tr><tr><td>Create Files / Write Data</td><td>Create files in a folder; overwrite file data</td></tr><tr><td>Create Folders / Append Data</td><td>Create subfolders; append data to end of a file without modifying existing content</td></tr><tr><td>Write Attributes</td><td>Modify basic file attributes</td></tr><tr><td>Write Extended Attributes</td><td>Modify extended attributes</td></tr><tr><td>Delete Subfolders and Files</td><td>Delete folder contents even without Delete permission on individual items</td></tr><tr><td>Delete</td><td>Delete the file or folder itself</td></tr><tr><td>Read Permissions</td><td>View the ACL on the object</td></tr><tr><td>Change Permissions</td><td>Modify the ACL on the object</td></tr><tr><td>Take Ownership</td><td>Assume ownership of the object</td></tr><tr><td>Synchronize</td><td>Allow threads to synchronize on a file handle; applies only to multithreaded programs</td></tr></tbody></table>
+<h4 id="alternate-data-streams-ads">Alternate Data Streams (ADS)</h4>
+<ul>
+<li>NTFS-specific feature allowing multiple data streams per file (<code>$DATA</code>)</li>
+<li>Legitimate use: metadata storage (e.g., Zone.Identifier marks files downloaded from the internet)</li>
+<li>Security concern: can hide malicious payloads inside legitimate files</li>
+<li>Viewable via PowerShell: <code>Get-Item -Path &#x3C;file> -Stream *</code></li>
+</ul>
+<h3 id="share-permissions-smb">Share Permissions (SMB)</h3>
+<p>Share permissions apply when a folder is accessed over the network via SMB. They are separate from NTFS permissions — the most restrictive of the two applies.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td>Full Control</td><td>Read, Change, and modify share permissions</td></tr><tr><td>Change</td><td>Read and write shared files; create and delete content</td></tr><tr><td>Read</td><td>View file names and contents; execute programs</td></tr></tbody></table>
+<p>Create a network share: Right click folder → Advanced Sharing → Share this folder
+Access from Linux: <code>smbclient //host/"Share Name" -U username</code>
+Mount from Linux: <code>sudo mount -t cifs -o username=&#x3C;user>,password=&#x3C;pass> //&#x3C;host>/"&#x3C;share>" /mnt/point</code></p>
+<p>View shares: <code>net share</code> (CMD) or Computer Management GUI → Shared Folders</p>
+<hr>
+<h3 id="windows-sessions">Windows Sessions</h3>
+<h4 id="interactive-sessions">Interactive Sessions</h4>
+<p>A user authenticates directly and receives a GUI or shell:</p>
+<ul>
+<li>Standard logon: entering credentials at the console</li>
+<li><code>runas</code> command: launch a process as a different user</li>
+<li>RDP session: remote interactive logon</li>
+</ul>
+<h4 id="non-interactive-sessions">Non-Interactive Sessions</h4>
+<p>No user credentials required at logon. Used by the OS to run services and background processes.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Account</th><th>Description</th></tr></thead><tbody><tr><td><code>NT AUTHORITY\SYSTEM</code> (LocalSystem)</td><td>Most powerful account on the system — more privileged than local admin; runs core OS tasks</td></tr><tr><td><code>NT AUTHORITY\LocalService</code></td><td>Lower-privilege version of SYSTEM; has limited network access; used for services that don’t need domain credentials</td></tr><tr><td><code>NT AUTHORITY\NetworkService</code></td><td>Similar to LocalService locally; can authenticate to the network using the computer account</td></tr></tbody></table>
+<hr>
+<h3 id="services--processes">Services &#x26; Processes</h3>
+<p>Services are long-running processes managed by the <strong>Service Control Manager (SCM)</strong>, accessible via <code>services.msc</code>. They can be set to start <strong>Automatically</strong>, <strong>Manually</strong>, or on a <strong>Delayed</strong> timer at boot.</p>
+<h4 id="critical-system-services">Critical System Services</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Service</th><th>Role</th></tr></thead><tbody><tr><td><code>smss.exe</code></td><td>Session Manager — first user-mode process launched by the kernel</td></tr><tr><td><code>csrss.exe</code></td><td>Client/Server Runtime Subsystem — manages Win32 console and thread creation</td></tr><tr><td><code>wininit.exe</code></td><td>Initializes services, LSA, and SAM at startup</td></tr><tr><td><code>lsass.exe</code></td><td>Local Security Authority — enforces security policy, creates access tokens; stores cleartext creds and hashes in memory</td></tr><tr><td><code>services.exe</code></td><td>Service Control Manager — starts and stops services</td></tr><tr><td><code>winlogon.exe</code></td><td>Handles logon/logoff UI and loads user profiles</td></tr><tr><td><code>svchost.exe</code></td><td>Generic host process; multiple instances run different service groups (e.g., RPCSS, DCOM/PnP)</td></tr><tr><td><code>System</code></td><td>Kernel-mode system process</td></tr></tbody></table>
+<p><code>lsass.exe</code> is a high-value target during post-exploitation — it holds NTLM hashes and sometimes cleartext credentials in memory (see Mimikatz when created).</p>
+<h4 id="service-permissions--misconfigurations">Service Permissions &#x26; Misconfigurations</h4>
+<p>Services run under a security context (LocalSystem, LocalService, NetworkService, or a custom service account). Misconfigured service permissions are a common privilege escalation vector:</p>
+<ul>
+<li><strong>Binary path replacement</strong>: if the service binary path is writable, replace with a malicious executable</li>
+<li><strong>Recovery actions</strong>: services can execute a program on failure — check the Recovery tab in <code>services.msc</code></li>
+<li><strong>DLL hijacking</strong>: if the service searches for a DLL in a writable path, place a malicious DLL there</li>
+</ul>
+<p>Built-in service accounts in order of privilege: <code>LocalService &#x3C; NetworkService &#x3C; LocalSystem</code></p>
+<p>Recommended practice: create a dedicated service account with only the minimum permissions the service needs.</p>
+<blockquote>
+<p>See <a href="/knowledge/Operating-Systems/Windows/Windows-Command-Line">Windows Command Line</a> for full <code>sc</code> command reference.</p>
+</blockquote>
+<h4 id="task-manager">Task Manager</h4>
+<p>Access: <code>Ctrl + Shift + Esc</code> or search “Task Manager”
+Useful tabs: Processes (live CPU/RAM/disk/network), Performance, Services, Startup (disable autorun entries), Users (active sessions)</p>
+<h4 id="sysinternals-suite">Sysinternals Suite</h4>
+<p>Portable Windows tools for advanced system administration and analysis. Load directly via: <code>\\live.sysinternals.com\tools</code> in Windows Explorer, or download from Microsoft.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody><tr><td>Process Explorer</td><td>Enhanced Task Manager — shows parent-child process relationships and loaded handles/DLLs</td></tr><tr><td>Process Monitor</td><td>Real-time file system, registry, and process/thread activity monitor</td></tr><tr><td>TCPView</td><td>Live view of all TCP/UDP endpoints and their associated processes</td></tr><tr><td>PSExec</td><td>Execute processes on remote systems</td></tr><tr><td>Autoruns</td><td>Comprehensive view of all autorun locations (more complete than Task Manager)</td></tr></tbody></table>
+<p>Always append <code>-accepteula</code> when running Sysinternals tools from the command line.</p>
+<hr>
+<h3 id="windows-management-instrumentation-wmi">Windows Management Instrumentation (WMI)</h3>
+<p>WMI is a PowerShell subsystem providing programmatic access to hardware, OS configuration, processes, services, and more across local and remote systems.</p>
+<h4 id="wmi-architecture">WMI Architecture</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Component</th><th>Role</th></tr></thead><tbody><tr><td>WMI Service</td><td>Runs at boot; intermediary between consumers and providers</td></tr><tr><td>WMI Providers</td><td>Monitor and expose data for specific objects (OS, hardware, services, etc.)</td></tr><tr><td>CIM Object Manager</td><td>Processes queries from consumers and routes them to the correct provider</td></tr><tr><td>WMI Repository</td><td>Static database of WMI schema information</td></tr><tr><td>WMI Consumer</td><td>Application sending queries via the CIM Object Manager</td></tr></tbody></table>
+<h4 id="key-wmi-classes">Key WMI Classes</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Class</th><th>Returns</th></tr></thead><tbody><tr><td><code>Win32_OperatingSystem</code></td><td>OS version, build number, install date</td></tr><tr><td><code>Win32_Process</code></td><td>Running processes</td></tr><tr><td><code>Win32_Service</code></td><td>Windows services</td></tr><tr><td><code>Win32_UserAccount</code></td><td>Local user accounts</td></tr><tr><td><code>Win32_Bios</code></td><td>BIOS serial number and version</td></tr><tr><td><code>Win32_ComputerSystem</code></td><td>Hostname, domain, manufacturer, model</td></tr><tr><td><code>Win32_NetworkAdapterConfiguration</code></td><td>Network interface config including IPs</td></tr></tbody></table>
+<blockquote>
+<p>See <a href="/knowledge/Operating-Systems/Windows/Windows-PowerShell">Windows PowerShell</a> for full <code>Get-WmiObject</code> and <code>Get-CimInstance</code> reference.
+See <a href="/knowledge/Operating-Systems/Windows/Windows-Command-Line">Windows Command Line</a> for <code>wmic</code> CLI commands.</p>
+</blockquote>
+<hr>
+<h3 id="microsoft-management-console-mmc">Microsoft Management Console (MMC)</h3>
+<p>MMC groups administrative snap-ins into a customized management console. Open via <code>mmc</code> in the Start menu.</p>
+<p>Add snap-ins: File → Add or Remove Snap-ins
+Save a custom console to a <code>.msc</code> file — loads automatically next time.</p>
+<p>Can manage both local and remote systems. Common use cases: managing users, certificates, event logs, and disk management.</p>
+<hr>
+<h3 id="windows-subsystem-for-linux-wsl">Windows Subsystem for Linux (WSL)</h3>
+<p>WSL allows native Linux binaries to run on Windows 10/Server 2019+. Uses a real Linux kernel via a Hyper-V subset.</p>
+<p>Install: <code>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux</code> (as Administrator)
+Then install a distro from the Microsoft Store or via command line.</p>
+<p>WSL installs <code>bash.exe</code> — run with <code>bash</code> in any Windows console. Windows drives accessible via <code>/mnt/c/</code>, <code>/mnt/d/</code>, etc.</p>
+<hr>
+<h3 id="desktop-experience-vs-server-core">Desktop Experience vs. Server Core</h3>
+<p>Server Core is a minimal Windows Server installation with no GUI — only command-line, PowerShell, and remote management tools.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Aspect</th><th>Desktop Experience</th><th>Server Core</th></tr></thead><tbody><tr><td>Interface</td><td>Full GUI</td><td>CLI only</td></tr><tr><td>Attack surface</td><td>Larger</td><td>Smaller</td></tr><tr><td>Disk/memory usage</td><td>Higher</td><td>Lower</td></tr><tr><td>Management</td><td>GUI + CLI</td><td>CLI, PowerShell, RSAT, MMC</td></tr><tr><td>Primary config tool</td><td>GUI</td><td><code>sconfig</code></td></tr></tbody></table>
+<p>Since Windows Server 2019, you cannot switch from Desktop Experience to Server Core after installation.</p>
+<p>Server Core does not support: SCVMM, System Center DPM, SharePoint Server, Project Server.</p>
+<hr>
+<h3 id="user-accounts--permissions">User Accounts &#x26; Permissions</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Account Type</th><th>Description</th></tr></thead><tbody><tr><td>Administrator</td><td>Full system access and control</td></tr><tr><td>Standard User</td><td>Limited access; cannot make system-wide changes</td></tr></tbody></table>
+<ul>
+<li><strong>Local User &#x26; Group Management:</strong> <code>lusrmgr.msc</code></li>
+<li><strong>UAC (User Account Control):</strong>
+<ul>
+<li>Default admin accounts bypass elevation prompts for low-risk actions</li>
+<li>Admin sessions run without elevated privileges until explicitly prompted</li>
+<li>Prevents unauthorized system-wide changes</li>
+</ul>
+</li>
+</ul>
+<h4 id="authentication-vs-authorization">Authentication vs Authorization</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Concept</th><th>Description</th></tr></thead><tbody><tr><td>Authentication</td><td>Verifies a user is who they claim to be; requires correct credentials</td></tr><tr><td>Authorization</td><td>Determines the level of access a granted user has</td></tr></tbody></table>
+<h4 id="account-types">Account Types</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Account</th><th>Description</th></tr></thead><tbody><tr><td>Administrator</td><td>Highest privilege; can install software, manage devices, settings, and other users; cannot be deleted</td></tr><tr><td>Guest</td><td>Temporary limited access for users without dedicated accounts</td></tr><tr><td>Local Account</td><td>Authenticated by the local machine; credentials stored in SAM (Security Accounts Manager)</td></tr><tr><td>Domain Account</td><td>Authenticated by a Domain Controller; credentials stored in Active Directory — see <a href="/knowledge/Operating-Systems/Windows/Active-Directory/Active-Directory-Basics">Active Directory Basics</a></td></tr></tbody></table>
+<h3 id="system-configuration--management-tools">System Configuration &#x26; Management Tools</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tool</th><th>Access</th><th>Purpose</th></tr></thead><tbody><tr><td>MSConfig</td><td><code>msconfig</code></td><td>Diagnose startup issues; view all services</td></tr><tr><td>Task Manager</td><td><code>taskmgr</code></td><td>Enable/disable startup items; monitor processes</td></tr><tr><td>Computer Management</td><td><code>compmgmt</code></td><td>Unified console: Task Scheduler, Event Viewer, Shared Folders</td></tr><tr><td>Performance Monitor</td><td><code>perfmon</code></td><td>Monitor local/remote system performance</td></tr><tr><td>Resource Monitor</td><td><code>resmon</code></td><td>Real-time CPU, Disk, Network, Memory usage</td></tr><tr><td>Disk Management</td><td><code>compmgmt</code> → Disk Management</td><td>Manage partitions, assign drive letters</td></tr><tr><td>System Information</td><td><code>msinfo32.exe</code></td><td>Environment variables, IP config, hardware summary</td></tr><tr><td>Event Viewer</td><td><code>compmgmt</code> → Event Viewer</td><td>View system, security, and application logs</td></tr></tbody></table>
+<p>Event Viewer Types
+Windows Logs Descriptions</p>
+<h3 id="registry">Registry</h3>
+<p>Central hierarchical database storing all system and application configuration.
+Access via: <code>regedit</code></p>
+<p>Stores: user profiles, installed application settings, folder and icon settings, hardware configuration, network ports in use.</p>
+<p>Registry is organized into <strong>Root Keys</strong> (also called <strong>hives</strong>), each with subkeys and values:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Root Key</th><th>Abbreviation</th><th>Scope</th></tr></thead><tbody><tr><td><code>HKEY_LOCAL_MACHINE</code></td><td>HKLM</td><td>All system settings loaded at boot; hardware loaded dynamically</td></tr><tr><td><code>HKEY_CURRENT_USER</code></td><td>HKCU</td><td>Settings for the currently logged-in user</td></tr><tr><td><code>HKEY_USERS</code></td><td>HKU</td><td>Settings for all user profiles on the system</td></tr><tr><td><code>HKEY_CLASSES_ROOT</code></td><td>HKCR</td><td>File type associations and COM object registration</td></tr><tr><td><code>HKEY_CURRENT_CONFIG</code></td><td>HKCC</td><td>Hardware configuration profile used at startup</td></tr></tbody></table>
+<p>Registry hive files are stored at: <code>C:\Windows\System32\Config\</code>
+HKCU is stored in: <code>C:\Users\&#x3C;USERNAME>\Ntuser.dat</code></p>
+<h4 id="registry-value-types">Registry Value Types</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>REG_SZ</code></td><td>Fixed-length string value</td></tr><tr><td><code>REG_EXPAND_SZ</code></td><td>Variable-length string with environment variable expansion</td></tr><tr><td><code>REG_MULTI_SZ</code></td><td>Multiple strings separated by null characters</td></tr><tr><td><code>REG_BINARY</code></td><td>Raw binary data</td></tr><tr><td><code>REG_DWORD</code></td><td>32-bit unsigned integer</td></tr><tr><td><code>REG_DWORD_LITTLE_ENDIAN</code></td><td>32-bit value in little-endian format (same as REG_DWORD)</td></tr><tr><td><code>REG_DWORD_BIG_ENDIAN</code></td><td>32-bit value in big-endian format</td></tr><tr><td><code>REG_QWORD</code></td><td>64-bit unsigned integer</td></tr><tr><td><code>REG_QWORD_LITTLE_ENDIAN</code></td><td>64-bit value in little-endian format (same as REG_QWORD)</td></tr><tr><td><code>REG_LINK</code></td><td>Symbolic link to another registry key</td></tr><tr><td><code>REG_NONE</code></td><td>No defined data type</td></tr></tbody></table>
+<h4 id="run-and-runonce-keys--persistence-locations">Run and RunOnce Keys — Persistence Locations</h4>
+<p>These keys contain programs that execute automatically at startup or logon. A common persistence and privilege escalation vector.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Key</th><th>When Executes</th></tr></thead><tbody><tr><td><code>HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code></td><td>On every system startup</td></tr><tr><td><code>HKCU\Software\Microsoft\Windows\CurrentVersion\Run</code></td><td>On every logon for current user</td></tr><tr><td><code>HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce</code></td><td>Once at next system startup, then deleted</td></tr><tr><td><code>HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce</code></td><td>Once at next logon for current user, then deleted</td></tr></tbody></table>
+<p>Query via CMD: <code>reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code></p>
+<h3 id="security-features">Security Features</h3>
+<h4 id="security-identifiers-sid">Security Identifiers (SID)</h4>
+<p>Every user, group, and computer account is assigned a unique SID automatically at creation. SIDs are stored in the security database and added to the user’s access token at logon.</p>
+<p>SID format: <code>S-(revision)-(identifier-authority)-(subauthority-1)-(subauthority-2)-(RID)</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Component</th><th>Description</th></tr></thead><tbody><tr><td>Revision</td><td>Always <code>1</code></td></tr><tr><td>Identifier Authority</td><td>48-bit value identifying the authority that created the SID (e.g., NT Authority = 5)</td></tr><tr><td>Subauthority-1</td><td>Identifies the domain or local computer that issued the SID</td></tr><tr><td>Subauthority-2</td><td>Domain component (in domain environments)</td></tr><tr><td>RID</td><td>Relative Identifier — distinguishes accounts from one another; RID 500 = Administrator, 501 = Guest</td></tr></tbody></table>
+<p>List users and SIDs: <code>wmic useraccount get name,sid</code></p>
+<h4 id="security-accounts-manager-sam--access-control">Security Accounts Manager (SAM) &#x26; Access Control</h4>
+<p>The SAM database stores local user credentials. Rights granted to accounts are defined via Access Control Entries (ACEs) within Access Control Lists (ACLs) attached to securable objects.</p>
+<p>Every thread and process started by a user goes through authorization:</p>
+<ul>
+<li><strong>Access Token</strong> — created by LSA at logon; contains SID, group memberships, and privileges</li>
+<li><strong>DACL</strong> — checked against the access token to determine whether to allow or deny the requested access</li>
+<li><strong>SACL</strong> — records access attempts for auditing</li>
+</ul>
+<h4 id="user-account-control-uac">User Account Control (UAC)</h4>
+<p>UAC prevents malware and unauthorized changes by requiring elevation confirmation for privileged actions. Admin accounts operate with a standard user token until elevation is needed.</p>
+<ul>
+<li><strong>Admin Approval Mode</strong>: prompts the administrator to confirm or enter credentials before elevation</li>
+<li>Elevation triggers: installing software, modifying system settings, running apps that request admin</li>
+<li>Check via: <code>Get-WmiObject -Class Win32_UserAccount | select Name,SID,LocalAccount</code></li>
+</ul>
+<p>UAC Process</p>
+<h4 id="applocker">AppLocker</h4>
+<p>Microsoft’s application whitelisting solution — gives administrators granular control over which executables, scripts, DLLs, packaged apps, and installers users can run.</p>
+<ul>
+<li>Rules can be based on: file hash, publisher/signature, file path, product name, or version</li>
+<li>Applied to: security groups or individual users</li>
+<li><strong>Audit Mode</strong>: log blocked events without enforcing — use before switching to enforcement</li>
+<li>Configured via: Local Group Policy (<code>gpedit.msc</code>) or Domain GPO</li>
+</ul>
+<h4 id="local-group-policy">Local Group Policy</h4>
+<p>Allows administrators to configure system behavior, security settings, and network restrictions.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Category</th><th>Scope</th></tr></thead><tbody><tr><td>Computer Configuration</td><td>Settings applied regardless of who logs on</td></tr><tr><td>User Configuration</td><td>Settings applied to specific users at logon</td></tr></tbody></table>
+<p>Access: <code>gpedit.msc</code> or Start Menu
+In domain environments, GPOs are pushed from a Domain Controller to all domain-joined machines.</p>
+<p>Notable policy: <strong>Credential Guard</strong> — isolates the LSA process to prevent credential theft attacks.</p>
+<h4 id="windows-defender-antivirus">Windows Defender Antivirus</h4>
+<p>Built-in AV included since Windows Vista / Server 2008. Managed via Windows Security Center.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Feature</th><th>Description</th></tr></thead><tbody><tr><td>Real-Time Protection</td><td>Continuously monitors for known threats</td></tr><tr><td>Cloud-Delivered Protection</td><td>Submits suspicious samples to Microsoft for analysis</td></tr><tr><td>Controlled Folder Access</td><td>Blocks unauthorized writes to protected folders; built-in ransomware protection</td></tr><tr><td>Tamper Protection</td><td>Prevents disabling Defender via registry, PowerShell, or Group Policy</td></tr><tr><td>Automatic Sample Submission</td><td>Sends unknown files to cloud protection service for analysis</td></tr></tbody></table>
+<p>Defender cmdlets useful during post-exploitation recon:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Cmdlet</th><th>Purpose</th></tr></thead><tbody><tr><td><code>Get-MpComputerStatus</code></td><td>Full AV status — check <code>AntivirusEnabled</code>, <code>RealTimeProtectionEnabled</code>, <code>BehaviorMonitorEnabled</code></td></tr><tr><td><code>Get-MpPreference</code></td><td>AV config — exclusion paths, scan schedule, signature update settings</td></tr><tr><td><code>Get-MpThreatDetection</code></td><td>Active and historical malware detection events</td></tr></tbody></table>
+<p>Windows Defender detects common open-source tools (Metasploit payloads, unmodified Mimikatz). Bypassing requires custom encoding, obfuscation, or in-memory execution.</p>
+<h4 id="windows-updates">Windows Updates</h4>
+<ul>
+<li>Released on <strong>Patch Tuesday</strong> — typically the 2nd Tuesday of each month</li>
+<li>Access via: <code>control /name Microsoft.WindowsUpdate</code></li>
+</ul>
+<h4 id="firewall">Firewall</h4>
+<p>Access via: <code>WF.msc</code> or <a href="/tools/Defense-Monitoring/Windows-Defender-Firewall">Windows Defender Firewall</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Profile</th><th>Use Case</th></tr></thead><tbody><tr><td>Domain</td><td>Active Directory domain networks</td></tr><tr><td>Private</td><td>Trusted home or work networks</td></tr><tr><td>Public</td><td>Untrusted public networks</td></tr></tbody></table>
+<p>Firewall can be centrally managed in a domain environment via Group Policy.</p>
+<h4 id="volume-shadow-copy-service-vss">Volume Shadow Copy Service (VSS)</h4>
+<ul>
+<li>Creates point-in-time snapshots of volumes</li>
+<li>Used for backup, restore points, and system restore</li>
+<li>Security note: attackers often target VSS to prevent recovery after ransomware</li>
+</ul>
+<h3 id="common-commands">Common Commands</h3>
+<blockquote>
+<p>Full command reference in <a href="/knowledge/Operating-Systems/Windows/Windows-Command-Line">Windows Command Line</a></p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>hostname</code></td><td>Displays system hostname</td></tr><tr><td><code>whoami</code></td><td>Shows current logged-on user</td></tr><tr><td><code>ipconfig</code></td><td>Shows network configuration</td></tr><tr><td><code>cls</code></td><td>Clears console screen</td></tr><tr><td><code>netstat</code></td><td>TCP/IP connection statistics</td></tr><tr><td><code>net user</code></td><td>Manage network user accounts</td></tr><tr><td><code>findstr</code></td><td>Search text within files (similar to grep)</td></tr></tbody></table>
+<hr>
+<h2 id="related-concepts">Related Concepts</h2>
+<ul>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-Command-Line">Windows Command Line</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-PowerShell">Windows PowerShell</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-Remote-Management">Windows Remote Management</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Active-Directory/Active-Directory-Basics">Active Directory Basics</a></li>
+</ul>
+<h2 id="related-techniques">Related Techniques</h2>
+<ul>
+<li><a href="/playbooks/Windows-Pentest-Playbook">Windows Pentest Playbook</a></li>
+</ul>
+<h2 id="related-tools">Related Tools</h2>
+<ul>
+<li><a href="/tools/Defense-Monitoring/Windows-Defender-Firewall">Windows Defender Firewall</a></li>
+</ul>
+<hr>
+<h2 id="references--images">References / Images</h2>
+<ul>
+<li>NTFS Permissions</li>
+<li>Event Viewer Types</li>
+<li>Windows Logs Descriptions</li>
+<li><a href="https://ss64.com/nt/icacls.html">https://ss64.com/nt/icacls.html</a></li>
+<li>Microsoft Windows Documentation</li>
+<li>TryHackMe Windows Fundamentals Room</li>
+<li>HTB Windows Fundamentals Module</li>
+</ul>  </div> </main> <aside class="toc" id="toc" data-astro-cid-o5gmpz7g> <div class="toc-inner" data-astro-cid-o5gmpz7g> <p class="toc-label" data-astro-cid-o5gmpz7g>On this page</p> <aside id="toc-container"> <a href="#overview" class="toc-link toc-h2" data-heading="overview"> Overview </a><a href="#terminology" class="toc-link toc-h2" data-heading="terminology"> Terminology </a><a href="#core-concepts" class="toc-link toc-h2" data-heading="core-concepts"> Core Concepts </a><a href="#windows-version-history" class="toc-link toc-h3" data-heading="windows-version-history"> Windows Version History </a><a href="#operating-system-structure" class="toc-link toc-h3" data-heading="operating-system-structure"> Operating System Structure </a><a href="#file-systems" class="toc-link toc-h3" data-heading="file-systems"> File Systems </a><a href="#ntfs-permissions" class="toc-link toc-h3" data-heading="ntfs-permissions"> NTFS Permissions </a><a href="#standard-permissions" class="toc-link toc-h4" data-heading="standard-permissions"> Standard Permissions </a><a href="#special-permissions" class="toc-link toc-h4" data-heading="special-permissions"> Special Permissions </a><a href="#alternate-data-streams-ads" class="toc-link toc-h4" data-heading="alternate-data-streams-ads"> Alternate Data Streams (ADS) </a><a href="#share-permissions-smb" class="toc-link toc-h3" data-heading="share-permissions-smb"> Share Permissions (SMB) </a><a href="#windows-sessions" class="toc-link toc-h3" data-heading="windows-sessions"> Windows Sessions </a><a href="#interactive-sessions" class="toc-link toc-h4" data-heading="interactive-sessions"> Interactive Sessions </a><a href="#non-interactive-sessions" class="toc-link toc-h4" data-heading="non-interactive-sessions"> Non-Interactive Sessions </a><a href="#services--processes" class="toc-link toc-h3" data-heading="services--processes"> Services &amp; Processes </a><a href="#critical-system-services" class="toc-link toc-h4" data-heading="critical-system-services"> Critical System Services </a><a href="#service-permissions--misconfigurations" class="toc-link toc-h4" data-heading="service-permissions--misconfigurations"> Service Permissions &amp; Misconfigurations </a><a href="#task-manager" class="toc-link toc-h4" data-heading="task-manager"> Task Manager </a><a href="#sysinternals-suite" class="toc-link toc-h4" data-heading="sysinternals-suite"> Sysinternals Suite </a><a href="#windows-management-instrumentation-wmi" class="toc-link toc-h3" data-heading="windows-management-instrumentation-wmi"> Windows Management Instrumentation (WMI) </a><a href="#wmi-architecture" class="toc-link toc-h4" data-heading="wmi-architecture"> WMI Architecture </a><a href="#key-wmi-classes" class="toc-link toc-h4" data-heading="key-wmi-classes"> Key WMI Classes </a><a href="#microsoft-management-console-mmc" class="toc-link toc-h3" data-heading="microsoft-management-console-mmc"> Microsoft Management Console (MMC) </a><a href="#windows-subsystem-for-linux-wsl" class="toc-link toc-h3" data-heading="windows-subsystem-for-linux-wsl"> Windows Subsystem for Linux (WSL) </a><a href="#desktop-experience-vs-server-core" class="toc-link toc-h3" data-heading="desktop-experience-vs-server-core"> Desktop Experience vs. Server Core </a><a href="#user-accounts--permissions" class="toc-link toc-h3" data-heading="user-accounts--permissions"> User Accounts &amp; Permissions </a><a href="#authentication-vs-authorization" class="toc-link toc-h4" data-heading="authentication-vs-authorization"> Authentication vs Authorization </a><a href="#account-types" class="toc-link toc-h4" data-heading="account-types"> Account Types </a><a href="#system-configuration--management-tools" class="toc-link toc-h3" data-heading="system-configuration--management-tools"> System Configuration &amp; Management Tools </a><a href="#registry" class="toc-link toc-h3" data-heading="registry"> Registry </a><a href="#registry-value-types" class="toc-link toc-h4" data-heading="registry-value-types"> Registry Value Types </a><a href="#run-and-runonce-keys--persistence-locations" class="toc-link toc-h4" data-heading="run-and-runonce-keys--persistence-locations"> Run and RunOnce Keys — Persistence Locations </a><a href="#security-features" class="toc-link toc-h3" data-heading="security-features"> Security Features </a><a href="#security-identifiers-sid" class="toc-link toc-h4" data-heading="security-identifiers-sid"> Security Identifiers (SID) </a><a href="#security-accounts-manager-sam--access-control" class="toc-link toc-h4" data-heading="security-accounts-manager-sam--access-control"> Security Accounts Manager (SAM) &amp; Access Control </a><a href="#user-account-control-uac" class="toc-link toc-h4" data-heading="user-account-control-uac"> User Account Control (UAC) </a><a href="#applocker" class="toc-link toc-h4" data-heading="applocker"> AppLocker </a><a href="#local-group-policy" class="toc-link toc-h4" data-heading="local-group-policy"> Local Group Policy </a><a href="#windows-defender-antivirus" class="toc-link toc-h4" data-heading="windows-defender-antivirus"> Windows Defender Antivirus </a><a href="#windows-updates" class="toc-link toc-h4" data-heading="windows-updates"> Windows Updates </a><a href="#firewall" class="toc-link toc-h4" data-heading="firewall"> Firewall </a><a href="#volume-shadow-copy-service-vss" class="toc-link toc-h4" data-heading="volume-shadow-copy-service-vss"> Volume Shadow Copy Service (VSS) </a><a href="#common-commands" class="toc-link toc-h3" data-heading="common-commands"> Common Commands </a> </aside> </div> </aside> <div class="note-spacer" data-astro-cid-o5gmpz7g></div> </div>  </div> </body></html>  <script type="module">const e=document.getElementById("sidebar-toggle"),l=document.getElementById("sidebar");if(e&&l){let a=function(o){o?(l.setAttribute("data-collapsed",""),e.textContent="›",e.style.left="0px"):(l.removeAttribute("data-collapsed"),e.textContent="‹",e.style.left="240px")},t=localStorage.getItem("sidebar")==="1";a(t),e.addEventListener("click",()=>{t=!t,localStorage.setItem("sidebar",t?"1":"0"),a(t)})}</script> <script type="module">window.addEventListener("DOMContentLoaded",()=>{const c=document.querySelectorAll(".toc-link[data-heading]");if(!c.length)return;const d=["related concepts","related techniques","related tools","related playbooks","related knowledge","references","references / images","references/images"],o=Array.from(document.querySelectorAll(".note-content h1, .note-content h2, .note-content h3, .note-content h4")).filter(e=>{if(!e.id)return!1;const t=e.textContent.trim().toLowerCase();return!d.some(n=>t.includes(n))});if(!o.length)return;function r(e){c.forEach(n=>{n.classList.toggle("active",n.dataset.heading===e)});const t=document.querySelector(`.toc-link[data-heading="${e}"]`);t&&t.scrollIntoView({block:"nearest",behavior:"smooth"})}function i(){const e=window.scrollY,t=document.documentElement.scrollHeight,n=window.innerHeight,a=100;if(e+n>=t-10){r(o[o.length-1].id);return}let s=o[0];for(const l of o)l.getBoundingClientRect().top<=a&&(s=l);r(s.id)}window.addEventListener("scroll",i,{passive:!0}),i()});</script>

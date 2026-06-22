@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Personal cybersecurity notes, writeups, and reference vault"><title>Search — CyberHacks</title><link rel="stylesheet" href="/styles/global.css"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><style>.site-header{position:sticky;top:0;z-index:100;height:56px;background:#09070fed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;gap:2rem;height:100%;padding:0 1.5rem}.logo{display:flex;align-items:center;gap:.5rem;color:var(--text);font-family:var(--font-display);font-weight:800;font-size:1.1rem;text-decoration:none;flex-shrink:0;letter-spacing:-.02em}.logo-icon{color:var(--purple-3)}.logo:hover{color:var(--purple-1)}.header-nav{display:flex;align-items:center;gap:.2rem}.nav-link{color:var(--text-muted);font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .7rem;border-radius:6px;text-decoration:none;transition:color .15s,background .15s;position:relative}.nav-link:hover{color:var(--purple-1);background:var(--surface)}.nav-link.active{color:var(--purple-2);background:var(--surface)}.nav-link.active:after{content:"";position:absolute;bottom:-1px;left:.7rem;right:.7rem;height:2px;background:var(--purple-3);border-radius:2px 2px 0 0}.hdr-search{position:relative;flex-shrink:0}.hdr-search-box{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.28rem .6rem;width:210px;transition:border-color .15s;cursor:text}.hdr-search-box:focus-within{border-color:var(--purple-3)}#hdr-input{background:transparent;border:none;outline:none;color:var(--text);font-size:.8rem;font-family:var(--font-sans);width:100%}#hdr-input::placeholder{color:var(--text-dim)}.hdr-search-box kbd{font-size:.58rem;background:var(--surface-2);border:1px solid var(--border-2);border-radius:4px;padding:.1rem .3rem;color:var(--text-dim);flex-shrink:0}.hdr-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:380px;background:#0b0814fa;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 20px 60px #000000b3;padding:.35rem;z-index:999}#hdr-results{display:flex;flex-direction:column;gap:.25rem;max-height:420px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}#hdr-results::-webkit-scrollbar{width:3px}#hdr-results::-webkit-scrollbar-track{background:transparent}#hdr-results::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}#hdr-results::-webkit-scrollbar-thumb:hover{background:var(--purple-3)}.hdr-result{display:block;padding:.6rem .75rem;background:#140f22cc;border:1px solid rgba(42,32,64,.9);border-radius:8px;text-decoration:none;transition:background .15s,border-color .15s,transform .15s;cursor:pointer;overflow:hidden}.hdr-result:hover{background:#5a3db833;border-color:var(--purple-3);transform:translate(2px);pointer-events:auto}.hdr-result-title{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;margin-bottom:.2rem}.hdr-result:hover .hdr-result-title{color:var(--purple-1)}.hdr-result-path{font-size:.62rem;color:var(--text-dim);text-transform:capitalize;letter-spacing:.02em}.hdr-result-path span{color:var(--purple-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem}.hdr-empty{padding:1rem;text-align:center;color:var(--text-dim);font-size:.76rem}.hdr-view-all{display:block;margin-top:.3rem;padding:.45rem .75rem;background:#140f2280;border:1px solid var(--border);border-radius:7px;font-size:.7rem;color:var(--text-muted);text-align:center;text-decoration:none;transition:color .15s,border-color .15s;flex-shrink:0}.hdr-view-all:hover{color:var(--purple-2);border-color:var(--purple-3);background:#140f2280;transform:none}.hdr-result-excerpt{font-size:.62rem;color:var(--text-muted);line-height:1.35;margin-top:.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hdr-result-excerpt mark{background:#7c5ce84d;color:var(--purple-1);border-radius:2px;padding:0 2px;font-style:normal}@media(max-width:768px){.header-nav,.hdr-search-box kbd{display:none}.hdr-dropdown{width:calc(100vw - 2rem);right:-.5rem}}
+.search-page{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:3rem 2rem 4rem}.search-header{margin-bottom:2rem}.search-header h1{font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--purple-1);letter-spacing:-.02em;margin-bottom:.5rem}.search-header p{color:var(--text-muted);font-size:1rem}.search-widget{--pagefind-ui-scale: .9;--pagefind-ui-primary: #7c5ce8;--pagefind-ui-text: #e8e0ff;--pagefind-ui-background: rgba(14, 10, 26, .55);--pagefind-ui-border: #2a2040;--pagefind-ui-tag: #1c1630;--pagefind-ui-border-width: 1px;--pagefind-ui-border-radius: 8px;--pagefind-ui-font: "Inter", sans-serif}.pagefind-ui__search-input{background:#0e0a1ab3!important;border:1px solid var(--border)!important;color:var(--text)!important;backdrop-filter:blur(12px)!important}.pagefind-ui__search-input:focus{border-color:var(--purple-3)!important;outline:none!important;box-shadow:0 0 0 3px #7c5ce826!important}.pagefind-ui__result{background:#0e0a1a8c!important;backdrop-filter:blur(20px)!important;border:1px solid rgba(61,48,96,.5)!important;border-radius:12px!important;padding:1.25rem 1.5rem!important;margin-bottom:.75rem!important;cursor:pointer!important;transition:border-color .2s,box-shadow .2s,transform .15s!important}.pagefind-ui__result:hover{border-color:var(--purple-3)!important;box-shadow:0 4px 24px #7c5ce826!important;transform:translateY(-1px)!important}.pagefind-ui__result-title{color:var(--purple-1)!important;font-weight:700!important;font-size:1rem!important;padding-bottom:.6rem!important;margin-bottom:.6rem!important;border-bottom:1px solid var(--border)!important;display:block!important}.pagefind-ui__result-title a{color:inherit!important;text-decoration:none!important;border:none!important}.pagefind-ui__result-nested{border:none!important;border-left:2px solid var(--border-2)!important;border-bottom:none!important;border-top:none!important;border-right:none!important;margin:.2rem 0 .2rem .25rem!important;padding:.15rem 0 .15rem .6rem!important;transition:border-left-color .15s!important}.pagefind-ui__result-nested-title{color:var(--purple-2)!important;font-size:.75rem!important;font-weight:600!important;margin-bottom:0!important;border:none!important;padding:0!important}.pagefind-ui__result-nested-title a{color:inherit!important;text-decoration:none!important;border:none!important}.pagefind-ui__result-excerpt{color:var(--text-muted)!important;font-size:.72rem!important;line-height:1.4!important;margin:0!important;padding-top:0!important}mark{background:#7c5ce84d!important;color:var(--purple-1)!important;border-radius:3px!important;padding:0 2px!important}.pagefind-ui__message{color:var(--text-muted)!important;font-size:.8rem!important;margin-bottom:1rem!important}.pagefind-ui__search-clear{color:var(--text-muted)!important;background:transparent!important}.pagefind-ui__button{background:var(--surface)!important;border:1px solid var(--border)!important;color:var(--text-muted)!important;border-radius:8px!important;transition:border-color .15s,color .15s!important}.pagefind-ui__button:hover{border-color:var(--purple-3)!important;color:var(--purple-1)!important}.pagefind-ui__result-nested-title:before{display:none!important;content:none!important}.pagefind-ui__result-link-arrow{display:none!important}.pagefind-ui__result-title:after,.pagefind-ui__result-nested-title:after{display:none!important;content:none!important}.pagefind-ui__result-nested .pagefind-ui__result-link:before{display:none!important;content:""!important}.pagefind-ui__result-nested,.pagefind-ui__result-nested *,.pagefind-ui__result-excerpt{border-top:none!important;border-right:none!important;border-bottom:none!important;box-shadow:none!important}.pagefind-ui__result-nested{border-left:2px solid var(--border-2)!important}.pagefind-ui__result-nested:hover{border-left-color:var(--purple-3)!important}.pagefind-ui__result-nested p,.pagefind-ui__result-nested div,.pagefind-ui__result-nested span{margin:0!important;padding:0!important}
+</style></head> <body> <div class="bg-gradient"></div> <div class="bg-noise"></div> <div class="bg-grid"></div> <div class="site-wrap">  <header class="site-header"> <div class="header-inner"> <a href="/" class="logo"> <span class="logo-icon">⬡</span> <span class="logo-text">CyberHacks</span> </a> <nav class="header-nav"> <a href="/knowledge" class="nav-link "> Knowledge </a><a href="/techniques" class="nav-link "> Techniques </a><a href="/playbooks" class="nav-link "> Playbooks </a><a href="/tools" class="nav-link "> Tools </a><a href="/resources" class="nav-link "> Resources </a><a href="/labs" class="nav-link "> Labs </a> </nav> <div class="hdr-search" id="hdr-search"> <div class="hdr-search-box"> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input id="hdr-input" type="text" placeholder="Search notes..." autocomplete="off" spellcheck="false"> <kbd>⌘K</kbd> </div> <div class="hdr-dropdown" id="hdr-dropdown" style="display:none"> <div id="hdr-results"></div> <a id="hdr-all" href="/search" class="hdr-view-all">View all results →</a> </div> </div> </div> </header>  <script>
+(function(){
+  let pf = null;
+  let timer = null;
+  const input = document.getElementById('hdr-input');
+  const dropdown = document.getElementById('hdr-dropdown');
+  const results = document.getElementById('hdr-results');
+  const viewAll = document.getElementById('hdr-all');
+  if(!input) return;
+
+  async function init() {
+    if(pf) return pf;
+    try {
+      pf = await import('/pagefind/pagefind.js');
+      await pf.init();
+    } catch(e){ pf=null; }
+    return pf;
+  }
+
+  input.addEventListener('focus', init);
+
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(async ()=>{
+      const q = input.value.trim();
+      if(!q){ dropdown.style.display='none'; return; }
+
+      const lib = await init();
+      if(!lib){
+        results.innerHTML = '<div class="hdr-empty">Run a build to enable search.</div>';
+        dropdown.style.display='block';
+        return;
+      }
+
+      const res = await lib.search(q);
+      const top = await Promise.all(res.results.slice(0,5).map(r=>r.data()));
+      viewAll.href = '/search?q='+encodeURIComponent(q);
+
+      if(!top.length){
+        results.innerHTML = '<div class="hdr-empty">No results for "'+q+'"</div>';
+      } else {
+        results.innerHTML = top.map(r=>{
+          const parts = r.url.split('/').filter(Boolean);
+          const cat = parts[0]||'';
+          const sub = parts.length>2 ? parts[1].replace(/-/g,' ') : '';
+          const title = (r.meta&&r.meta.title||'')
+            .replace(/\s*[—–-]+\s*CyberHacks\s*$/i,'').trim()
+            || parts[parts.length-1].replace(/-/g,' ');
+          const path = sub ? `<span>${cat}</span> / ${sub}` : `<span>${cat}</span>`;
+          const excerpt = (r.excerpt||'')
+            .replace(/<(?!\/?mark)[^>]+>/g,'')
+            .replace(/\s+/g,' ')
+            .replace(/^[\s\/\-–—]+/,'')
+            .trim()
+            .slice(0,90);
+          return '<a href="'+r.url+'" class="hdr-result">'
+            +'<div class="hdr-result-title">'+title+'</div>'
+            +'<div class="hdr-result-path">'+path+'</div>'
+            +(excerpt?'<div class="hdr-result-excerpt">'+excerpt+'</div>':'')
+            +'</a>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }, 180);
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('hdr-search').contains(e.target))
+      dropdown.style.display='none';
+  });
+
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+      e.preventDefault(); input.focus(); input.select();
+    }
+    if(e.key==='Escape'){ dropdown.style.display='none'; input.blur(); }
+    if(e.key==='Enter'&&dropdown.style.display!=='none'&&input.value.trim())
+      window.location.href='/search?q='+encodeURIComponent(input.value.trim());
+  });
+})();
+</script> <main class="search-page"> <div class="search-header"> <h1>Search</h1> <p>Search across all notes, tools, playbooks, and techniques.</p> </div> <div id="search" class="search-widget"></div> </main>  </div> </body></html>  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const script = document.createElement('script');
+    script.src = '/pagefind/pagefind-ui.js';
+    script.onload = () => {
+      new PagefindUI({
+        element: '#search',
+        showSubResults: true,
+        excerptLength: 15,
+        showImages: false,
+      });
+
+      // Make entire result block and sub-results clickable
+      document.getElementById('search').addEventListener('click', (e) => {
+        if (e.target.closest('a')) return; // already a link click
+
+        // Check if clicked inside a sub-result
+        const nested = e.target.closest('.pagefind-ui__result-nested');
+        if (nested) {
+          const link = nested.querySelector('a');
+          if (link) { link.click(); return; }
+        }
+
+        // Otherwise click the main result title
+        const result = e.target.closest('.pagefind-ui__result');
+        if (!result) return;
+        const link = result.querySelector('.pagefind-ui__result-title a');
+        if (link) link.click();
+      });
+
+      // Watch for new results (pagefind renders dynamically)
+      const observer = new MutationObserver(() => {
+        document.querySelectorAll('.pagefind-ui__result').forEach(result => {
+          result.style.cursor = 'pointer';
+        });
+      });
+      observer.observe(document.getElementById('search'), { childList: true, subtree: true });
+    };
+    script.onerror = () => {
+      document.getElementById('search').innerHTML =
+        '<p style="color:#8070a8;padding:1rem">Search index not built yet. Run <code>npx astro build</code> first.</p>';
+    };
+    document.head.appendChild(script);
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/pagefind/pagefind-ui.css';
+    document.head.appendChild(link);
+
+    // Handle ?q= param to pre-fill search from other pages
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) {
+      setTimeout(() => {
+        const input = document.querySelector('.pagefind-ui__search-input');
+        if (input) {
+          input.value = q;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, 300);
+    }
+  });
+</script>
